@@ -10,6 +10,8 @@ import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import Swal from 'sweetalert2';
 import {UsuarioService} from '../../services/usuario-service';
 import {TranslatePipe} from '@ngx-translate/core';
+import {ConfiguracionService} from '../../services/configuracion-service';
+import {LenguajeService} from '../../services/lenguaje.service';
 
 @Component({
   selector: 'app-iniciar-sesion',
