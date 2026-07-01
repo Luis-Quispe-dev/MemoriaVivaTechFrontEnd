@@ -2,6 +2,11 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { AdultoMayorLlamarDTO } from '../model/adulto-mayor-llamar-dto';
+import { AdultoMayorRespuestaDTO } from '../model/adulto-mayor-respuesta-dto';
+import { CuidadorLlamarDTO } from '../model/cuidador-llamar-dto';
+import { CuidadorRespuestaDTO } from '../model/cuidador-respuesta-dto';
+import { RecuperarContrasenaDTO } from '../model/recuperar-contrasena-dto';
 
 @Injectable({
   providedIn: 'root',
@@ -12,12 +17,12 @@ export class UsuarioService {
 
   constructor() { }
 
-  registrarAdultoMayor(datosUsuario: any): Observable<any> {
-    return this.httpClient.post(`${this.apiUrl}/adulto-mayor`, datosUsuario);
+  registrarAdultoMayor(datosUsuario: AdultoMayorLlamarDTO): Observable<AdultoMayorRespuestaDTO> {
+    return this.httpClient.post<AdultoMayorRespuestaDTO>(`${this.apiUrl}/adulto-mayor`, datosUsuario);
   }
 
-  registrarCuidador(datosUsuario: any): Observable<any> {
-    return this.httpClient.post(`${this.apiUrl}/cuidador`, datosUsuario);
+  registrarCuidador(datosUsuario: CuidadorLlamarDTO): Observable<CuidadorRespuestaDTO> {
+    return this.httpClient.post<CuidadorRespuestaDTO>(`${this.apiUrl}/cuidador`, datosUsuario);
   }
 
   iniciarSesion(credenciales: any): Observable<any> {
@@ -66,19 +71,19 @@ export class UsuarioService {
     return localStorage.getItem('username');
   }
 
-  editarAdultoMayor(id: number, datos: any): Observable<any> {
-    return this.httpClient.put(`${this.apiUrl}/adulto-mayor/${id}`, datos);
+  editarAdultoMayor(id: number, datos: AdultoMayorLlamarDTO): Observable<AdultoMayorRespuestaDTO> {
+    return this.httpClient.put<AdultoMayorRespuestaDTO>(`${this.apiUrl}/adulto-mayor/${id}`, datos);
   }
 
-  editarCuidador(id: number, datos: any): Observable<any> {
-    return this.httpClient.put(`${this.apiUrl}/cuidador/${id}`, datos);
+  editarCuidador(id: number, datos: CuidadorLlamarDTO): Observable<CuidadorRespuestaDTO> {
+    return this.httpClient.put<CuidadorRespuestaDTO>(`${this.apiUrl}/cuidador/${id}`, datos);
   }
 
-  obtenerCuidadorPorId(id: number): Observable<any> {
-    return this.httpClient.get(`${this.apiUrl}/cuidador/${id}`);
+  obtenerCuidadorPorId(id: number): Observable<CuidadorRespuestaDTO> {
+    return this.httpClient.get<CuidadorRespuestaDTO>(`${this.apiUrl}/cuidador/${id}`);
   }
 
-  recuperarContrasena(dto: any): Observable<any> {
+  recuperarContrasena(dto: RecuperarContrasenaDTO): Observable<any> {
     return this.httpClient.put(`${this.apiUrl}/recuperar-contrasena`, dto, { responseType: 'text' });
   }
 
