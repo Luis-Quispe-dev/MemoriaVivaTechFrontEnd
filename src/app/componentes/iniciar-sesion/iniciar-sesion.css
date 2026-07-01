@@ -1,0 +1,174 @@
+/* Contenedor principal que divide la pantalla en dos */
+.login-page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #ffffff; /* Fondo totalmente blanco */
+  gap: 100px; /* Separación entre el logo y el formulario */
+  padding: 20px;
+}
+
+/* ========================================================
+   LADO IZQUIERDO: MARCA
+   ======================================================== */
+.brand-section {
+  text-align: center;
+  max-width: 400px;
+}
+
+.logo-gigante {
+  font-size: 4rem;
+  font-weight: 800;
+  color: var(--accent-purple);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.tagline {
+  color: var(--text-light);
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+}
+
+.btn-crear-cuenta {
+  border: 2px solid var(--accent-purple) !important;
+  color: var(--accent-purple) !important;
+  border-radius: 30px !important;
+  padding: 8px 30px !important;
+  font-weight: 600 !important;
+  font-size: 1.1rem !important;
+}
+
+/* ========================================================
+   LADO DERECHO: TARJETA DE FORMULARIO
+   ======================================================== */
+.form-section {
+  width: 100%;
+  max-width: 450px;
+}
+
+.login-card {
+  padding: 40px;
+  border-radius: 30px !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08) !important;
+  border: 1px solid #f0f0f0 !important;
+  background-color: #ffffff !important;
+}
+
+.form-title {
+  text-align: center;
+  font-weight: 800;
+  font-size: 2rem;
+  margin-bottom: 30px;
+  color: var(--text-dark);
+}
+
+/* ========================================================
+   INPUTS Y ETIQUETAS DE MATERIAL
+   ======================================================== */
+.custom-label {
+  font-weight: 800;
+  color: var(--text-dark);
+  font-size: 1.1rem;
+  margin-bottom: 5px;
+}
+
+.custom-label i { margin-right: 8px; }
+
+.mat-form-full {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+::ng-deep .mat-form-full .mat-mdc-text-field-wrapper {
+  border-radius: 12px !important;
+}
+
+/* ========================================================
+   BOTONES VERDES Y BOTÓN VOLVER
+   ======================================================== */
+.botones-accion {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.btn-verde-pill {
+  background-color: var(--primary-green) !important;
+  color: var(--text-dark) !important;
+  border-radius: 30px !important;
+  width: 80%;
+  padding: 25px 0 !important;
+  font-weight: 800 !important;
+  font-size: 1.1rem !important;
+}
+
+.btn-verde-pill i { margin-right: 10px; }
+
+.volver-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 25px;
+  width: 100%;
+}
+
+/* ========================================================
+   RESPONSIVE (Para celulares)
+   ======================================================== */
+@media (max-width: 900px) {
+  .login-page-container {
+    flex-direction: column;
+    gap: 40px;
+    padding: 40px 20px;
+  }
+}
+
+
+/* ========================================================
+   --- LIMPIEZA ABSOLUTA DEL MENÚ MÓVIL (BLANCO TOTAL) ---
+   ======================================================== */
+
+.menu-movil-premium.mat-mdc-menu-panel,
+.mat-mdc-menu-panel.menu-movil-premium {
+  min-width: 300px !important; /* Más ancho */
+  background-color: #ffffff !important;
+}
+
+.menu-movil-premium .mat-mdc-menu-item {
+  font-size: 1.25rem !important;
+  min-height: 60px !important;
+  line-height: 60px !important;
+  padding: 0 25px !important;
+  background-color: transparent !important;
+}
+
+.menu-movil-premium .menu-icon {
+  font-size: 1.4rem !important;
+  margin-right: 15px !important;
+}
+
+.menu-movil-premium .mat-mdc-menu-item:not([disabled]):hover,
+.menu-movil-premium .mat-mdc-menu-item.cdk-program-focused:not([disabled]),
+.menu-movil-premium .mat-mdc-menu-item.cdk-keyboard-focused:not([disabled]),
+.menu-movil-premium .mat-mdc-menu-item-highlighted:not([disabled]) {
+  background-color: transparent !important;
+}
+
+.menu-movil-premium .mat-mdc-menu-item .mat-ripple {
+  display: none !important;
+}
+
+.menu-movil-premium .mat-mdc-menu-item:hover {
+  background-color: var(--primary-green) !important;
+  color: var(--text-dark) !important;
+}
+
+.menu-movil-premium .mat-mdc-menu-item:hover .mdc-list-item__primary-text {
+  color: var(--text-dark) !important;
+}
