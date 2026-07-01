@@ -1,0 +1,198 @@
+/* ========================================================
+   --- ESTRUCTURA PRINCIPAL (SPLIT LAYOUT) ---
+   ======================================================== */
+.registro-page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #ffffff;
+  gap: 100px; /* Separación entre logo y form */
+  padding: 40px 20px;
+}
+
+/* ========================================================
+   --- LADO IZQUIERDO: MARCA ---
+   ======================================================== */
+.brand-section {
+  text-align: center;
+  max-width: 400px;
+}
+
+.logo-gigante {
+  font-size: 4rem;
+  font-weight: 800;
+  color: var(--accent-purple);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.tagline {
+  color: var(--text-light);
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+}
+
+.btn-outline-morado {
+  border: 2px solid var(--accent-purple) !important;
+  color: var(--accent-purple) !important;
+  border-radius: 30px !important;
+  padding: 8px 30px !important;
+  font-weight: 600 !important;
+  font-size: 1.1rem !important;
+}
+
+/* ========================================================
+   --- LADO DERECHO: TARJETA DE FORMULARIO ---
+   ======================================================== */
+.form-section {
+  width: 100%;
+  max-width: 450px;
+}
+
+.registro-card {
+  padding: 40px;
+  border-radius: 30px !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08) !important;
+  border: 1px solid #f0f0f0 !important;
+  background-color: #ffffff !important;
+}
+
+/* Títulos Centrados */
+.form-title-container {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.form-title {
+  font-weight: 800;
+  font-size: 2rem;
+  margin: 0;
+  color: var(--text-dark);
+}
+
+.form-subtitle {
+  font-weight: 800;
+  font-size: 1.8rem;
+  margin: 0;
+  color: var(--text-dark);
+}
+
+/* ========================================================
+   --- INPUTS Y ETIQUETAS DE MATERIAL ---
+   ======================================================== */
+.custom-label {
+  font-weight: 800;
+  color: var(--text-dark);
+  font-size: 1.1rem;
+  margin-bottom: 5px;
+}
+
+.custom-label i {
+  margin-right: 8px;
+}
+
+.mat-form-full {
+  width: 100%;
+  margin-bottom: 15px; /* Un poco más de espacio para que respiren */
+  display: block;
+}
+
+/* Forzamos el redondeo y quitamos el fondo gris por defecto de Material 3 */
+::ng-deep .mat-form-full .mat-mdc-text-field-wrapper {
+  border-radius: 15px !important;
+  background-color: #ffffff !important;
+}
+
+/* ========================================================
+   --- ACCIONES Y BOTONES DE FLUJO ---
+   ======================================================== */
+.botones-accion {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 15px;
+}
+
+.btn-verde-pill {
+  background-color: var(--primary-green) !important;
+  color: var(--text-dark) !important;
+  border-radius: 30px !important;
+  width: 85%;
+  padding: 25px 0 !important;
+  font-weight: 800 !important;
+  font-size: 1.1rem !important;
+  border: none !important;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-verde-pill i {
+  margin-right: 10px;
+}
+
+/* Acciones en Dos Pasos (Atrás / Crear) */
+.botones-accion-dos-pasos {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  margin-top: 25px;
+  width: 100%;
+}
+
+.btn-atras-pill {
+  flex: 1;
+  border: 2px solid var(--text-light) !important;
+  color: var(--text-light) !important;
+  border-radius: 30px !important;
+  padding: 12px 0 !important;
+  font-weight: 700 !important;
+  font-size: 1rem !important;
+  background: transparent !important;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-crear-pill {
+  flex: 2;
+  background-color: var(--primary-green) !important;
+  color: var(--text-dark) !important;
+  border-radius: 30px !important;
+  padding: 25px 0 !important;
+  font-weight: 800 !important;
+  font-size: 1.1rem !important;
+  border: none !important;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ========================================================
+   --- RESPONSIVE (Para celulares) ---
+   ======================================================== */
+@media (max-width: 900px) {
+  .registro-page-container {
+    flex-direction: column;
+    gap: 40px;
+    padding: 30px 15px;
+  }
+
+  .botones-accion-dos-pasos {
+    flex-direction: column-reverse;
+    gap: 12px;
+  }
+
+  .btn-atras-pill, .btn-crear-pill {
+    width: 100%;
+  }
+}

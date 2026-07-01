@@ -1,0 +1,101 @@
+<div class="registro-page-container">
+
+  <div class="brand-section">
+    <div class="logo-gigante">
+      <i class="fas fa-heart"></i>
+      <span>SoulStory</span>
+    </div>
+    <p class="tagline">Preserva tus recuerdos, conecta generaciones</p>
+
+    <button mat-stroked-button class="btn-outline-morado" routerLink="/iniciar-sesion">
+      <i class="fas fa-heart" style="margin-right: 8px;"></i> Iniciar Sesión
+    </button>
+  </div>
+
+  <div class="form-section">
+    <mat-card class="registro-card">
+
+      @if (paso === 1) {
+        <div class="form-title-container">
+          <h2 class="form-title">Crear Cuenta Cuidador</h2>
+          <h2 class="form-subtitle" style="font-size: 1.2rem; color: var(--accent-purple); margin-top: 5px;">(Paso 1 de 2)</h2>
+        </div>
+
+        <form id="registro-cuidador-form-1" class="registro-form" [formGroup]="registroForm" (ngSubmit)="irASiguiente()">
+
+          <div class="custom-label">
+            <i class="fas fa-user"></i> Nombre completo
+          </div>
+          <mat-form-field appearance="outline" class="mat-form-full">
+            <input matInput type="text" formControlName="nombreCompleto" placeholder="Ingresa tu nombre completo" />
+          </mat-form-field>
+
+          <div class="custom-label">
+            <i class="fas fa-envelope"></i> Correo electrónico
+          </div>
+          <mat-form-field appearance="outline" class="mat-form-full">
+            <input matInput type="email" formControlName="email" placeholder="correo@ejemplo.com" />
+          </mat-form-field>
+
+          <div class="custom-label">
+            <i class="fas fa-lock"></i> Contraseña
+          </div>
+          <mat-form-field appearance="outline" class="mat-form-full">
+            <input matInput type="password" formControlName="password" placeholder="Ingresa tu contraseña" />
+          </mat-form-field>
+
+          <div class="custom-label">
+            <i class="fas fa-lock"></i> Confirmar Contraseña
+          </div>
+          <mat-form-field appearance="outline" class="mat-form-full">
+            <input matInput type="password" formControlName="confirmPassword" placeholder="Confirma tu contraseña" />
+          </mat-form-field>
+
+          <div class="botones-accion">
+            <button type="submit" mat-flat-button class="btn-verde-pill">
+              Siguiente <i class="fas fa-arrow-right" style="margin-left: 10px; margin-right: 0;"></i>
+            </button>
+          </div>
+
+        </form>
+      }
+
+      @if (paso === 2) {
+        <div class="form-title-container">
+          <h2 class="form-title">Crear Cuenta</h2>
+          <h2 class="form-subtitle" style="font-size: 1.2rem; color: var(--accent-purple); margin-top: 5px;">Cuidador (Paso 2 de 2)</h2>
+        </div>
+
+        <form id="registro-cuidador-form-2" class="registro-form" [formGroup]="registroForm" (ngSubmit)="enviarFormulario()">
+
+          <div class="custom-label">
+            <i class="fas fa-phone"></i> Teléfono (Opcional)
+          </div>
+          <mat-form-field appearance="outline" class="mat-form-full">
+            <input matInput type="tel" formControlName="telefono" placeholder="Ej. +51 987654321" />
+          </mat-form-field>
+
+          <div class="custom-label">
+            <i class="fas fa-book-open"></i> Biografía / Parentesco (Opcional)
+          </div>
+          <mat-form-field appearance="outline" class="mat-form-full">
+            <textarea matInput formControlName="biografia" placeholder="Cuéntanos un poco sobre ti o tu relación con el adulto mayor..." rows="5"></textarea>
+          </mat-form-field>
+
+          <div class="botones-accion-dos-pasos">
+            <button type="button" mat-stroked-button class="btn-atras-pill" (click)="irAAtras()">
+              <i class="fas fa-arrow-left" style="margin-right: 8px;"></i> Atrás
+            </button>
+
+            <button type="submit" mat-flat-button class="btn-crear-pill">
+              Crear cuenta <i class="fas fa-heart" style="margin-left: 8px;"></i>
+            </button>
+          </div>
+
+        </form>
+      }
+
+    </mat-card>
+  </div>
+
+</div>
