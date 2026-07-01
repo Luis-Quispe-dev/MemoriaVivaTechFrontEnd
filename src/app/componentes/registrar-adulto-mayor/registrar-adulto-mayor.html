@@ -1,0 +1,77 @@
+<div class="registro-page-container">
+
+  <div class="brand-section">
+    <div class="logo-gigante">
+      <i class="fas fa-heart"></i>
+      <span>SoulStory</span>
+    </div>
+    <p class="tagline">Preserva tus recuerdos, conecta generaciones</p>
+
+    <button mat-stroked-button class="btn-outline-morado" routerLink="/iniciar-sesion">
+      <i class="fas fa-heart" style="margin-right: 8px;"></i> Iniciar Sesión
+    </button>
+  </div>
+
+  <div class="form-section">
+    <mat-card class="registro-card">
+
+      <div class="form-title-container">
+        <h2 class="form-title">Crear Cuenta</h2>
+        <h2 class="form-subtitle">Adulto Mayor</h2>
+      </div>
+
+      <form id="registro-mayor-form" class="registro-form" (ngSubmit)="enviarFormulario()">
+
+        <div class="custom-label">
+          <i class="fas fa-user"></i> Nombre completo
+        </div>
+        <mat-form-field appearance="outline" class="mat-form-full">
+          <input matInput type="text" name="nombreCompleto" required placeholder="Ingresa tu nombre completo"
+                 [(ngModel)]="datosRegistro.nombreCompleto" />
+        </mat-form-field>
+
+        <div class="custom-label">
+          <i class="fas fa-envelope"></i> Correo electrónico
+        </div>
+        <mat-form-field appearance="outline" class="mat-form-full">
+          <input matInput type="email" name="email" required placeholder="correo@ejemplo.com"
+                 [(ngModel)]="datosRegistro.email" />
+        </mat-form-field>
+
+        <div class="custom-label">
+          <i class="fas fa-calendar-alt"></i> Fecha de nacimiento
+        </div>
+        <mat-form-field appearance="outline" class="mat-form-full">
+          <input matInput [matDatepicker]="soulPicker" placeholder="Selecciona tu fecha" required readonly (click)="soulPicker.open()"
+                 name="fechaNacimiento" [(ngModel)]="datosRegistro.fechaNacimiento">
+          <mat-datepicker-toggle matSuffix [for]="soulPicker"></mat-datepicker-toggle>
+          <mat-datepicker #soulPicker></mat-datepicker>
+        </mat-form-field>
+
+        <div class="custom-label">
+          <i class="fas fa-lock"></i> Contraseña
+        </div>
+        <mat-form-field appearance="outline" class="mat-form-full">
+          <input matInput type="password" name="password" required placeholder="Ingresa tu contraseña"
+                 [(ngModel)]="datosRegistro.password" />
+        </mat-form-field>
+
+        <div class="custom-label">
+          <i class="fas fa-lock"></i> Afirmar Contraseña
+        </div>
+        <mat-form-field appearance="outline" class="mat-form-full">
+          <input matInput type="password" name="confirmPassword" required placeholder="Ingresa tu contraseña"
+                 [(ngModel)]="datosRegistro.confirmPassword" />
+        </mat-form-field>
+
+        <div class="botones-accion">
+          <button type="submit" mat-flat-button class="btn-verde-pill">
+            <i class="fas fa-arrow-right"></i> Crear cuenta SoulStory
+          </button>
+        </div>
+
+      </form>
+    </mat-card>
+  </div>
+
+</div>
