@@ -1,0 +1,224 @@
+<div class="dashboard-container">
+
+  <!-- Main Classic Navbar -->
+  <header class="classic-navbar">
+    <div class="logo-section">
+      <i class="fas fa-heart logo-heart"></i>
+      <span class="logo-text">SoulStory</span>
+    </div>
+
+    <!-- Navigation buttons -->
+    <nav class="nav-links">
+      <button class="nav-btn" routerLink="/inicio-adulto-mayor">
+        <i class="fas fa-home"></i> {{ 'NAV.INICIO' | translate }}
+      </button>
+      <button class="nav-btn" routerLink="/ver-recuerdos">
+        <i class="fas fa-memory"></i> {{ 'NAV.RECUERDOS' | translate }}
+      </button>
+      <button class="nav-btn active" routerLink="/galeria-ia">
+        <i class="fas fa-image"></i> {{ 'NAV.GALERIA' | translate }}
+      </button>
+    </nav>
+
+    <!-- User Profile (Wrapped as a Clickable Button) & Logout -->
+    <div class="profile-logout-section">
+      <button class="profile-btn" routerLink="/perfil-adulto-mayor" [title]="'NAV.PERFIL' | translate">
+        <div class="user-profile">
+          <div class="avatar-circle" style="overflow: hidden; display: flex; align-items: center; justify-content: center;">
+            @if (fotoPerfil) {
+              <img [src]="fotoPerfil" style="width: 100%; height: 100%; object-fit: cover;" alt="Foto de perfil">
+            } @else {
+              <i class="fas fa-user"></i>
+            }
+          </div>
+          <div class="profile-text">
+            <span class="profile-name">{{ nombreUsuario }}</span>
+            <span class="profile-role">{{ 'NAV.ROL' | translate }}</span>
+          </div>
+        </div>
+      </button>
+
+      <button class="btn-logout-square" (click)="cerrarSesion()" [title]="'NAV.CERRAR_SESION' | translate">
+        <i class="fas fa-sign-out-alt"></i>
+      </button>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="glass-panel main-panel animate-fade-in">
+      <div class="panel-header">
+        <button mat-button class="btn btn-retroceder" routerLink="/inicio-adulto-mayor">
+          <i class="fas fa-arrow-left"></i> {{ 'BOTON.VOLVER' | translate }}
+        </button>
+        <h2 class="panel-title">
+          <i class="fas fa-magic text-indigo"></i> {{ 'GALERIA.TITULO' | translate }}
+        </h2>
+        <button mat-flat-button class="btn" (click)="mostrarFormularioGenerador = !mostrarFormularioGenerador"
+                [style.background]="mostrarFormularioGenerador ? '#fee2e2' : '#6200ea'"
+                [style.color]="mostrarFormularioGenerador ? '#991b1b' : 'white'"
+                style="border: none; font-weight: 700; border-radius: 12px; padding: 10px 22px; font-size: 1.05rem; display: inline-flex; align-items: center; gap: 8px; transition: var(--transition); cursor: pointer; box-shadow: 0 4px 10px rgba(98, 0, 234, 0.15);">
+          <i class="fas" [class.fa-plus]="!mostrarFormularioGenerador" [class.fa-times]="mostrarFormularioGenerador"></i>
+          {{ mostrarFormularioGenerador ? ('GALERIA.BOTON_CERRAR' | translate) : ('GALERIA.BOTON_CREAR' | translate) }}
+        </button>
+      </div>
+
+      <p class="panel-intro">{{ 'GALERIA.INTRO' | translate }}</p>
+
+      <!-- STABILITY AI PROMPT GENERATOR WIDRAME CARD -->
+      @if (mostrarFormularioGenerador) {
+        <div class="ai-generator-card animate-fade-in" style="background: linear-gradient(135deg, #f5f3ff 0%, #edd8fc 100%); border: 2px dashed #c084fc; border-radius: 20px; padding: 30px; margin-bottom: 40px; box-shadow: 0 10px 25px rgba(98, 0, 234, 0.05);">
+          <h3 style="color: #6200ea; font-size: 1.5rem; font-weight: 800; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+            <i class="fas fa-magic"></i> {{ 'GALERIA.PROMPT_PREGUNTA' | translate }}
+          </h3>
+          <p style="color: #5b21b6; font-size: 1.05rem; margin-bottom: 20px; font-weight: 500;">
+            {{ 'GALERIA.PROMPT_INSTRUCCION' | translate }}
+          </p>
+
+          <div class="form-group" style="margin-bottom: 20px; width: 100%;">
+            <mat-form-field appearance="outline" style="width: 100%;">
+              <mat-label>{{ 'GALERIA.PROMPT_LABEL' | translate }}</mat-label>
+              <textarea matInput [(ngModel)]="prompt" [placeholder]="'GALERIA.PROMPT_PLACEHOLDER' | translate" style="min-height: 100px; font-size: 1.1rem;" [disabled]="generando || guardando"></textarea>
+            </mat-form-field>
+          </div>
+
+          <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+            <button mat-flat-button class="btn" (click)="generarIlustracion()" [disabled]="generando || !prompt.trim() || guardando" style="background: #6200ea !important; color: white !important; font-weight: 700; border-radius: 12px; padding: 12px 25px; font-size: 1.1rem; border: none; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; transition: all 0.2s ease;">
+              @if (generando) {
+                <i class="fas fa-spinner fa-spin"></i> {{ 'GALERIA.STATUS_GENERANDO' | translate }}
+              } @else {
+                <i class="fas fa-paint-brush"></i> {{ 'GALERIA.BOTON_GENERAR' | translate }}
+              }
+            </button>
+          </div>
+
+          <!-- AI Generation Result Frame -->
+          @if (imagenGeneradaUrl) {
+            <div class="ai-result-frame animate-fade-in" style="margin-top: 30px; padding-top: 25px; border-top: 2px solid #ddd6fe; text-align: center;">
+              <h4 style="color: #0f172a; font-size: 1.25rem; font-weight: 700; margin-bottom: 15px;">{{ 'GALERIA.READY_TITULO' | translate }}</h4>
+
+              <div style="display: inline-block; max-width: 380px; width: 100%; border: 8px solid white; border-bottom: 40px solid white; box-shadow: 0 10px 30px rgba(0,0,0,0.15); border-radius: 8px; transform: rotate(-1deg); margin-bottom: 25px;">
+                <img [src]="imagenGeneradaUrl" style="width: 100%; height: auto; display: block; object-fit: cover;" alt="Ilustración generada por IA">
+                <div style="text-align: center; padding-top: 15px; font-family: 'Georgia', serif; font-size: 1.1rem; font-style: italic; color: #475569;">
+                  {{ tituloRetrato || ('GALERIA.READY_UNTITLED' | translate) }}
+                </div>
+              </div>
+
+              <!-- Save Section -->
+              <div style="max-width: 500px; margin: 0 auto; background: white; padding: 20px; border-radius: 16px; border: 1px solid #ddd6fe; text-align: left; box-shadow: 0 4px 12px rgba(0,0,0,0.02);">
+                <div class="form-group" style="margin-bottom: 15px; width: 100%;">
+                  <mat-form-field appearance="outline" style="width: 100%;">
+                    <mat-label>{{ 'GALERIA.LABEL_TITULO' | translate }}</mat-label>
+                    <input matInput type="text" [(ngModel)]="tituloRetrato" [placeholder]="'GALERIA.PLACEHOLDER_TITULO' | translate" style="font-size: 1.05rem;" [disabled]="guardando">
+                  </mat-form-field>
+                </div>
+
+                <button mat-flat-button class="btn" (click)="guardarIlustracion()" [disabled]="guardando || !tituloRetrato.trim()" style="background: #22c55e !important; color: white !important; font-weight: 700; border-radius: 12px; padding: 12px 25px; font-size: 1.1rem; border: none; width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;">
+                  @if (guardando) {
+                    <i class="fas fa-spinner fa-spin"></i> {{ 'GALERIA.STATUS_GUARDANDO' | translate }}
+                  } @else {
+                    <i class="fas fa-save"></i> {{ 'GALERIA.BOTON_SAVE' | translate }}
+                  }
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      }
+
+      @if (cargando) {
+        <div class="loading-state">
+          <i class="fas fa-spinner fa-spin spin-icon"></i>
+          <p>{{ 'GALERIA.LOADING' | translate }}</p>
+        </div>
+      } @else {
+        @if (retratos.length === 0) {
+          <!-- CUSTOM GALLERY EMPTY STATE -->
+          <div class="custom-empty-state animate-fade-in" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; text-align: center; background: white;">
+            <div class="empty-heart-circle" style="width: 140px; height: 140px; border-radius: 50%; background: radial-gradient(circle, #e0f2fe 0%, #bae6fd 100%); display: flex; align-items: center; justify-content: center; margin-bottom: 30px; box-shadow: 0 8px 20px rgba(186, 230, 253, 0.2);">
+              <i class="fas fa-images" style="font-size: 3.5rem; color: #787f8a;"></i>
+            </div>
+
+            <h3 style="font-size: 2.2rem; font-weight: 800; color: #000000; margin-bottom: 12px; font-family: 'Segoe UI', sans-serif;">{{ 'GALERIA.VACIO_TITULO' | translate }}</h3>
+            <p style="font-size: 1.25rem; color: #94a3b8; max-width: 500px; line-height: 1.6; font-weight: 500; margin-bottom: 30px;">{{ 'GALERIA.VACIO_DESC' | translate }}</p>
+
+            <button mat-flat-button class="btn btn-create-first" (click)="mostrarFormularioGenerador = true" style="background: #bbf7d0 !important; color: #166534 !important; border: 2px solid #86efac !important; font-weight: 700; border-radius: 12px; padding: 12px 35px; font-size: 1.15rem; display: inline-flex; align-items: center; gap: 8px; transition: var(--transition); cursor: pointer; box-shadow: 0 4px 10px rgba(22, 101, 52, 0.05);">
+              {{ 'GALERIA.BOTON_CREAR' | translate }}
+            </button>
+          </div>
+        } @else {
+          <div class="gallery-photo-grid">
+            @for (retrato of retratos; track retrato.idRetratoIa) {
+              <div class="gallery-photo-card animate-fade-in">
+                <div class="gallery-photo-img-wrapper" (click)="abrirPrevisualizacion(retrato)" style="cursor: pointer; position: relative;">
+                  <img [src]="retrato.urlImagen" class="gallery-photo-img" alt="Ilustración IA" style="transition: transform 0.3s ease;">
+                  <div class="image-overlay-hover" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(98, 0, 234, 0.4); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease; color: white; font-size: 1.6rem; pointer-events: none;">
+                    <i class="fas fa-search-plus"></i>
+                  </div>
+                </div>
+                <div class="gallery-photo-info">
+                  <h4 (click)="abrirPrevisualizacion(retrato)" style="cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='#6200ea'" onmouseout="this.style.color='#0f172a'">{{ retrato.titulo }}</h4>
+                  <p class="gallery-photo-desc">{{ 'GALERIA.IDEA_ORIGINAL' | translate }}: {{ retrato.promptDescripcion }}</p>
+                  <div class="gallery-photo-footer">
+                    <span class="gallery-photo-date">{{ retrato.fechaCreacion ? (retrato.fechaCreacion | date:'dd/MM/yyyy HH:mm') : ('RECUERDOS.FECHA_NO_REGISTRADA' | translate) }}</span>
+                    <div style="display: flex; gap: 8px;">
+                      <button class="gallery-print-btn" (click)="abrirPrevisualizacion(retrato)" title="Ver en Grande / Detalle">
+                        <i class="fas fa-search-plus"></i>
+                      </button>
+                      <button class="gallery-print-btn" (click)="exportarLegado(retrato)" [title]="'GALERIA.IMPRIMIR' | translate">
+                        <i class="fas fa-print"></i>
+                      </button>
+                      <button class="gallery-print-btn" (click)="eliminarRetrato(retrato.idRetratoIa)" [title]="'RECUERDOS.BORRAR' | translate" style="color: #ef4444;">
+                        <i class="fas fa-trash-alt"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      }
+    </div>
+  </div>
+
+  <!-- LIGHTBOX PREVIEW OVERLAY MODAL -->
+  @if (retratoSeleccionado) {
+    <div class="portrait-lightbox-overlay" (click)="cerrarPrevisualizacion()">
+      <div class="portrait-lightbox-container" (click)="$event.stopPropagation()">
+
+        <div class="lightbox-polaroid-frame">
+          <img [src]="retratoSeleccionado.urlImagen" class="lightbox-image" alt="Ilustración ampliada">
+        </div>
+
+        <div class="lightbox-info">
+          <div class="lightbox-title-bar">
+            <h3 class="lightbox-title">{{ retratoSeleccionado.titulo }}</h3>
+            <button mat-icon-button class="lightbox-close-btn" (click)="cerrarPrevisualizacion()" title="Cerrar vista">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+
+          <p class="lightbox-prompt">
+            <strong>{{ 'GALERIA.IDEA_ORIGINAL' | translate }}:</strong> "{{ retratoSeleccionado.promptDescripcion }}"
+          </p>
+
+          <div class="lightbox-footer">
+            <span class="lightbox-date">
+              <i class="far fa-calendar-alt" style="margin-right: 4px;"></i>
+              {{ retratoSeleccionado.fechaCreacion ? (retratoSeleccionado.fechaCreacion | date:'dd/MM/yyyy HH:mm') : ('RECUERDOS.FECHA_NO_REGISTRADA' | translate) }}
+            </span>
+            <div class="lightbox-actions">
+              <button mat-flat-button class="btn" (click)="exportarLegado(retratoSeleccionado)" style="background: #6200ea !important; color: white !important; font-weight: 700; border-radius: 12px; padding: 10px 20px; font-size: 1rem; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 10px rgba(98, 0, 234, 0.2);">
+                <i class="fas fa-print"></i> {{ 'GALERIA.IMPRIMIR' | translate }}
+              </button>
+              <button mat-button class="btn" (click)="eliminarRetrato(retratoSeleccionado.idRetratoIa); cerrarPrevisualizacion()" style="background: #fee2e2 !important; color: #dc2626 !important; font-weight: 700; border-radius: 12px; padding: 10px 20px; font-size: 1rem; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+                <i class="fas fa-trash-alt"></i> {{ 'RECUERDOS.BORRAR' | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  }
+</div>
