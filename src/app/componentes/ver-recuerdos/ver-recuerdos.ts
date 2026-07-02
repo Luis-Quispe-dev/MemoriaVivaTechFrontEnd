@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -42,13 +42,11 @@ export class VerRecuerdos implements OnInit {
   filtroActual = 'TODOS';
   busquedaQuery = '';
 
-  constructor(
-    private usuarioService: UsuarioService,
-    private recuerdoService: RecuerdoService,
-    private lenguajeService: LenguajeService,
-    private router: Router,
-    private cdr: ChangeDetectorRef,
-  ) {}
+  private usuarioService = inject(UsuarioService);
+  private recuerdoService = inject(RecuerdoService);
+  private lenguajeService = inject(LenguajeService);
+  private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
 
   ngOnInit() {
     if (!this.usuarioService.estaLogueado()) {
@@ -191,6 +189,118 @@ export class VerRecuerdos implements OnInit {
               this.lenguajeService.translate('RECUERDOS.DELETE_ERROR_DESC'),
               'error',
             );
+          },
+        });
+      }
+    });
+  }
+
+  abrirEditarRecuerdoModal(recuerdo: RecuerdoRespondeDTO) {
+    const titleLabel =
+      this.lenguajeService.translate('RECUERDOS.EDITAR_TITULO_LABEL') || 'Título del recuerdo';
+    const contentLabel =
+      this.lenguajeService.translate('RECUERDOS.EDITAR_CONTENIDO_LABEL') || 'Contenido / Relato';
+    const submitText = this.lenguajeService.translate('CONF.GUARDAR') || 'Guardar';
+    const cancelText = this.lenguajeService.translate('BOTON.CANCELAR') || 'Cancelar';
+    const modalTitle =
+      this.lenguajeService.translate('RECUERDOS.EDITAR_MODAL_TITLE') || 'Editar Recuerdo';
+
+    let contentHtml = '';
+
+    if (recuerdo.tipoRecuerdo === 'TEXTO') {
+      contentHtml = `
+        <div style="text-align: left; font-family: 'Segoe UI', system-ui, sans-serif; padding: 10px 0;">
+          <div style="margin-bottom: 15px;">
+            <label style="display: block; font-weight: 700; color: #475569; margin-bottom: 5px;">${titleLabel}</label>
+            <input id="edit-recuerdo-titulo" type="text" class="swal2-input" value="${recuerdo.tituloRecuerdo}" style="margin: 0; width: 100%; box-sizing: border-box; border-radius: 8px;">
+          </div>
+          <div style="margin-bottom: 15px;">
+            <label style="display: block; font-weight: 700; color: #475569; margin-bottom: 5px;">${contentLabel}</label>
+            <textarea id="edit-recuerdo-contenido" class="swal2-textarea" style="margin: 0; width: 100%; height: 180px; box-sizing: border-box; border-radius: 8px; font-family: inherit;">${recuerdo.contenido}</textarea>
+          </div>
+        </div>
+      `;
+    } else {
+      contentHtml = `
+        <div style="text-align: left; font-family: 'Segoe UI', system-ui, sans-serif; padding: 10px 0;">
+          <div style="margin-bottom: 15px;">
+            <label style="display: block; font-weight: 700; color: #475569; margin-bottom: 5px;">${titleLabel}</label>
+            <input id="edit-recuerdo-titulo" type="text" class="swal2-input" value="${recuerdo.tituloRecuerdo}" style="margin: 0; width: 100%; box-sizing: border-box; border-radius: 8px;">
+          </div>
+          <input id="edit-recuerdo-contenido" type="hidden" value="${recuerdo.contenido}">
+        </div>
+      `;
+    }
+
+    Swal.fire({
+      title: modalTitle,
+      html: contentHtml,
+      showCancelButton: true,
+      confirmButtonText: submitText,
+      cancelButtonText: cancelText,
+      confirmButtonColor: '#10b981',
+      cancelButtonColor: '#64748b',
+      focusConfirm: false,
+      preConfirm: () => {
+        const nuevoTitulo = (
+          document.getElementById('edit-recuerdo-titulo') as HTMLInputElement
+        ).value.trim();
+        const nuevoContenido = (
+          document.getElementById('edit-recuerdo-contenido') as HTMLInputElement
+        ).value.trim();
+
+        if (!nuevoTitulo) {
+          Swal.showValidationMessage(
+            this.lenguajeService.translate('RECUERDOS.VALIDATION_TITLE_REQ') ||
+              'El título es obligatorio.',
+          );
+          return false;
+        }
+        if (!nuevoContenido) {
+          Swal.showValidationMessage(
+            this.lenguajeService.translate('RECUERDOS.VALIDATION_CONTENT_REQ') ||
+              'El contenido es obligatorio.',
+          );
+          return false;
+        }
+
+        return {
+          idAdultoMayor: this.userId!,
+          tituloRecuerdo: nuevoTitulo,
+          tipoRecuerdo: recuerdo.tipoRecuerdo,
+          contenido: nuevoContenido,
+          formato: recuerdo.formato || '',
+        };
+      },
+    }).then((result) => {
+      if (result.isConfirmed && result.value) {
+        Swal.showLoading();
+        this.recuerdoService.editarRecuerdo(recuerdo.idRecuerdo, result.value).subscribe({
+          next: (res) => {
+            Swal.close();
+            Swal.fire({
+              icon: 'success',
+              title:
+                this.lenguajeService.translate('RECUERDOS.EDITAR_SUCCESS_TITLE') ||
+                'Recuerdo Actualizado',
+              text:
+                this.lenguajeService.translate('RECUERDOS.EDITAR_SUCCESS_DESC') ||
+                'El recuerdo ha sido modificado con éxito.',
+              confirmButtonColor: '#10b981',
+            });
+            this.cargarRecuerdos();
+          },
+          error: (err) => {
+            Swal.close();
+            console.error('Error al editar recuerdo:', err);
+            Swal.fire({
+              icon: 'error',
+              title: this.lenguajeService.translate('REC_TEXTO.SAVE_ERROR_TITLE') || 'Error',
+              text:
+                this.lenguajeService.translate('RECUERDOS.EDITAR_ERROR_DESC') ||
+                'No se pudo guardar la modificación del recuerdo.',
+              confirmButtonColor: '#10b981',
+            });
           },
         });
       }

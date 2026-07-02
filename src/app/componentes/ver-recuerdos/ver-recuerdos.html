@@ -146,6 +146,9 @@
                     <button class="action-btn-mini download-btn" (click)="exportarLegado(recuerdo)" [title]="'GALERIA.IMPRIMIR' | translate">
                       <i class="fas fa-print"></i>
                     </button>
+                    <button class="action-btn-mini edit-btn" (click)="abrirEditarRecuerdoModal(recuerdo)" [title]="'RECUERDOS.EDITAR' | translate">
+                      <i class="fas fa-pencil-alt" style="color: #6200ea;"></i>
+                    </button>
                   </div>
                   <button class="btn-delete" (click)="eliminarRecuerdo(recuerdo.idRecuerdo)" [title]="'RECUERDOS.BORRAR' | translate">
                     <i class="fas fa-trash-alt"></i> {{ 'RECUERDOS.BORRAR' | translate }}
