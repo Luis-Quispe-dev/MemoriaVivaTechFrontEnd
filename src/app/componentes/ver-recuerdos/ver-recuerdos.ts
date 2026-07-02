@@ -318,7 +318,7 @@ export class VerRecuerdos implements OnInit {
                    <hr style="border-color: rgba(0,0,0,0.05); margin: 10px 0;">
                    <p style="white-space: pre-wrap; font-family: monospace; font-size: 0.95rem;">${exportData.contenido || recuerdo.contenido}</p>
                  </div>`,
-          confirmButtonText: 'Descargar e Imprimir',
+          confirmButtonText: 'Descargar e Imprimir.',
           confirmButtonColor: '#6200ea',
         });
       },
