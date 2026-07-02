@@ -1,0 +1,164 @@
+<div class="dashboard-container">
+
+  <!-- Main Classic Navbar -->
+  <header class="classic-navbar">
+    <div class="logo-section">
+      <i class="fas fa-heart logo-heart"></i>
+      <span class="logo-text">SoulStory</span>
+    </div>
+
+    <!-- Navigation buttons -->
+    <nav class="nav-links">
+      <button class="nav-btn" routerLink="/inicio-adulto-mayor">
+        <i class="fas fa-home"></i> {{ 'NAV.INICIO' | translate }}
+      </button>
+      <button class="nav-btn active" routerLink="/ver-recuerdos">
+        <i class="fas fa-memory"></i> {{ 'NAV.RECUERDOS' | translate }}
+      </button>
+      <button class="nav-btn" routerLink="/galeria-ia">
+        <i class="fas fa-image"></i> {{ 'NAV.GALERIA' | translate }}
+      </button>
+    </nav>
+
+    <!-- User Profile & Logout -->
+    <div class="profile-logout-section">
+      <button class="profile-btn" routerLink="/perfil-adulto-mayor" [title]="'NAV.PERFIL' | translate">
+        <div class="user-profile">
+          <div class="avatar-circle" style="overflow: hidden; display: flex; align-items: center; justify-content: center;">
+            @if (fotoPerfil) {
+              <img [src]="fotoPerfil" style="width: 100%; height: 100%; object-fit: cover;" alt="Foto de perfil">
+            } @else {
+              <i class="fas fa-user"></i>
+            }
+          </div>
+          <div class="profile-text">
+            <span class="profile-name">{{ nombreUsuario }}</span>
+            <span class="profile-role">{{ 'NAV.ROL' | translate }}</span>
+          </div>
+        </div>
+      </button>
+
+      <button class="btn-logout-square" (click)="cerrarSesion()" [title]="'NAV.CERRAR_SESION' | translate">
+        <i class="fas fa-sign-out-alt"></i>
+      </button>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="glass-panel main-panel animate-fade-in">
+      <div class="panel-header">
+        <button class="btn btn-retroceder" routerLink="/inicio-adulto-mayor">
+          <i class="fas fa-arrow-left"></i> {{ 'BOTON.VOLVER' | translate }}
+        </button>
+        <h2 class="panel-title">
+          <i class="fas fa-memory text-blue"></i> {{ 'RECUERDOS.TITULO' | translate }}
+        </h2>
+      </div>
+
+      <!-- Search Bar and Filter Tabs -->
+      <div class="search-filter-section">
+        <div class="search-bar-wrapper">
+          <i class="fas fa-search search-icon"></i>
+          <input type="text" class="search-input-box" [placeholder]="'RECUERDOS.BUSCAR_PLACEHOLDER' | translate"
+                 name="busquedaQuery" [(ngModel)]="busquedaQuery" (input)="filtrarPorBusqueda()">
+        </div>
+
+        <div class="filtros-tabs">
+          <button class="tab-btn" [class.active]="filtroActual === 'TODOS'" (click)="cambiarFiltro('TODOS')">
+            <i class="fas fa-archive"></i> {{ 'RECUERDOS.TAB_TODOS' | translate }}
+          </button>
+          <button class="tab-btn" [class.active]="filtroActual === 'TEXTO'" (click)="cambiarFiltro('TEXTO')">
+            <i class="fas fa-pen-fancy"></i> {{ 'RECUERDOS.TAB_RELATOS' | translate }}
+          </button>
+          <button class="tab-btn" [class.active]="filtroActual === 'AUDIO'" (click)="cambiarFiltro('AUDIO')">
+            <i class="fas fa-microphone"></i> {{ 'RECUERDOS.TAB_AUDIOS' | translate }}
+          </button>
+          <button class="tab-btn" [class.active]="filtroActual === 'FOTO'" (click)="cambiarFiltro('FOTO')">
+            <i class="fas fa-camera"></i> {{ 'RECUERDOS.TAB_FOTOS' | translate }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Stories dynamic list -->
+      <div class="stories-list">
+        @if (cargando) {
+          <div class="loading-state">
+            <i class="fas fa-spinner fa-spin spin-icon"></i>
+            <p>{{ 'RECUERDOS.LOADING' | translate }}</p>
+          </div>
+        } @else if (recuerdos.length === 0) {
+          <!-- CUSTOM EMPTY STATE (Matching screenshot exactly) -->
+          <div class="custom-empty-state animate-fade-in" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; text-align: center; background: white;">
+            <!-- Soft blue gradient circle with grey heart icon -->
+            <div class="empty-heart-circle" style="width: 140px; height: 140px; border-radius: 50%; background: radial-gradient(circle, #e0f2fe 0%, #bae6fd 100%); display: flex; align-items: center; justify-content: center; margin-bottom: 30px; box-shadow: 0 8px 20px rgba(186, 230, 253, 0.2);">
+              <i class="fas fa-heart" style="font-size: 3.5rem; color: #787f8a;"></i>
+            </div>
+
+            <h3 style="font-size: 2.2rem; font-weight: 800; color: #000000; margin-bottom: 12px; font-family: 'Segoe UI', sans-serif;">{{ 'RECUERDOS.VACIO_TITULO' | translate }}</h3>
+            <p style="font-size: 1.25rem; color: #94a3b8; max-width: 500px; line-height: 1.6; font-weight: 500; margin-bottom: 30px;">{{ 'RECUERDOS.VACIO_DESC' | translate }}</p>
+
+            <button class="btn btn-create-first" routerLink="/registrar-recuerdo-texto" style="background: #bbf7d0 !important; color: #166534 !important; border: 2px solid #86efac !important; font-weight: 700; border-radius: 12px; padding: 12px 28px; font-size: 1.1rem; display: inline-flex; align-items: center; gap: 8px; transition: var(--transition); cursor: pointer; box-shadow: 0 4px 10px rgba(22, 101, 52, 0.05);">
+              <i class="fas fa-plus"></i> {{ 'RECUERDOS.BOTON_CREAR_PRIMERO' | translate }}
+            </button>
+          </div>
+        } @else if (recuerdosFiltrados.length === 0) {
+          <div class="empty-state">
+            <i class="fas fa-book-open empty-icon"></i>
+            <h3>{{ 'RECUERDOS.NO_ENCONTRADOS_TITULO' | translate }}</h3>
+            <p>{{ 'RECUERDOS.NO_ENCONTRADOS_DESC' | translate }}</p>
+          </div>
+        } @else {
+          <div class="stories-grid">
+            @for (recuerdo of recuerdosFiltrados; track recuerdo.idRecuerdo) {
+              <div class="story-card" [class.favorite-card]="recuerdo.esFavorito">
+                <div class="story-header">
+                  <div>
+                    <h3 class="story-title">{{ recuerdo.tituloRecuerdo }}</h3>
+                    <span class="story-date"><i class="far fa-calendar-alt"></i> {{ recuerdo.fechaCreacion || ('RECUERDOS.FECHA_NO_REGISTRADA' | translate) }}</span>
+                  </div>
+                  <span class="story-badge" [ngClass]="recuerdo.tipoRecuerdo">
+                    @if (recuerdo.tipoRecuerdo === 'TEXTO') { <i class="fas fa-pen-fancy"></i> {{ 'RECUERDOS.TIPO_RELATO' | translate }} }
+                    @if (recuerdo.tipoRecuerdo === 'AUDIO') { <i class="fas fa-microphone"></i> {{ 'RECUERDOS.TIPO_AUDIO' | translate }} }
+                    @if (recuerdo.tipoRecuerdo === 'FOTO') { <i class="fas fa-camera"></i> {{ 'RECUERDOS.TIPO_FOTO' | translate }} }
+                  </span>
+                </div>
+
+                @if (recuerdo.tipoRecuerdo === 'FOTO') {
+                  <div class="polaroid-frame-mini" style="margin-bottom: 20px; text-align: center;">
+                    <img [src]="recuerdo.contenido" class="polaroid-image-mini" alt="Recuerdo familiar"
+                         style="width: 100%; max-height: 250px; object-fit: cover; border-radius: 12px; border: 1px solid #e2e8f0; padding: 6px; background: white; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                  </div>
+                } @else if (recuerdo.tipoRecuerdo === 'AUDIO') {
+                  <div class="audio-player-card-mini" style="margin-bottom: 20px; width: 100%; text-align: center; background: #fff0f5; padding: 15px; border-radius: 16px; border: 1px solid #ffb3c6;">
+                    <audio [src]="recuerdo.contenido" controls style="width: 100%; max-width: 350px;"></audio>
+                  </div>
+                } @else {
+                  <p class="story-body">{{ recuerdo.contenido }}</p>
+                }
+
+                <!-- Cards footer actions -->
+                <div class="story-footer">
+                  <div class="card-actions-left">
+                    <button class="action-btn-mini fav-toggle" [class.fav-active]="recuerdo.esFavorito"
+                            (click)="toggleFavorito(recuerdo)" title="Favorito">
+                      <i [ngClass]="recuerdo.esFavorito ? 'fas fa-heart' : 'far fa-heart'" [style.color]="recuerdo.esFavorito ? '#ef4444' : '#64748b'"></i>
+                    </button>
+                    <button class="action-btn-mini download-btn" (click)="exportarLegado(recuerdo)" [title]="'GALERIA.IMPRIMIR' | translate">
+                      <i class="fas fa-print"></i>
+                    </button>
+                    <button class="action-btn-mini edit-btn" (click)="abrirEditarRecuerdoModal(recuerdo)" [title]="'RECUERDOS.EDITAR' | translate">
+                      <i class="fas fa-pencil-alt" style="color: #6200ea;"></i>
+                    </button>
+                  </div>
+                  <button class="btn-delete" (click)="eliminarRecuerdo(recuerdo.idRecuerdo)" [title]="'RECUERDOS.BORRAR' | translate">
+                    <i class="fas fa-trash-alt"></i> {{ 'RECUERDOS.BORRAR' | translate }}
+                  </button>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

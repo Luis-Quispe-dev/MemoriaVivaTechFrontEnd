@@ -1,13 +1,11 @@
 <div class="dashboard-container">
 
-  <!-- Main Classic Navbar -->
   <header class="classic-navbar">
     <div class="logo-section">
       <i class="fas fa-heart logo-heart"></i>
       <span class="logo-text">SoulStory</span>
     </div>
 
-    <!-- Navigation buttons -->
     <nav class="nav-links">
       <button class="nav-btn" routerLink="/inicio-adulto-mayor">
         <i class="fas fa-home"></i> {{ 'NAV.INICIO' | translate }}
@@ -20,7 +18,6 @@
       </button>
     </nav>
 
-    <!-- User Profile (Wrapped as a Clickable Button) & Logout -->
     <div class="profile-logout-section">
       <button class="profile-btn" routerLink="/perfil-adulto-mayor" [title]="'NAV.PERFIL' | translate">
         <div class="user-profile">
@@ -51,33 +48,55 @@
           <i class="fas fa-arrow-left"></i> {{ 'BOTON.VOLVER' | translate }}
         </button>
         <h2 class="panel-title">
-          <i class="fas fa-pen-fancy text-purple"></i> {{ 'REC_TEXTO.TITULO' | translate }}
+          <i class="fas fa-microphone text-purple"></i> {{ 'REC_AUDIO.TITULO' | translate }}
         </h2>
       </div>
 
-      <p class="panel-intro">{{ 'REC_TEXTO.INTRO' | translate }}</p>
+      <p class="panel-intro">{{ 'REC_AUDIO.INTRO' | translate }}</p>
 
       <form (ngSubmit)="guardarRecuerdo()" class="senior-form">
         <div class="form-group">
           <mat-form-field appearance="outline" class="w-full">
-            <mat-label>{{ 'REC_TEXTO.LABEL_TITULO' | translate }}</mat-label>
-            <input matInput type="text" id="titulo-texto" name="tituloRecuerdo" required
-                   [placeholder]="'REC_TEXTO.PLACEHOLDER_TITULO' | translate"
+            <mat-label>{{ 'REC_AUDIO.LABEL_TITULO' | translate }}</mat-label>
+            <input matInput type="text" id="titulo-audio" name="tituloRecuerdo" required
+                   [placeholder]="'REC_AUDIO.PLACEHOLDER_TITULO' | translate"
                    [(ngModel)]="nuevoRecuerdo.tituloRecuerdo">
           </mat-form-field>
         </div>
 
-        <div class="form-group">
-          <mat-form-field appearance="outline" class="w-full">
-            <mat-label>{{ 'REC_TEXTO.LABEL_RELATO' | translate }}</mat-label>
-            <textarea matInput id="contenido-texto" name="contenido" required rows="8"
-                      [placeholder]="'REC_TEXTO.PLACEHOLDER_RELATO' | translate"
-                      [(ngModel)]="nuevoRecuerdo.contenido"></textarea>
-          </mat-form-field>
+        <div class="audio-dashboard-card">
+          <button type="button" class="mic-pulsing-btn" [class.recording]="estaGrabando" (click)="alternarGrabacion()">
+            <i class="fas" [ngClass]="estaGrabando ? 'fa-stop' : 'fa-microphone'"></i>
+          </button>
+
+          <p class="mic-status-text">
+            {{ estaGrabando ? ('REC_AUDIO.STATUS_RECORDING' | translate) : (audioUrl ? ('REC_AUDIO.STATUS_FINISHED' | translate) : ('REC_AUDIO.STATUS_START' | translate)) }}
+          </p>
+
+          @if (estaGrabando) {
+            <div class="wave-container">
+              <span class="wave-bar"></span>
+              <span class="wave-bar"></span>
+              <span class="wave-bar"></span>
+              <span class="wave-bar"></span>
+              <span class="wave-bar"></span>
+              <span class="wave-bar"></span>
+              <span class="wave-bar"></span>
+            </div>
+          }
+
+          @if (audioUrl) {
+            <div class="audio-player-container animate-fade-in" style="margin-top: 15px; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 15px;">
+              <audio [src]="audioUrl" controls style="width: 100%; max-width: 400px; border-radius: 50px; background: #7835d5; box-shadow: 0 4px 10px rgba(255, 71, 133, 0.08);"></audio>
+              <button mat-button type="button" class="btn btn-retroceder" (click)="borrarGrabacion()" style="background: #fff5f5 !important; color: #ef4444 !important; border-color: #fee2e2 !important;">
+                <i class="fas fa-trash"></i> {{ 'REC_AUDIO.DESCARTAR' | translate }}
+              </button>
+            </div>
+          }
         </div>
 
-        <button type="submit" mat-flat-button class="btn btn-save bg-purple-btn" [disabled]="cargando">
-          <i class="fas fa-save"></i> {{ 'REC_TEXTO.BOTON_SAVE' | translate }}
+        <button type="submit" mat-flat-button class="btn btn-save bg-purple-btn" [disabled]="cargando || !nuevoRecuerdo.contenido" style="margin-top: 20px;">
+          <i class="fas fa-save"></i> {{ 'REC_AUDIO.BOTON_SAVE' | translate }}
         </button>
       </form>
     </div>
