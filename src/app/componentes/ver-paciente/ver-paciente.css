@@ -1,0 +1,361 @@
+@import "../inicio-adulto-mayor/inicio-adulto-mayor.css";
+
+/* Bell Notification Button - Symmetrical to Caregiver Dashboard */
+.classic-navbar .bell-btn {
+  background: white;
+  border: 1px solid #cbd5e1;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #475569;
+  font-size: 1.15rem;
+  transition: all 0.2s ease;
+}
+
+.classic-navbar .bell-btn:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+  transform: scale(1.05);
+}
+
+/* Search client bar - Perfect, ultra-clean premium recreation */
+.search-client-container {
+  position: relative;
+  width: 100%;
+  max-width: 720px;
+  margin: 25px auto 45px auto;
+  display: block;
+}
+
+.search-client-container input {
+  display: block;
+  width: 100%;
+  height: 56px;
+  padding: 12px 65px 12px 28px;
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: #1e293b;
+  background-color: #ffffff;
+  border: 2px solid #e2e8f0;
+  border-radius: 50px;
+  box-shadow: 0 8px 24px rgba(148, 163, 184, 0.08);
+  outline: none;
+  font-family: inherit;
+  letter-spacing: -0.2px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.search-client-container input::placeholder {
+  color: #94a3b8;
+  font-weight: 500;
+  font-size: 1.1rem;
+}
+
+.search-client-container input:focus {
+  border-color: #6200ea;
+  background-color: #ffffff;
+  box-shadow: 0 12px 35px rgba(98, 0, 234, 0.12);
+  transform: translateY(-2px);
+}
+
+.search-client-container .search-client-icon-unique {
+  position: absolute;
+  right: 28px;
+  top: 50%;
+  transform: translateY(-50%);
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  font-size: 1.35rem;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.search-client-container input:focus + .search-client-icon-unique {
+  color: #6200ea;
+  transform: translateY(-50%) scale(1.08);
+}
+
+/* Patients grid structure */
+.patients-grid-layout {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 30px;
+  width: 100%;
+  margin-top: 20px;
+}
+
+/* Modern client cards - Exact match to PNG layout */
+.patient-card-modern {
+  background: white;
+  border: 2px solid #edf2f7;
+  border-radius: 22px;
+  padding: 30px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.01);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.patient-card-modern:hover {
+  transform: translateY(-6px);
+  border-color: #6200ea;
+  box-shadow: 0 12px 30px rgba(98, 0, 234, 0.08);
+}
+
+.avatar-wrapper {
+  margin-bottom: 18px;
+}
+
+.avatar-circle-icon {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: #5b6882; /* blue-grey tint match to PNG icon */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #e2e8f0;
+  font-size: 2.6rem;
+  transition: all 0.3s ease;
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.08);
+}
+
+.patient-card-modern:hover .avatar-circle-icon {
+  background: #6200ea;
+  color: white;
+  transform: scale(1.05);
+}
+
+.patient-name {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 6px 0;
+  font-family: inherit;
+}
+
+.patient-subtitle {
+  font-size: 0.9rem;
+  color: #94a3b8;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+
+
+/* ========================================================
+   --- POPUP MODAL STYLING (Adulto Mayor Details) ---
+   ======================================================== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(8px);
+  z-index: 9999;
+}
+
+.modal-panel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10000;
+  width: 100%;
+  max-width: 480px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.modal-card {
+  background: white;
+  border-radius: 28px;
+  border: 1.5px solid rgba(226, 232, 240, 0.8);
+  box-shadow: 0 25px 60px rgba(15, 23, 42, 0.18);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: scaleInModal 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes scaleInModal {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.modal-card-header {
+  padding: 35px 24px 20px 24px;
+  text-align: center;
+  background: linear-gradient(180deg, #f5f0ff 0%, #ffffff 100%);
+  border-bottom: 1px solid #edf2f7;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal-avatar-wrapper {
+  margin-bottom: 14px;
+}
+
+.modal-avatar-circle {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: #6200ea;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 2.6rem;
+  box-shadow: 0 8px 20px rgba(98, 0, 234, 0.15);
+}
+
+.modal-patient-name {
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 6px 0;
+  font-family: inherit;
+}
+
+.modal-patient-subtitle {
+  font-size: 0.95rem;
+  color: #94a3b8;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+.modal-card-body {
+  padding: 24px;
+  background: white;
+}
+
+.modal-loading {
+  text-align: center;
+  padding: 35px 0;
+  color: #64748b;
+}
+
+.modal-loading i {
+  font-size: 2rem;
+  color: #6200ea;
+  margin-bottom: 12px;
+}
+
+.details-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 18px;
+  background: #f8fafc;
+  border-radius: 16px;
+  border: 1px solid #edf2f7;
+  transition: all 0.25s ease;
+}
+
+.detail-item:hover {
+  background: #f1f5f9;
+  transform: translateX(4px);
+  border-color: #e2e8f0;
+}
+
+.detail-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: #e0e7ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4f46e5;
+  font-size: 1.2rem;
+}
+
+.detail-item:nth-child(2) .detail-icon {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.detail-item:nth-child(3) .detail-icon {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.detail-content {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.detail-label {
+  font-size: 0.8rem;
+  color: #64748b;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.detail-value {
+  font-size: 1.05rem;
+  color: #0f172a;
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+.pending-badge-value {
+  color: #dc2626;
+}
+
+.modal-card-footer {
+  padding: 18px 24px 24px 24px;
+  background: #f8fafc;
+  border-top: 1px solid #edf2f7;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+
+
+.btn-action-close {
+  background: #cbd5e1 !important;
+  color: #334155 !important;
+  font-weight: 700;
+  border-radius: 14px;
+  padding: 12px 20px;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-action-close:hover {
+  background: #94a3b8 !important;
+  color: #0f172a !important;
+}
