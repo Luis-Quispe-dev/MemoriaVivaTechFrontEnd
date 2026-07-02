@@ -85,7 +85,7 @@ export class VerRecuerdos implements OnInit {
         }, 1500);
       },
       error: (err) => {
-        console.error('Error al cargar recuerdos:', err);
+        console.error('Error al cargar los recuerdos:', err);
 
         setTimeout(() => {
           this.cargando = false;

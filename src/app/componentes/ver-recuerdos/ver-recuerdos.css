@@ -9,6 +9,7 @@
   transition: all 0.2s ease;
 }
 
+
 .action-btn-mini.edit-btn:hover i {
   color: #7c3aed !important;
 }
