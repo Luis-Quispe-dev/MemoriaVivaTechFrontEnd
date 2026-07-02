@@ -36,7 +36,7 @@ export class PerfilCuidador implements OnInit {
   nombreUsuario = 'Cuidador';
   emailUsuario = 'correo@ejemplo.com';
   userId: number | null = null;
-  solicitudMensaje = ''; // Bindable text for custom request invitation message
+  solicitudMensaje = '';
   cuidadoresList: any[] = [];
   busquedaQuery = '';
 
