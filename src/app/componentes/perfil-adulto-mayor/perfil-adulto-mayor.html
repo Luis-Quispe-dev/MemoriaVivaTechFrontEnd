@@ -1,0 +1,211 @@
+<div class="dashboard-container">
+
+  <header class="classic-navbar">
+    <div class="logo-section">
+      <i class="fas fa-heart logo-heart"></i>
+      <span class="logo-text">SoulStory</span>
+    </div>
+
+    <nav class="nav-links">
+      <button class="nav-btn" routerLink="/inicio-adulto-mayor">
+        <i class="fas fa-home"></i> {{ 'NAV.INICIO' | translate }}
+      </button>
+      <button class="nav-btn" routerLink="/ver-recuerdos">
+        <i class="fas fa-memory"></i> {{ 'NAV.RECUERDOS' | translate }}
+      </button>
+      <button class="nav-btn" routerLink="/galeria-ia">
+        <i class="fas fa-image"></i> {{ 'NAV.GALERIA' | translate }}
+      </button>
+    </nav>
+
+    <div class="profile-logout-section">
+      <button class="bell-btn" [title]="'CONF.NOTIF' | translate" style="background: white; border: 1px solid #cbd5e1; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #475569; font-size: 1.15rem; transition: all 0.2s ease;">
+        <i class="fas fa-bell"></i>
+      </button>
+
+      <button class="profile-btn active" routerLink="/perfil-adulto-mayor" [title]="'NAV.PERFIL' | translate" style="background: #c6f6d5; border: none; padding: 6px 14px; border-radius: 16px; cursor: pointer; display: flex; align-items: center;">
+        <div class="user-profile" style="display: flex; align-items: center; gap: 10px;">
+          <div class="avatar-circle" style="width: 48px; height: 48px; border-radius: 50%; background: #e2e8f0; display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 1.4rem; border: 1px solid #cbd5e1; overflow: hidden;">
+            @if (fotoPerfil) {
+              <img [src]="fotoPerfil" style="width: 100%; height: 100%; object-fit: cover;" [alt]="'NAV.PERFIL' | translate">
+            } @else {
+              <i class="fas fa-user"></i>
+            }
+          </div>
+          <div class="profile-text" style="display: flex; flex-direction: column; text-align: left;">
+            <span class="profile-name" style="font-size: 1.15rem; font-weight: 700; color: #166534;">{{ nombreUsuario }}</span>
+            <span class="profile-role" style="font-size: 0.85rem; color: #166534; font-weight: 600;">{{ 'NAV.ROL' | translate }}</span>
+          </div>
+        </div>
+      </button>
+
+      <button class="btn-logout-square" (click)="cerrarSesion()" [title]="'NAV.CERRAR_SESION' | translate">
+        <i class="fas fa-sign-out-alt"></i>
+      </button>
+    </div>
+  </header>
+
+  <div class="container" style="display: flex; justify-content: center; align-items: center; min-height: 75vh; padding: 20px 0 80px 0;">
+
+    <mat-card class="glass-panel main-panel animate-fade-in" style="max-width: 720px; width: 100%; border-radius: 40px; border: 2px solid #cbd5e1; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.03); background: white; padding: 45px 40px;">
+
+      <div style="display: grid; grid-template-columns: 180px 1fr; gap: 30px; align-items: center; margin-bottom: 25px;">
+
+        <div style="width: 180px; height: 180px; position: relative;">
+          <div style="width: 100%; height: 100%; border-radius: 50%; background: #edf2f7; display: flex; align-items: center; justify-content: center; color: #64748b; border: 4px solid white; box-shadow: 0 8px 20px rgba(0,0,0,0.05); overflow: hidden;">
+            @if (fotoPerfil) {
+              <img [src]="fotoPerfil" style="width: 100%; height: 100%; object-fit: cover;" [alt]="'NAV.PERFIL' | translate">
+            } @else {
+              <i class="fas fa-user" style="font-size: 6.5rem; color: #718096; transform: translateY(10px);"></i>
+            }
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <h2 style="font-size: 2.6rem; font-weight: 700; color: #4a5568; margin: 0; font-family: 'Segoe UI', system-ui, sans-serif;">{{ nombreUsuario }}</h2>
+          <span style="font-size: 1.45rem; font-weight: 700; color: #5a6c7d;">{{ 'NAV.ROL' | translate }}</span>
+          <span style="font-size: 1.15rem; font-weight: 700; color: #5a6c7d;">{{ emailUsuario }}</span>
+
+          <div style="display: flex; align-items: center; gap: 5px; margin-top: 5px;">
+            <span style="font-size: 1.45rem; font-weight: 700; color: #4a5568;">{{ 'PERF.CUIDADOR' | translate }}</span>
+            <span style="font-size: 1.45rem; font-weight: 700; color: #5a6c7d;">
+              {{ tieneCuidador ? nombreCuidador : (solicitudPendiente ? ('PERF.PENDIENTE' | translate) : ('PERF.SIN_VINCULAR' | translate)) }}
+            </span>
+          </div>
+        </div>
+
+      </div>
+
+      <div style="margin-top: 10px; padding: 22px 25px; border-radius: 24px; background: #f8fafc; border: 2px solid #edf2f7; text-align: left; margin-bottom: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.01);">
+        <h4 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 0 0 12px 0; display: flex; align-items: center; gap: 8px; font-family: 'Segoe UI', sans-serif;">
+          <i class="fas fa-user-shield" style="color: #6200ea; font-size: 1.4rem;"></i> {{ 'PERF.RED_ACOMPANAMIENTO' | translate }}
+        </h4>
+
+        @if (tieneCuidador) {
+          <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+            <div style="width: 70px; height: 70px; border-radius: 50%; background: #edf2f7; display: flex; align-items: center; justify-content: center; color: #64748b; border: 3px solid #6200ea; box-shadow: 0 4px 10px rgba(98, 0, 234, 0.1); overflow: hidden; flex-shrink: 0;">
+              @if (fotoCuidador) {
+                <img [src]="fotoCuidador" style="width: 100%; height: 100%; object-fit: cover;" [alt]="'PERF.CUIDADOR' | translate">
+              } @else {
+                <i class="fas fa-user-shield" style="font-size: 2.2rem; color: #718096;"></i>
+              }
+            </div>
+            <div style="flex: 1; min-width: 200px;">
+              <p style="font-size: 1.35rem; font-weight: 800; color: #1e293b; margin: 0;">{{ nombreCuidador }}</p>
+              <p style="font-size: 1rem; color: #64748b; margin: 3px 0 0 0; font-weight: 500;">{{ 'PERF.CUIDADOR_DESC' | translate }}</p>
+            </div>
+            <span style="background: #d1fae5; color: #065f46; border: 2px solid #a7f3d0; font-size: 0.9rem; font-weight: 800; padding: 8px 16px; border-radius: 20px; display: inline-flex; align-items: center; gap: 5px; height: fit-content;">
+              <i class="fas fa-check-circle"></i> {{ 'PERF.VINCULADO_ACTIVO' | translate }}
+            </span>
+          </div>
+        } @else if (solicitudPendiente) {
+          @if (solicitudPendiente.iniciadoPor === 'CUIDADOR') {
+            <div style="display: flex; flex-direction: column; gap: 15px; width: 100%;">
+              <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+                <div style="width: 70px; height: 70px; border-radius: 50%; background: #edf2f7; display: flex; align-items: center; justify-content: center; color: #64748b; border: 3px solid #6200ea; box-shadow: 0 4px 10px rgba(98, 0, 234, 0.1); overflow: hidden; flex-shrink: 0;">
+                  @if (fotoCuidador) {
+                    <img [src]="fotoCuidador" style="width: 100%; height: 100%; object-fit: cover;" [alt]="'PERF.CUIDADOR' | translate">
+                  } @else {
+                    <i class="fas fa-user-shield" style="font-size: 2.2rem; color: #718096;"></i>
+                  }
+                </div>
+
+                <div style="flex: 1; min-width: 200px;">
+                  <p style="font-size: 1.35rem; font-weight: 800; color: #1e293b; margin: 0;">{{ solicitudPendiente.nombreCuidador }}</p>
+                  <p style="font-size: 1rem; color: #6200ea; margin: 3px 0 0 0; font-weight: 600;">
+                    {{ 'PERF.INVITADO_DESC' | translate }}
+                  </p>
+                </div>
+                <span style="background: #ebf5ff; color: #1e3a8a; border: 2px solid #bfdbfe; font-size: 0.9rem; font-weight: 800; padding: 8px 16px; border-radius: 20px; display: inline-flex; align-items: center; gap: 5px; height: fit-content;">
+                  <i class="fas fa-hand-holding-heart"></i> {{ 'PERF.INVITACION_RECIBIDA' | translate }}
+                </span>
+              </div>
+
+              <p style="font-size: 1rem; font-style: italic; color: #4b5563; margin: 5px 0; background: #f9fafb; padding: 14px 18px; border-radius: 14px; border-left: 4px solid #6200ea;">
+                "{{ solicitudPendiente.mensaje || 'Hola, me gustaría vincularme como tu cuidador en SoulStory.' }}"
+              </p>
+
+              <div style="display: flex; gap: 12px; margin-top: 5px;">
+                <button mat-button (click)="responderSolicitud(solicitudPendiente.idSolicitud, 'ACEPTADA')" style="background: #c6f6d5 !important; color: #166534 !important; font-weight: 700; border: 2px solid #86efac; border-radius: 12px; padding: 12px 24px; font-size: 1.1rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s; border-style: solid;">
+                  <i class="fas fa-check"></i> {{ 'PERF.ACEPTAR' | translate }}
+                </button>
+                <button mat-button (click)="responderSolicitud(solicitudPendiente.idSolicitud, 'RECHAZADA')" style="background: #fee2e2 !important; color: #991b1b !important; font-weight: 700; border: 2px solid #fca5a5; border-radius: 12px; padding: 12px 24px; font-size: 1.1rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s; border-style: solid;">
+                  <i class="fas fa-times"></i> {{ 'PERF.RECHAZAR' | translate }}
+                </button>
+              </div>
+            </div>
+          } @else {
+            <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap; width: 100%;">
+              <div style="width: 70px; height: 70px; border-radius: 50%; background: #edf2f7; display: flex; align-items: center; justify-content: center; color: #64748b; border: 3px solid #b45309; box-shadow: 0 4px 10px rgba(180, 83, 9, 0.1); overflow: hidden; flex-shrink: 0;">
+                @if (fotoCuidador) {
+                  <img [src]="fotoCuidador" style="width: 100%; height: 100%; object-fit: cover;" [alt]="'PERF.CUIDADOR' | translate">
+                } @else {
+                  <i class="fas fa-user-shield" style="font-size: 2.2rem; color: #718096;"></i>
+                }
+              </div>
+
+              <div style="flex: 1; min-width: 200px;">
+                <p style="font-size: 1.35rem; font-weight: 800; color: #1e293b; margin: 0;">{{ solicitudPendiente.nombreCuidador }}</p>
+                <p style="font-size: 1rem; color: #b45309; margin: 3px 0 0 0; font-weight: 500;">{{ 'PERF.SOLICITUD_PENDIENTE_DESC' | translate }}</p>
+              </div>
+              <span style="background: #fef3c7; color: #92400e; border: 2px solid #fde68a; font-size: 0.9rem; font-weight: 800; padding: 8px 16px; border-radius: 20px; display: inline-flex; align-items: center; gap: 5px; height: fit-content;">
+                <i class="fas fa-clock"></i> {{ 'PERF.SOLICITUD_PENDIENTE' | translate }}
+              </span>
+            </div>
+          }
+        } @else {
+          <div style="display: flex; flex-direction: column; gap: 15px; align-items: flex-start;">
+            <p style="font-size: 1.05rem; color: #64748b; line-height: 1.6; margin: 0; font-weight: 500;">
+              {{ 'PERF.SIN_VINCULAR_DESC' | translate }}
+            </p>
+            <button mat-flat-button (click)="buscarYSolicitarCuidador()" style="background: #6200ea !important; color: white !important; font-weight: 700; border: none; padding: 12px 25px; border-radius: 12px; font-size: 1.05rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s ease; box-shadow: 0 4px 10px rgba(98, 0, 234, 0.2);">
+              <i class="fas fa-search-plus"></i> {{ 'PERF.VINCULAR_CUIDADOR' | translate }}
+            </button>
+          </div>
+        }
+      </div>
+
+      <div style="margin-bottom: 40px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+          <span style="font-size: 1.45rem; font-weight: 700; color: #166534;">{{ 'PERF.PLAN' | translate }}: {{ nombrePlan }}</span>
+          <span style="font-size: 1.1rem; color: #475569; font-weight: 700;">
+            <i class="fas fa-memory"></i> {{ cantidadRecuerdos }} / {{ limitePlan }} {{ 'PERF.RECUERDOS' | translate }}
+          </span>
+        </div>
+
+        <div style="position: relative; width: 100%; padding-top: 15px;">
+          <div style="width: 100%; height: 10px; background: #e2e8f0; border-radius: 6px; overflow: hidden; position: relative;">
+            <div [style.width.%]="porcentajeUso" style="height: 100%; background: linear-gradient(90deg, #86efac 0%, #166534 100%); border-radius: 6px; transition: width 0.4s ease;"></div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; font-size: 0.9rem; font-weight: 700; color: #4a5568; margin-top: 8px; font-family: 'Segoe UI', sans-serif; position: relative;">
+            <span>0%</span>
+            <span [style.left.%]="porcentajeUso" style="position: absolute; transform: translateX(-50%); top: -3px; background: #166534; color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.82rem; font-weight: 800; box-shadow: 0 2px 5px rgba(0,0,0,0.15); transition: left 0.4s ease;">
+              {{ porcentajeUso | number:'1.0-0' }}%
+            </span>
+            <span>100%</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 15px;">
+
+        <button mat-button (click)="cambioSuscripcion()" class="profile-action-btn">
+          <i class="fas fa-balance-scale"></i> {{ 'PERF.CAMBIO_SUSC' | translate }}
+        </button>
+
+        <button mat-button (click)="editarPerfil()" class="profile-action-btn">
+          <i class="fas fa-edit"></i> {{ 'PERF.EDITAR_PERFIL' | translate }}
+        </button>
+
+        <button mat-button (click)="abrirConfiguracion()" class="profile-action-btn">
+          <i class="fas fa-cog"></i> {{ 'PERF.CONFIGURACION' | translate }}
+        </button>
+
+      </div>
+
+    </mat-card>
+
+  </div>
+
+</div>
