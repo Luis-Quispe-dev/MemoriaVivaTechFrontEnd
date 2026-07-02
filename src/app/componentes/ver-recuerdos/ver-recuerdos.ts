@@ -323,7 +323,7 @@ export class VerRecuerdos implements OnInit {
         });
       },
       error: (err) => {
-        console.error('Error al exportar recuerdo:', err);
+        console.error('Error al exportar el recuerdo:', err);
         Swal.fire(
           'Error',
           'No se pudo realizar la exportación del legado en este momento.',
