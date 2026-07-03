@@ -1,0 +1,493 @@
+<mat-toolbar class="navbar">
+  <div class="navbar-container">
+    <div class="logo">
+      <i class="fas fa-heart"></i>
+      SoulStory
+    </div>
+
+    <div class="nav-menu desktop-only">
+      <a mat-button href="#inicio">Inicio</a>
+      <a mat-button href="#quienes-somos">Quienes Somos</a>
+      <a mat-button href="#proposito">Propósito</a>
+      <a mat-button href="#contactanos">Contáctanos</a>
+      <a mat-button href="#ayuda">Ayuda</a>
+      <div class="auth-buttons">
+        <a routerLink="/iniciar-sesion" mat-stroked-button class="btn-secondary">Iniciar Sesión</a>
+        <a routerLink="/seleccionar-cuenta" mat-flat-button class="btn-material-primary">Registrarse</a>
+      </div>
+    </div>
+
+    <button mat-icon-button class="menu-toggle"
+            [matMenuTriggerFor]="mobileMenu"
+            #menuTrigger="matMenuTrigger"
+            (mouseenter)="menuTrigger.openMenu()"
+            aria-label="Abrir menú">
+      <mat-icon style="font-size: 1.8rem; height: 1.8rem; width: 1.8rem;">menu</mat-icon>
+    </button>
+
+    <mat-menu #mobileMenu="matMenu" class="menu-movil-premium" [autofocus]="false" overlapTrigger="false">
+      <div (mouseleave)="menuTrigger.closeMenu()" class="menu-movil-container">
+        <a mat-menu-item href="#inicio">
+          <i class="fas fa-home menu-icon"></i> Inicio
+        </a>
+        <a mat-menu-item href="#quienes-somos">
+          <i class="fas fa-users menu-icon"></i> Quienes Somos
+        </a>
+        <a mat-menu-item href="#proposito">
+          <i class="fas fa-bullseye menu-icon"></i> Propósito
+        </a>
+        <a mat-menu-item href="#contactanos">
+          <i class="fas fa-envelope menu-icon"></i> Contáctanos
+        </a>
+        <a mat-menu-item href="#ayuda">
+          <i class="fas fa-question-circle menu-icon"></i> Ayuda
+        </a>
+
+        <hr class="menu-divider">
+
+        <a mat-menu-item routerLink="/iniciar-sesion">
+          <i class="fas fa-sign-in-alt menu-icon"></i> Iniciar Sesión
+        </a>
+        <a mat-menu-item routerLink="/seleccionar-cuenta" class="menu-highlight">
+          <i class="fas fa-user-plus menu-icon"></i> Registrarse
+        </a>
+      </div>
+    </mat-menu>
+
+  </div>
+</mat-toolbar>
+
+<section id="inicio" class="hero">
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-text fade-in">
+        <h1>Preserva tus recuerdos,<br><span class="gradient">conecta generaciones</span></h1>
+        <p>
+          SoulStory te ayuda a documentar y compartir las historias más
+          preciadas de tu vida, creando un legado multimedia que fortalece
+          los vínculos familiares para siempre.
+        </p>
+        <div class="hero-cta">
+          <a routerLink="/seleccionar-cuenta" mat-flat-button class="btn-material-primary btn-large-mat">
+            <i class="fas fa-user-plus" style="margin-right: 8px;"></i>
+            Comenzar Gratis
+          </a>
+          <a href="#video-producto" mat-stroked-button class="btn-material-outline btn-large-mat">
+            <i class="fas fa-play" style="margin-right: 8px;"></i>
+            Ver Demo
+          </a>
+        </div>
+      </div>
+      <div class="hero-image fade-in">
+        <div class="collage-container">
+          <!-- Main Card -->
+          <div class="collage-card main-card">
+            <div class="main-card-header">
+              <div class="avatar-info">
+                <div class="avatar-placeholder">
+                  <i class="fas fa-user" style="color: var(--accent-purple); font-size: 1.5rem;"></i>
+                </div>
+                <div>
+                  <h4>Elena Rivas</h4>
+                  <p>Abuela y Narradora</p>
+                </div>
+              </div>
+              <span class="badge">Activo</span>
+            </div>
+            <div class="main-card-body">
+              <div class="audio-player-mock">
+                <div class="play-btn-mock"><i class="fas fa-play"></i></div>
+                <div class="wave-container">
+                  <span class="wave-bar bar-1"></span>
+                  <span class="wave-bar bar-2"></span>
+                  <span class="wave-bar bar-3"></span>
+                  <span class="wave-bar bar-4"></span>
+                  <span class="wave-bar bar-5"></span>
+                  <span class="wave-bar bar-6"></span>
+                  <span class="wave-bar bar-7"></span>
+                  <span class="wave-bar bar-8"></span>
+                </div>
+                <span class="duration">02:45</span>
+              </div>
+              <p class="recuerdo-quote">"Aquel verano en la playa con toda la familia, cuando las olas parecían gigantes y comíamos helado de coco..."</p>
+            </div>
+          </div>
+          <!-- Floating Card 1: IA Illustration -->
+          <div class="collage-card float-card-1">
+            <div class="ia-banner">
+              <i class="fas fa-magic"></i>
+              <span>Ilustración por IA</span>
+            </div>
+            <div class="ia-image-mock">
+              <i class="fas fa-paint-brush"></i>
+            </div>
+          </div>
+          <!-- Floating Card 2: caretaker badge -->
+          <div class="collage-card float-card-2">
+            <div class="caretaker-badge">
+              <div class="avatar-placeholder-sm">
+                <i class="fas fa-user" style="color: var(--accent-blue, #3b82f6); font-size: 1.25rem;"></i>
+              </div>
+              <div>
+                <h5>Carlos Gómez</h5>
+                <p>Cuidador</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="quienes-somos" class="about">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Quienes Somos</h2>
+      <p class="section-subtitle">
+        Estudiantes apasionados por conectar generaciones a través de la
+        tecnología
+      </p>
+    </div>
+    <div class="about-content">
+      <div class="about-text fade-in">
+        <p>
+          <span class="about-highlight">Memoria Viva Tech</span> es una
+          startup fundada por estudiantes del cuarto ciclo de
+          <strong>Ingeniería de Sistemas de Información e Ingeniería de Software
+            de la UPC</strong>, motivados por el deseo de rescatar y preservar las memorias de
+          los adultos mayores.
+        </p>
+        <br>
+        <p>
+          Nacimos con el propósito de crear
+          <span class="about-highlight">soluciones tecnológicas que conecten generaciones</span>
+          y den valor al legado emocional de nuestras familias. Nuestra
+          misión es diseñar herramientas accesibles que, mediante
+          inteligencia artificial, ayuden a documentar y compartir recuerdos
+          significativos.
+        </p>
+        <br>
+        <p>
+          Como
+          <span class="about-highlight">equipo joven e innovador</span>,
+          creemos en la tecnología como puente entre el pasado y el
+          presente. Con SoulStory, buscamos transformar historias de vida en
+          un legado multimedia que fortalezca los vínculos familiares y
+          preserve la sabiduría de nuestros mayores para las futuras
+          generaciones.
+        </p>
+      </div>
+      <div class="about-image fade-in">
+        <div class="team-card">
+          <div class="team-avatar">
+            <i class="fas fa-users"></i>
+          </div>
+          <h3>Equipo UPC</h3>
+          <p>
+            Estudiantes de Ingeniería comprometidos con crear tecnología que
+            genere impacto social positivo
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="proposito" class="purpose">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Nuestro Propósito</h2>
+      <p class="section-subtitle">
+        Construimos puentes entre generaciones preservando lo que más
+        importa: las historias de vida
+      </p>
+    </div>
+    <div class="purpose-grid">
+      <div class="purpose-card fade-in">
+        <div class="purpose-icon"><i class="fas fa-heart"></i></div>
+        <h3>Preservar Memorias</h3>
+        <p>Convertimos cada recuerdo en un legado valioso, accesible y emotivo que trasciende el tiempo y conecta corazones.</p>
+      </div>
+      <div class="purpose-card fade-in">
+        <div class="purpose-icon"><i class="fas fa-link"></i></div>
+        <h3>Conectar Generaciones</h3>
+        <p>Facilitamos el intercambio de experiencias entre abuelos, padres e hijos, fortaleciendo los lazos familiares.</p>
+      </div>
+      <div class="purpose-card fade-in">
+        <div class="purpose-icon"><i class="fas fa-universal-access"></i></div>
+        <h3>Inclusión Digital</h3>
+        <p>Promovemos que los adultos mayores se sientan cómodos con la tecnología a través de herramientas intuitivas y amigables.</p>
+      </div>
+    </div>
+    <div style="text-align: center; margin-top: 50px">
+      <p style="font-size: 1.2rem; color: var(--text-light); max-width: 700px; margin: 0 auto; line-height: 1.7;">
+        <em>"Nuestro compromiso es construir espacios donde la memoria
+          colectiva se celebre, se conserve y se comparta, contribuyendo así
+          a una sociedad más empática, conectada y consciente de su
+          historia."</em>
+      </p>
+    </div>
+  </div>
+</section>
+
+<section id="video-equipo" class="video-section">
+  <div class="container">
+    <div class="video-container">
+      <div class="video-text fade-in">
+        <h3>Conoce a Nuestro Equipo</h3>
+        <p>
+          Somos estudiantes de la UPC apasionados por la tecnología y el
+          impacto social. Descubre cómo nace la idea de SoulStory y qué nos
+          motiva cada día a preservar las historias más importantes de la
+          vida.
+        </p>
+        <a href="#quienes-somos" mat-flat-button class="btn-material-primary">
+          <i class="fas fa-users" style="margin-right: 8px;"></i>
+          Más sobre nosotros
+        </a>
+      </div>
+      <div class="video-real fade-in">
+        <iframe width="100%" height="300" src="https://www.youtube.com/embed/6MUO56pViJI?si=vtJ5nemfqe1j0c5l" title="Video del Equipo SoulStory" frameborder="0" allowfullscreen style="border-radius: var(--border-radius); box-shadow: var(--shadow);"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="video-producto" class="video-section" style="background: var(--bg-section)">
+  <div class="container">
+    <div class="video-container">
+      <div class="video-real fade-in">
+        <iframe width="100%" height="300" src="https://www.youtube.com/embed/XQplMlVHueY?si=piVLyB7V8BjUJzVO" title="Demo de SoulStory" frameborder="0" allowfullscreen style="border-radius: var(--border-radius); box-shadow: var(--shadow);"></iframe>
+      </div>
+      <div class="video-text fade-in">
+        <h3>SoulStory en Acción</h3>
+        <p>
+          Descubre cómo funciona nuestra plataforma: desde grabar tus
+          primeros recuerdos hasta crear un legado multimedia completo con
+          ilustraciones generadas por inteligencia artificial.
+        </p>
+        <a routerLink="/seleccionar-cuenta" mat-flat-button class="btn-material-primary">
+          <i class="fas fa-rocket" style="margin-right: 8px;"></i>
+          Probar SoulStory
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="ayuda" class="help">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">¿Necesitas Ayuda?</h2>
+      <p class="section-subtitle">
+        Encuentra respuestas a las preguntas más comunes sobre SoulStory
+      </p>
+    </div>
+    <div class="faq-container">
+      <mat-accordion>
+        <mat-expansion-panel class="faq-panel-mat">
+          <mat-expansion-panel-header>
+            <mat-panel-title>¿Qué es SoulStory?</mat-panel-title>
+          </mat-expansion-panel-header>
+          <p>SoulStory es una aplicación innovadora que permite guardar recuerdos en texto, audio o video, enriquecidos con ilustraciones creadas por inteligencia artificial. Es la herramienta perfecta para preservar y compartir las historias más importantes de tu vida.</p>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel class="faq-panel-mat">
+          <mat-expansion-panel-header>
+            <mat-panel-title>¿Para quién está dirigida?</mat-panel-title>
+          </mat-expansion-panel-header>
+          <p>Principalmente para adultos mayores que deseen documentar sus experiencias, pero cualquier persona puede usarla. También es ideal para familias que quieren preservar su historia y cuidadores profesionales.</p>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel class="faq-panel-mat">
+          <mat-expansion-panel-header>
+            <mat-panel-title>¿Necesito conocimientos tecnológicos?</mat-panel-title>
+          </mat-expansion-panel-header>
+          <p>No. SoulStory está diseñada para ser extremadamente fácil de usar. Cuenta con comandos de voz, texto ajustable y una interfaz intuitiva pensada especialmente para personas de todas las edades.</p>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel class="faq-panel-mat">
+          <mat-expansion-panel-header>
+            <mat-panel-title>¿Cómo se crean las ilustraciones?</mat-panel-title>
+          </mat-expansion-panel-header>
+          <p>Nuestra avanzada inteligencia artificial analiza el contenido de tus relatos y genera automáticamente ilustraciones únicas que complementan y enriquecen visualmente tus recuerdos.</p>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel class="faq-panel-mat">
+          <mat-expansion-panel-header>
+            <mat-panel-title>¿Puedo compartir mis historias con la familia?</mat-panel-title>
+          </mat-expansion-panel-header>
+          <p>¡Por supuesto! Puedes compartir tus recuerdos con familiares a través de enlaces seguros, permitir que comenten y crear una experiencia colaborativa que fortalece los vínculos familiares.</p>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel class="faq-panel-mat">
+          <mat-expansion-panel-header>
+            <mat-panel-title>¿SoulStory es gratuita?</mat-panel-title>
+          </mat-expansion-panel-header>
+          <p>Ofrecemos una versión gratuita con funcionalidades básicas y planes premium con características adicionales como más espacio de almacenamiento, ilustraciones ilimitadas y herramientas avanzadas de compartir.</p>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel class="faq-panel-mat">
+          <mat-expansion-panel-header>
+            <mat-panel-title>¿Cómo puedo contactar el soporte?</mat-panel-title>
+          </mat-expansion-panel-header>
+          <p>Puedes escribirnos a <strong>soporte@memoriavivatech.com</strong>, usar el formulario de contacto en esta página, o acceder al soporte desde la aplicación en la sección "Contáctanos".</p>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </div>
+</section>
+
+<section id="contactanos" class="contact">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Contáctanos</h2>
+      <p class="section-subtitle">
+        ¿Tienes alguna pregunta? Estamos aquí para ayudarte en tu viaje de
+        preservar memorias
+      </p>
+    </div>
+    <div class="contact-container">
+      <div class="contact-info fade-in">
+        <h3>Hablemos</h3>
+        <p>
+          Nos encanta escuchar de nuestros usuarios. Ya sea que tengas una
+          pregunta, sugerencia o simplemente quieras compartir tu
+          experiencia con SoulStory.
+        </p>
+
+        <div class="contact-item">
+          <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+          <div>
+            <strong>Email</strong><br />
+            soporte@memoriavivatech.com
+          </div>
+        </div>
+
+        <div class="contact-item">
+          <div class="contact-icon"><i class="fas fa-phone"></i></div>
+          <div>
+            <strong>Teléfono</strong><br />
+            +51 123 456 789
+          </div>
+        </div>
+
+        <div class="contact-item">
+          <div class="contact-icon"><i class="fas fa-clock"></i></div>
+          <div>
+            <strong>Horario de Atención</strong><br />
+            Lunes a Viernes: 9:00 - 18:00
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-form fade-in">
+        <form (ngSubmit)="enviarMensaje($event)">
+          <mat-form-field appearance="outline" class="mat-form-full">
+            <mat-label>Nombre Completo *</mat-label>
+            <input matInput id="nombre" name="nombre" required />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="mat-form-full">
+            <mat-label>Correo Electrónico *</mat-label>
+            <input matInput type="email" id="email" name="email" required />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="mat-form-full">
+            <mat-label>Teléfono</mat-label>
+            <input matInput type="tel" id="telefono" name="telefono" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="mat-form-full">
+            <mat-label>Tipo de Consulta</mat-label>
+            <mat-select id="tipo" name="tipo">
+              <mat-option value="">Selecciona una opción</mat-option>
+              <mat-option value="soporte">Soporte Técnico</mat-option>
+              <mat-option value="informacion">Información del Producto</mat-option>
+              <mat-option value="sugerencia">Sugerencias</mat-option>
+              <mat-option value="colaboracion">Colaboración</mat-option>
+              <mat-option value="otro">Otro</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="mat-form-full">
+            <mat-label>Mensaje *</mat-label>
+            <textarea matInput id="mensaje" name="mensaje" required placeholder="Cuéntanos cómo podemos ayudarte..." rows="4"></textarea>
+          </mat-form-field>
+
+          <button mat-flat-button class="btn-material-primary btn-large-mat" type="submit" style="width: 100%;">
+            <i class="fas fa-paper-plane" style="margin-right: 8px;"></i>
+            Enviar Mensaje
+          </button>
+
+          <p style="font-size: 0.9rem; color: var(--text-light); margin-top: 16px; text-align: center;">
+            * Campos obligatorios. Responderemos en un plazo máximo de 24 horas.
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <h3>SoulStory</h3>
+        <p>
+          Preservando memorias, conectando generaciones. Una iniciativa de
+          Memoria Viva Tech para transformar historias de vida en legados
+          eternos.
+        </p>
+        <div class="social-links">
+          <a href="https://www.facebook.com/" class="social-link" aria-label="Facebook" target="_blank"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://www.instagram.com/" class="social-link" aria-label="Instagram" target="_blank"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="social-link" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" class="social-link" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+
+      <div class="footer-column">
+        <h4>Producto</h4>
+        <ul>
+          <li><a href="#video-producto">Ver Demo</a></li>
+          <li><a routerLink="/seleccionar-cuenta">Registrarse</a></li>
+          <li><a routerLink="/iniciar-sesion">Iniciar Sesión</a></li>
+          <li><a href="#ayuda">Preguntas Frecuentes</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h4>Empresa</h4>
+        <ul>
+          <li><a href="#quienes-somos">Quienes Somos</a></li>
+          <li><a href="#proposito">Nuestro Propósito</a></li>
+          <li><a href="#video-equipo">Nuestro Equipo</a></li>
+          <li><a href="#contactanos">Contacto</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h4>Soporte</h4>
+        <ul>
+          <li><a href="#ayuda">Centro de Ayuda</a></li>
+          <li><a href="#contactanos">Contactar Soporte</a></li>
+          <li><a href="#">Términos y Condiciones</a></li>
+          <li><a href="#">Política de Privacidad</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>
+        &copy; 2026 Memoria Viva Tech. Todos los derechos reservados.
+        Desarrollado con ❤️ por estudiantes de la UPC.
+      </p>
+    </div>
+  </div>
+</footer>
+
+<button class="back-to-top" [class.visible]="showBackToTop" (click)="scrollToTop()" aria-label="Volver arriba">
+  <i class="fas fa-arrow-up"></i>
+</button>
