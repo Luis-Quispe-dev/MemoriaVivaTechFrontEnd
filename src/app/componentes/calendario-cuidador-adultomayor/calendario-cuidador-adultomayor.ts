@@ -843,7 +843,7 @@ export class CalendarioCuidadorAdultomayor implements OnInit {
         },
         error: (err) => {
           Swal.close();
-          console.error('Error al actualizar actividad:', err);
+          console.error('Error al actualizar la actividad:', err);
           Swal.fire({
             icon: 'error',
             title: this.lenguajeService.translate('CAL.ALERT_NETWORK_ERROR_TITLE'),
