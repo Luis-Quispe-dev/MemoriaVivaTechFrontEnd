@@ -1,0 +1,93 @@
+<div class="dashboard-container">
+
+  <!-- Classic Navbar -->
+  <header class="classic-navbar">
+    <div class="logo-section">
+      <i class="fas fa-heart logo-heart"></i>
+      <span class="logo-text">SoulStory</span>
+    </div>
+
+    <nav class="nav-links">
+      <button class="nav-btn" routerLink="/inicio-adulto-mayor">
+        <i class="fas fa-home"></i> {{ 'NAV.INICIO' | translate }}
+      </button>
+      <button class="nav-btn" routerLink="/ver-recuerdos">
+        <i class="fas fa-memory"></i> {{ 'NAV.RECUERDOS' | translate }}
+      </button>
+      <button class="nav-btn" routerLink="/galeria-ia">
+        <i class="fas fa-image"></i> {{ 'NAV.GALERIA' | translate }}
+      </button>
+    </nav>
+
+    <div class="profile-logout-section">
+      <button class="bell-btn" title="Notificaciones" style="background: white; border: 1px solid #cbd5e1; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #475569; font-size: 1.15rem; transition: all 0.2s ease;">
+        <i class="fas fa-bell"></i>
+      </button>
+
+      <button class="profile-btn active" routerLink="/perfil-adulto-mayor" [title]="'NAV.PERFIL' | translate" style="background: #c6f6d5; border: none; padding: 6px 14px; border-radius: 16px; cursor: pointer; display: flex; align-items: center;">
+        <div class="user-profile" style="display: flex; align-items: center; gap: 10px;">
+          <div class="avatar-circle" style="width: 48px; height: 48px; border-radius: 50%; background: #e2e8f0; display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 1.4rem; border: 1px solid #cbd5e1; overflow: hidden;">
+            <img *ngIf="fotoPerfil" [src]="fotoPerfil" style="width: 100%; height: 100%; object-fit: cover;" alt="Mini foto">
+            <i *ngIf="!fotoPerfil" class="fas fa-user"></i>
+          </div>
+          <div class="profile-text" style="display: flex; flex-direction: column; text-align: left;">
+            <span class="profile-name" style="font-size: 1.15rem; font-weight: 700; color: #166534;">{{ nombreUsuario }}</span>
+            <span class="profile-role" style="font-size: 0.85rem; color: #166534; font-weight: 600;">{{ 'NAV.ROL' | translate }}</span>
+          </div>
+        </div>
+      </button>
+
+      <button class="btn-logout-square" (click)="cerrarSesion()" [title]="'NAV.CERRAR_SESION' | translate">
+        <i class="fas fa-sign-out-alt"></i>
+      </button>
+    </div>
+  </header>
+
+  <div class="container animate-fade-in" style="display: flex; flex-direction: column; align-items: center; min-height: 80vh; padding: 40px 20px 80px 20px;">
+
+    <div class="section-title-block" style="margin-bottom: 35px; text-align: center;">
+      <h2 style="font-size: 2.2rem; font-weight: 800; color: #1e293b; margin: 0;">{{ 'CAT.TITULO' | translate }}</h2>
+      <p style="color: #64748b; font-size: 1.05rem; margin-top: 8px;">{{ 'CAT.SUBTITULO' | translate }}</p>
+    </div>
+
+    <div class="planes-grid" style="display: flex; gap: 25px; flex-wrap: wrap; justify-content: center; width: 100%;">
+
+      <div *ngFor="let plan of planes" class="plan-option-card" [class.current-active]="suscripcionActiva?.nombrePlan === plan.nombrePlan">
+        <div class="active-ribbon" *ngIf="suscripcionActiva?.nombrePlan === plan.nombrePlan">
+          <span>{{ 'CAT.TU_PLAN_ACTUAL' | translate }}</span>
+        </div>
+
+        <div class="plan-option-header">
+          <h3 class="option-title">{{ plan.nombrePlan }}</h3>
+          <div class="option-price">
+            <span class="currency">$</span>
+            <span class="price-val">{{ plan.precio }}</span>
+            <span class="period">{{ 'CAT.PERIODO' | translate }}</span>
+          </div>
+        </div>
+
+        <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;">
+
+        <div class="option-features">
+          <div class="option-feature-item" *ngFor="let feat of obtenerDetallesPlan(plan.nombrePlan)">
+            <i class="fas fa-check"></i>
+            <span>{{ feat | translate }}</span>
+          </div>
+        </div>
+
+        <button (click)="seleccionarPlan(plan)" class="option-action-btn" [class.active-btn-disabled]="suscripcionActiva?.nombrePlan === plan.nombrePlan">
+          {{ suscripcionActiva?.nombrePlan === plan.nombrePlan ? ('CAT.TU_PLAN_ACTUAL' | translate) : ('CAT.SELECCIONAR_PLAN' | translate) }}
+        </button>
+      </div>
+
+    </div>
+
+    <div style="margin-top: 40px; text-align: center;">
+      <a routerLink="/suscripcion-adultomayor" class="back-text-link">
+        <i class="fas fa-arrow-left"></i> {{ 'CAT.VOLVER_ACTIVO' | translate }}
+      </a>
+    </div>
+
+  </div>
+
+</div>
