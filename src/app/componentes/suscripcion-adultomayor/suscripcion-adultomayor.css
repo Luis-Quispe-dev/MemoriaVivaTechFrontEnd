@@ -1,0 +1,367 @@
+@import "../inicio-adulto-mayor/inicio-adulto-mayor.css";
+
+/* Views Alignment */
+.subscription-view-wrapper,
+.payment-view-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* Plan Profile Card (Screenshot layout) */
+.active-plan-card {
+  max-width: 520px;
+  width: 100%;
+  border-radius: 40px !important;
+  border: 2px solid #cbd5e1 !important;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.03) !important;
+  background: white;
+  padding: 50px 45px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.active-plan-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05) !important;
+  border-color: #166534 !important;
+}
+
+.plan-header-title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: #1e293b;
+  margin: 0 0 15px 0;
+  letter-spacing: -1.5px;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.plan-badge-pill {
+  background: #2563eb;
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 700;
+  padding: 10px 40px;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+  margin-bottom: 25px;
+}
+
+.plan-duration-container {
+  margin-bottom: 30px;
+}
+
+.duration-title {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.duration-subtitle {
+  font-size: 0.95rem;
+  color: #64748b;
+  font-weight: 600;
+  margin: 5px 0 0 0;
+}
+
+/* Bullet Features */
+.plan-features-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 320px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.05rem;
+  color: #475569;
+  font-weight: 600;
+}
+
+.check-icon {
+  color: #166534;
+  font-size: 1.2rem;
+}
+
+/* Pill Action Button (Aligned Left) */
+.action-btn-pill {
+  border-radius: 24px;
+  border: none;
+  font-weight: 700;
+  padding: 14px 28px;
+  font-size: 1.05rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease-in-out;
+}
+
+.change-plan-btn {
+  background: #c6f6d5;
+  color: #166534;
+  border: 1px solid transparent;
+}
+
+.change-plan-btn:hover {
+  background: #b9f2c9;
+  transform: scale(1.03);
+}
+
+/* Catalog Option Cards */
+.plan-option-card {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 30px;
+  padding: 35px 30px;
+  width: 270px;
+  text-align: center;
+  position: relative;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.plan-option-card:hover {
+  transform: translateY(-8px);
+  border-color: #166534;
+  box-shadow: 0 15px 30px rgba(22, 101, 52, 0.05);
+}
+
+.plan-option-card.current-active {
+  border-color: #166534;
+  box-shadow: 0 10px 25px rgba(22, 101, 52, 0.08);
+}
+
+.active-ribbon {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: #d1fae5;
+  color: #065f46;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 12px;
+  letter-spacing: 0.5px;
+}
+
+.option-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #1e293b;
+  margin: 0 0 10px 0;
+}
+
+.option-price {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  color: #0f172a;
+}
+
+.currency {
+  font-size: 1.4rem;
+  font-weight: 700;
+  align-self: flex-start;
+  margin-top: 5px;
+}
+
+.price-val {
+  font-size: 2.8rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+.period {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #64748b;
+  margin-left: 2px;
+}
+
+.option-features {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: left;
+  margin-bottom: 30px;
+  flex: 1;
+}
+
+.option-feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.92rem;
+  color: #475569;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.option-feature-item i {
+  color: #166534;
+  font-size: 1rem;
+  margin-top: 2px;
+}
+
+.option-action-btn {
+  background: #f1f5f9;
+  color: #475569;
+  border: none;
+  font-weight: 800;
+  font-size: 0.95rem;
+  padding: 12px 0;
+  width: 100%;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.option-action-btn:hover {
+  background: #166534;
+  color: white;
+}
+
+.plan-option-card.current-active .option-action-btn {
+  background: #c6f6d5;
+  color: #166534;
+  cursor: default;
+}
+
+.plan-option-card.current-active .option-action-btn:hover {
+  background: #c6f6d5;
+  color: #166534;
+}
+
+.back-text-link {
+  color: #64748b;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+
+.back-text-link:hover {
+  color: #166534;
+}
+
+/* Secure Checkout Forms */
+.checkout-card {
+  max-width: 520px;
+  width: 100%;
+  border-radius: 40px !important;
+  border: 2px solid #cbd5e1 !important;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.03) !important;
+  background: white;
+  padding: 40px 35px;
+  transition: all 0.3s ease;
+}
+
+.payment-icon-bubble {
+  background: #f0fdf4;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 12px auto;
+  box-shadow: 0 4px 10px rgba(22, 101, 52, 0.06);
+}
+
+.payment-icon-bubble i {
+  color: #166534;
+  font-size: 1.8rem;
+}
+
+.tab-btn {
+  background: transparent;
+  color: #64748b;
+}
+
+.tab-btn.active {
+  background: white;
+  color: #166534;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.06);
+}
+
+.checkout-input {
+  border-radius: 12px;
+  border: 1.5px solid #cbd5e1;
+  padding: 12px 16px;
+  box-sizing: border-box;
+  outline: none;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1e293b;
+  background: #f8fafc;
+  transition: all 0.2s;
+}
+
+.checkout-input:focus {
+  border-color: #166534;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(22, 101, 52, 0.08);
+}
+
+.field-icon-right {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  font-size: 1.1rem;
+  pointer-events: none;
+}
+
+.pay-confirm-btn {
+  background: #166534;
+  color: white;
+  border: none;
+  font-weight: 700;
+  font-size: 1.1rem;
+  padding: 15px 0;
+  border-radius: 14px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(22, 101, 52, 0.15);
+  transition: all 0.2s;
+}
+
+.pay-confirm-btn:hover {
+  filter: brightness(0.92);
+}
+
+.pay-confirm-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Animations */
+.animate-fade-in {
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
