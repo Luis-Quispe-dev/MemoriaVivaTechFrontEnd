@@ -85,6 +85,7 @@ export class MiLegado implements OnInit {
     });
   }
 
+
   toggleFavorito(recuerdo: any) {
     this.recuerdoService.toggleFavorito(recuerdo.idRecuerdo).subscribe({
       next: (updated: any) => {
