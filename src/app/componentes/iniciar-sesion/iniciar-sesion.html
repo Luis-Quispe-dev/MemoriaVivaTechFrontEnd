@@ -1,0 +1,54 @@
+<div class="login-page-container">
+
+  <div class="brand-section">
+    <div class="logo-gigante">
+      <i class="fas fa-heart"></i>
+      <span>SoulStory</span>
+    </div>
+    <p class="tagline">Preserva tus recuerdos, conecta generaciones</p>
+
+    <button mat-stroked-button class="btn-crear-cuenta" routerLink="/seleccionar-cuenta">
+      <i class="fas fa-heart" style="margin-right: 8px;"></i> Crear cuenta
+    </button>
+  </div>
+
+  <div class="form-section">
+    <mat-card class="login-card">
+      <h2 class="form-title">Iniciar Sesión</h2>
+
+      <form id="login-form" class="login-form" [formGroup]="loginForm" (ngSubmit)="enviarFormulario()">
+
+        <div class="custom-label">
+          <i class="fas fa-envelope"></i> Correo electrónico
+        </div>
+        <mat-form-field appearance="outline" class="mat-form-full">
+          <input matInput type="email" formControlName="email" placeholder="correo@ejemplo.com" />
+        </mat-form-field>
+
+        <div class="custom-label">
+          <i class="fas fa-lock"></i> Contraseña
+        </div>
+        <mat-form-field appearance="outline" class="mat-form-full">
+          <input matInput type="password" formControlName="password" placeholder="Ingresa tu contraseña" />
+        </mat-form-field>
+
+        <div class="botones-accion">
+          <button type="submit" mat-flat-button class="btn-verde-pill" [disabled]="cargando">
+            <i class="fas fa-arrow-right"></i> {{ cargando ? 'Ingresando...' : 'Ingresar a SoulStory' }}
+          </button>
+
+          <button type="button" mat-flat-button class="btn-verde-pill" (click)="abrirRecuperarContrasenaModal()">
+            <i class="fas fa-key"></i> {{ 'LOGIN.RECOVER_PASSWORD' | translate }}
+          </button>
+        </div>
+      </form>
+    </mat-card>
+
+    <div class="volver-container">
+      <button mat-flat-button class="btn-verde-pill" routerLink="/">
+        <i class="fas fa-arrow-left"></i> Volver al Inicio
+      </button>
+    </div>
+
+  </div>
+</div>

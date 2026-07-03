@@ -1,0 +1,211 @@
+<div class="dashboard-container">
+
+  <!-- Main Classic Navbar -->
+  <header class="classic-navbar">
+    <div class="logo-section">
+      <i class="fas fa-heart logo-heart"></i>
+      <span class="logo-text">SoulStory</span>
+    </div>
+
+    <!-- Navigation buttons -->
+    <nav class="nav-links">
+      <button class="nav-btn active" routerLink="/inicio-adulto-mayor">
+        <i class="fas fa-home"></i> {{ 'NAV.INICIO' | translate }}
+      </button>
+      <button class="nav-btn" routerLink="/ver-recuerdos">
+        <i class="fas fa-memory"></i> {{ 'NAV.RECUERDOS' | translate }}
+      </button>
+      <button class="nav-btn" routerLink="/galeria-ia">
+        <i class="fas fa-image"></i> {{ 'NAV.GALERIA' | translate }}
+      </button>
+    </nav>
+
+    <!-- User Profile (Wrapped as a Clickable Button) & Logout -->
+    <div class="profile-logout-section">
+      <button class="profile-btn" routerLink="/perfil-adulto-mayor" [title]="'NAV.PERFIL' | translate">
+        <div class="user-profile">
+          <div class="avatar-circle" style="overflow: hidden; display: flex; align-items: center; justify-content: center;">
+            @if (fotoPerfil) {
+              <img [src]="fotoPerfil" style="width: 100%; height: 100%; object-fit: cover;" alt="Foto de perfil">
+            } @else {
+              <i class="fas fa-user"></i>
+            }
+          </div>
+          <div class="profile-text">
+            <span class="profile-name">{{ nombreUsuario }}</span>
+            <span class="profile-role">{{ 'NAV.ROL' | translate }}</span>
+          </div>
+        </div>
+      </button>
+
+      <button class="btn-logout-square" (click)="cerrarSesion()" [title]="'NAV.CERRAR_SESION' | translate">
+        <i class="fas fa-sign-out-alt"></i>
+      </button>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <!-- Main Options Greeting -->
+    <div class="menu-header-classic text-center animate-fade-in">
+      <h1 class="welcome-title-classic">{{ 'INICIO.TITULO' | translate }}</h1>
+      <p class="welcome-subtitle-classic">{{ 'INICIO.SUBTITULO' | translate }}</p>
+    </div>
+
+    <!-- Large Option Cards Stacked Vertically (One on top of the other, centered like the PNG) -->
+    <div class="menu-grid-classic animate-fade-in">
+
+      <!-- 1. Escribir memorias -->
+      <div class="menu-card-classic" routerLink="/registrar-recuerdo-texto">
+        <div class="emblem-circle gradient-cyan-green">
+          <i class="fas fa-pen-fancy emblem-icon"></i>
+        </div>
+        <h3>{{ 'INICIO.ESCRIBIR_MEMORIAS' | translate }}</h3>
+        <p>{{ 'INICIO.ESCRIBIR_MEMORIAS_DESC' | translate }}</p>
+      </div>
+
+      <!-- 2. Grabar audio -->
+      <div class="menu-card-classic" routerLink="/registrar-recuerdo-audio">
+        <div class="emblem-circle gradient-cyan-green">
+          <i class="fas fa-microphone emblem-icon"></i>
+        </div>
+        <h3>{{ 'INICIO.GRABAR_AUDIO' | translate }}</h3>
+        <p>{{ 'INICIO.GRABAR_AUDIO_DESC' | translate }}</p>
+      </div>
+
+      <!-- 3. Foto -->
+      <div class="menu-card-classic" routerLink="/registrar-recuerdo-foto">
+        <div class="emblem-circle gradient-cyan-green">
+          <i class="fas fa-camera emblem-icon"></i>
+        </div>
+        <h3>{{ 'INICIO.FOTO' | translate }}</h3>
+        <p>{{ 'INICIO.FOTO_DESC' | translate }}</p>
+      </div>
+
+      <!-- 4. Ver recuerdos -->
+      <div class="menu-card-classic" routerLink="/ver-recuerdos">
+        <div class="emblem-circle gradient-cyan-green">
+          <i class="fas fa-memory emblem-icon"></i>
+        </div>
+        <h3>{{ 'INICIO.VER_RECUERDOS' | translate }}</h3>
+        <p>{{ 'INICIO.VER_RECUERDOS_DESC' | translate }}</p>
+      </div>
+
+      <!-- 5. Galería de imágenes -->
+      <div class="menu-card-classic" routerLink="/galeria-ia">
+        <div class="emblem-circle gradient-cyan-green">
+          <i class="fas fa-images emblem-icon"></i>
+        </div>
+        <h3>{{ 'INICIO.GALERIA' | translate }}</h3>
+        <p>{{ 'INICIO.GALERIA_DESC' | translate }}</p>
+      </div>
+
+      <!-- 6. Mi legado -->
+      <div class="menu-card-classic" routerLink="/mi-legado">
+        <div class="emblem-circle gradient-cyan-green">
+          <i class="fas fa-heart emblem-icon"></i>
+        </div>
+        <h3>{{ 'INICIO.LEGADO' | translate }}</h3>
+        <p>{{ 'INICIO.LEGADO_DESC' | translate }}</p>
+      </div>
+
+      <!-- 7. Calendario (Designed exactly like the image) -->
+      <div class="menu-card-classic" routerLink="/calendario-adulto-mayor">
+        <div class="emblem-circle gradient-cyan-green">
+          <i class="fas fa-calendar emblem-icon"></i>
+        </div>
+        <h3>{{ 'INICIO.CALENDARIO' | translate }}</h3>
+        <p>{{ 'INICIO.CALENDARIO_DESC' | translate }}</p>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- FLOATING CHAT BUTTON (Bottom Right, purple circle, comments icon) -->
+  <button class="floating-chat-btn animate-fade-in" [title]="'CHAT.MENSAJES_FAMILIARES' | translate" (click)="toggleChat()">
+    <i class="fas fa-comment"></i>
+    <!-- Red unread notification badge -->
+    @if (noLeidosCount > 0) {
+      <span class="chat-notification-badge" style="position: absolute; top: -5px; right: -5px; background: #ef4444; color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 800; border: 2px solid white; box-shadow: 0 2px 6px rgba(239, 68, 68, 0.4); z-index: 10;">
+        {{ noLeidosCount }}
+      </span>
+    }
+  </button>
+
+  <!-- FLOATING CHAT DRAWER (Matching Chat adulto mayor.png exactly) -->
+  @if (mostrarChat && asignacionActiva) {
+    <div class="chat-drawer-container animate-fade-in">
+
+      <!-- Light Green Header (Exactly like PNG) -->
+      <header class="chat-drawer-header">
+        <div class="chat-user-details">
+          <div class="chat-avatar-circle" style="overflow: hidden; display: flex; align-items: center; justify-content: center;">
+            @if (asignacionActiva.fotoCuidador) {
+              <img [src]="asignacionActiva.fotoCuidador" style="width: 100%; height: 100%; object-fit: cover;" alt="Foto de cuidador">
+            } @else {
+              <i class="fas fa-user"></i>
+            }
+          </div>
+          <div class="chat-profile-text">
+            <span class="chat-profile-name">{{ asignacionActiva.nombreCuidador }}</span>
+            <span class="chat-profile-role">{{ 'CHAT.CUIDADOR_DESIGNADO' | translate }}</span>
+          </div>
+        </div>
+        <!-- Close Button -->
+        <button class="chat-close-btn" (click)="toggleChat()" [title]="'CHAT.CERRAR' | translate">
+          <i class="fas fa-times"></i>
+        </button>
+      </header>
+
+      <!-- Scrollable Message History Area (Exactly like PNG) -->
+      <main id="chat-history-container" class="chat-drawer-body">
+        @if (cargandoMensajes && mensajes.length === 0) {
+          <div class="chat-loading-state">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>{{ 'CHAT.CARGANDO' | translate }}</p>
+          </div>
+        } @else if (mensajes.length === 0) {
+          <div class="chat-empty-state">
+            <i class="far fa-comments"></i>
+            <p>{{ 'CHAT.VACIO' | translate }}</p>
+          </div>
+        } @else {
+          <div class="chat-messages-list">
+            @for (msg of mensajes; track msg.idMensaje) {
+              <div class="chat-bubble-wrapper" [class.sent]="msg.tipoRemitente === 'ADULTO_MAYOR'" [class.received]="msg.tipoRemitente === 'CUIDADOR'">
+                <div class="chat-bubble">
+                  <p>{{ msg.contenido }}</p>
+                  <div class="chat-bubble-meta">
+                    <span class="chat-bubble-time">{{ formatearHora(msg.fechaHora) }}</span>
+                    @if (msg.tipoRemitente === 'ADULTO_MAYOR') {
+                      <span class="chat-bubble-tick">
+                        @if (msg.leido) {
+                          <i class="fas fa-check-double tick-read" title="Leído"></i>
+                        } @else {
+                          <i class="fas fa-check tick-sent" title="Enviado"></i>
+                        }
+                      </span>
+                    }
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </main>
+
+      <!-- Bottom Input Area (Exactly like PNG, with carriage return arrow ↵) -->
+      <footer class="chat-drawer-footer">
+        <input type="text" [placeholder]="'CHAT.INPUT_PLACEHOLDER' | translate"
+               [(ngModel)]="nuevoMensaje" (keydown.enter)="enviarMensaje()">
+        <button class="chat-send-btn" (click)="enviarMensaje()" [title]="'CHAT.ENVIAR' | translate">
+          &#8629;
+        </button>
+      </footer>
+
+    </div>
+  }
+
+</div>
+

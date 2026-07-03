@@ -1,0 +1,104 @@
+<div class="dashboard-container">
+
+  <header class="classic-navbar">
+    <div class="logo-section">
+      <i class="fas fa-heart logo-heart"></i>
+      <span class="logo-text">SoulStory</span>
+    </div>
+
+    <nav class="nav-links">
+      <button class="nav-btn" routerLink="/inicio-adulto-mayor">
+        <i class="fas fa-home"></i> {{ 'NAV.INICIO' | translate }}
+      </button>
+      <button class="nav-btn" routerLink="/ver-recuerdos">
+        <i class="fas fa-memory"></i> {{ 'NAV.RECUERDOS' | translate }}
+      </button>
+      <button class="nav-btn" routerLink="/galeria-ia">
+        <i class="fas fa-image"></i> {{ 'NAV.GALERIA' | translate }}
+      </button>
+    </nav>
+
+    <div class="profile-logout-section">
+      <button class="profile-btn" routerLink="/perfil-adulto-mayor" [title]="'NAV.PERFIL' | translate">
+        <div class="user-profile">
+          <div class="avatar-circle" style="overflow: hidden; display: flex; align-items: center; justify-content: center;">
+            @if (fotoPerfil) {
+              <img [src]="fotoPerfil" style="width: 100%; height: 100%; object-fit: cover;" alt="Foto de perfil">
+            } @else {
+              <i class="fas fa-user"></i>
+            }
+          </div>
+          <div class="profile-text">
+            <span class="profile-name">{{ nombreUsuario }}</span>
+            <span class="profile-role">{{ 'NAV.ROL' | translate }}</span>
+          </div>
+        </div>
+      </button>
+
+      <button class="btn-logout-square" (click)="cerrarSesion()" [title]="'NAV.CERRAR_SESION' | translate">
+        <i class="fas fa-sign-out-alt"></i>
+      </button>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="glass-panel main-panel animate-fade-in">
+      <div class="panel-header">
+        <button mat-button class="btn btn-retroceder" routerLink="/inicio-adulto-mayor">
+          <i class="fas fa-arrow-left"></i> {{ 'BOTON.VOLVER' | translate }}
+        </button>
+        <h2 class="panel-title">
+          <i class="fas fa-microphone text-purple"></i> {{ 'REC_AUDIO.TITULO' | translate }}
+        </h2>
+      </div>
+
+      <p class="panel-intro">{{ 'REC_AUDIO.INTRO' | translate }}</p>
+
+      <form (ngSubmit)="guardarRecuerdo()" class="senior-form">
+        <div class="form-group">
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>{{ 'REC_AUDIO.LABEL_TITULO' | translate }}</mat-label>
+            <input matInput type="text" id="titulo-audio" name="tituloRecuerdo" required
+                   [placeholder]="'REC_AUDIO.PLACEHOLDER_TITULO' | translate"
+                   [(ngModel)]="nuevoRecuerdo.tituloRecuerdo">
+          </mat-form-field>
+        </div>
+
+        <div class="audio-dashboard-card">
+          <button type="button" class="mic-pulsing-btn" [class.recording]="estaGrabando" (click)="alternarGrabacion()">
+            <i class="fas" [ngClass]="estaGrabando ? 'fa-stop' : 'fa-microphone'"></i>
+          </button>
+
+          <p class="mic-status-text">
+            {{ estaGrabando ? ('REC_AUDIO.STATUS_RECORDING' | translate) : (audioUrl ? ('REC_AUDIO.STATUS_FINISHED' | translate) : ('REC_AUDIO.STATUS_START' | translate)) }}
+          </p>
+
+          @if (estaGrabando) {
+            <div class="wave-container">
+              <span class="wave-bar"></span>
+              <span class="wave-bar"></span>
+              <span class="wave-bar"></span>
+              <span class="wave-bar"></span>
+              <span class="wave-bar"></span>
+              <span class="wave-bar"></span>
+              <span class="wave-bar"></span>
+            </div>
+          }
+
+          @if (audioUrl) {
+            <div class="audio-player-container animate-fade-in" style="margin-top: 15px; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 15px;">
+              <audio [src]="audioUrl" controls style="width: 100%; max-width: 400px; border-radius: 50px; background: #7835d5; box-shadow: 0 4px 10px rgba(255, 71, 133, 0.08);"></audio>
+              <button mat-button type="button" class="btn btn-retroceder" (click)="borrarGrabacion()" style="background: #fff5f5 !important; color: #ef4444 !important; border-color: #fee2e2 !important;">
+                <i class="fas fa-trash"></i> {{ 'REC_AUDIO.DESCARTAR' | translate }}
+              </button>
+            </div>
+          }
+        </div>
+
+        <button type="submit" mat-flat-button class="btn btn-save bg-purple-btn" [disabled]="cargando || !nuevoRecuerdo.contenido" style="margin-top: 20px;">
+          <i class="fas fa-save"></i> {{ 'REC_AUDIO.BOTON_SAVE' | translate }}
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

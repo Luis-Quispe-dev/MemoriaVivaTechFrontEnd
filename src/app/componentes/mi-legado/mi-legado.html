@@ -1,0 +1,174 @@
+<div class="dashboard-container">
+
+  <header class="classic-navbar">
+    <div class="logo-section">
+      <i class="fas fa-heart logo-heart"></i>
+      <span class="logo-text">SoulStory</span>
+    </div>
+
+    <nav class="nav-links">
+      <button class="nav-btn" routerLink="/inicio-adulto-mayor">
+        <i class="fas fa-home"></i> {{ 'NAV.INICIO' | translate }}
+      </button>
+      <button class="nav-btn" routerLink="/ver-recuerdos">
+        <i class="fas fa-memory"></i> {{ 'NAV.RECUERDOS' | translate }}
+      </button>
+      <button class="nav-btn" routerLink="/galeria-ia">
+        <i class="fas fa-image"></i> {{ 'NAV.GALERIA' | translate }}
+      </button>
+    </nav>
+
+    <div class="profile-logout-section">
+      <button class="profile-btn" routerLink="/perfil-adulto-mayor" [title]="'NAV.PERFIL' | translate">
+        <div class="user-profile">
+          <div class="avatar-circle" style="overflow: hidden; display: flex; align-items: center; justify-content: center;">
+            @if (fotoPerfil) {
+              <img [src]="fotoPerfil" style="width: 100%; height: 100%; object-fit: cover;" [alt]="'NAV.PERFIL' | translate">
+            } @else {
+              <i class="fas fa-user"></i>
+            }
+          </div>
+          <div class="profile-text">
+            <span class="profile-name">{{ nombreUsuario }}</span>
+            <span class="profile-role">{{ 'NAV.ROL' | translate }}</span>
+          </div>
+        </div>
+      </button>
+
+      <button class="btn-logout-square" (click)="cerrarSesion()" [title]="'NAV.CERRAR_SESION' | translate">
+        <i class="fas fa-sign-out-alt"></i>
+      </button>
+    </div>
+  </header>
+
+  <div class="container" style="display: flex; justify-content: center; align-items: center; min-height: 70vh;">
+    @if (!codigoVerificado) {
+      <div class="glass-panel main-panel animate-fade-in" style="max-width: 650px; width: 100%; text-align: center; padding: 45px 30px; border-radius: 36px; box-shadow: 0 15px 35px rgba(0,0,0,0.03); border: 2px solid #e2e8f0; background: white; margin: 20px auto;">
+
+        <h2 style="font-size: 2.3rem; font-weight: 800; color: #000000; margin-bottom: 30px; font-family: 'Segoe UI', system-ui, sans-serif; letter-spacing: -0.5px;">{{ 'LEGADO.VERIFICACION_TITULO' | translate }}</h2>
+
+        <div style="border: 2px solid #edf2f7; border-radius: 32px; padding: 45px 35px; box-shadow: 0 8px 24px rgba(0,0,0,0.01); display: flex; flex-direction: column; align-items: center; justify-content: center; background: #ffffff;">
+
+          <div style="width: 120px; height: 120px; border-radius: 50%; background: linear-gradient(135deg, #a5f3fc 0%, #3b82f6 100%); display: flex; align-items: center; justify-content: center; margin-bottom: 25px; box-shadow: 0 10px 25px rgba(59, 130, 246, 0.15);">
+            <i class="fas fa-shield-alt" style="font-size: 3.5rem; color: white;"></i>
+          </div>
+
+          <h3 style="font-size: 1.65rem; font-weight: 700; color: #0f172a; margin-bottom: 12px; font-family: 'Segoe UI', system-ui, sans-serif;">{{ 'LEGADO.VERIFICACION_TITULO' | translate }}</h3>
+
+          <p style="font-size: 1.1rem; color: #64748b; margin-bottom: 25px; line-height: 1.5; font-weight: 500; max-width: 320px;">
+            {{ 'LEGADO.VERIFICACION_DESC' | translate }}
+          </p>
+
+          <div style="margin-bottom: 20px; width: 100%; max-width: 320px;">
+            <mat-form-field appearance="outline" style="width: 100%; text-align: center;">
+              <mat-label>{{ 'LEGADO.LABEL_CODIGO' | translate }}</mat-label>
+              <input matInput type="text" maxlength="6" [(ngModel)]="codigoInput" placeholder="123456"
+                     style="font-size: 1.8rem; font-weight: 700; text-align: center; letter-spacing: 0.25em; color: #0f172a;"
+                     (keyup.enter)="codigoInput.length === 6 && verificarCodigo()">
+            </mat-form-field>
+          </div>
+
+          <button mat-flat-button (click)="verificarCodigo()"
+                  style="border: 2px solid #cbd5e1; font-weight: 700; border-radius: 14px; padding: 12px 38px; font-size: 1.15rem; display: inline-flex; align-items: center; gap: 8px; transition: all 0.25s ease; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.02);"
+                  [style.background]="codigoInput.length === 6 ? '#bbf7d0' : '#e2e8f0'"
+                  [style.color]="codigoInput.length === 6 ? '#166534' : '#64748b'"
+                  [style.borderColor]="codigoInput.length === 6 ? '#86efac' : '#cbd5e1'"
+                  [disabled]="codigoInput.length < 6">
+            <i class="fas fa-key"></i> {{ 'LEGADO.BOTON_VERIFICAR' | translate }}
+          </button>
+
+        </div>
+      </div>
+    } @else {
+      <div class="glass-panel main-panel animate-fade-in" style="width: 100%; border-radius: 28px;">
+        <div class="panel-header" style="border-bottom: 2px solid #edf2f7; padding-bottom: 20px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+          <button mat-button class="btn btn-retroceder" routerLink="/inicio-adulto-mayor">
+            <i class="fas fa-arrow-left"></i> {{ 'BOTON.VOLVER' | translate }}
+          </button>
+          <h2 class="panel-title" style="font-size: 1.8rem; font-weight: 800; display: flex; align-items: center; gap: 10px; color: #0f172a;">
+            <i class="fas fa-heart" style="color: #ef4444;"></i> {{ 'LEGADO.TITULO_PANEL' | translate }}
+          </h2>
+        </div>
+
+        <p class="panel-intro" style="font-size: 1.15rem; color: #64748b; margin-bottom: 30px;">
+          {{ 'LEGADO.INTRO_PANEL' | translate }}
+        </p>
+
+        @if (cargando) {
+          <div class="loading-state" style="text-align: center; padding: 40px;">
+            <i class="fas fa-spinner fa-spin spin-icon" style="font-size: 2.5rem; color: #6200ea; margin-bottom: 15px;"></i>
+            <p style="font-size: 1.1rem; color: #64748b;">{{ 'LEGADO.LOADING' | translate }}</p>
+          </div>
+        } @else if (recuerdos.length === 0) {
+          <div class="custom-empty-state animate-fade-in" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; text-align: center; background: white;">
+            <div class="empty-heart-circle" style="width: 140px; height: 140px; border-radius: 50%; background: radial-gradient(circle, #e0f2fe 0%, #bae6fd 100%); display: flex; align-items: center; justify-content: center; margin-bottom: 30px; box-shadow: 0 8px 20px rgba(186, 230, 253, 0.2);">
+              <i class="fas fa-heart" style="font-size: 3.5rem; color: #787f8a;"></i>
+            </div>
+
+            <h3 style="font-size: 2.2rem; font-weight: 800; color: #000000; margin-bottom: 12px; font-family: 'Segoe UI', sans-serif;">{{ 'LEGADO.VACIO_TITULO' | translate }}</h3>
+            <p style="font-size: 1.25rem; color: #94a3b8; max-width: 500px; line-height: 1.6; font-weight: 500; margin-bottom: 30px;">
+              {{ 'LEGADO.VACIO_DESC' | translate }}
+            </p>
+
+            <button mat-flat-button class="btn btn-create-first" routerLink="/ver-recuerdos" style="background: #bbf7d0 !important; color: #166534 !important; border: 2px solid #86efac !important; font-weight: 700; border-radius: 12px; padding: 12px 35px; font-size: 1.15rem; display: inline-flex; align-items: center; gap: 8px; transition: var(--transition); cursor: pointer; box-shadow: 0 4px 10px rgba(22, 101, 52, 0.05);">
+              {{ 'NAV.RECUERDOS' | translate }}
+            </button>
+          </div>
+        } @else {
+          <div class="stories-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; margin-top: 20px;">
+            @for (recuerdo of recuerdos; track recuerdo.idRecuerdo) {
+              <mat-card class="story-card" style="background: white; border-radius: 20px; border: 2px solid #edf2f7; padding: 25px; box-shadow: 0 6px 15px rgba(0,0,0,0.02); display: flex; flex-direction: column; transition: all 0.3s ease; position: relative;">
+
+                <div class="story-header" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 18px; border-bottom: 1px solid #edf2f7; padding-bottom: 12px;">
+                  <div>
+                    <h3 class="story-title" style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin: 0 0 6px 0;">{{ recuerdo.tituloRecuerdo }}</h3>
+                    <span class="story-date" style="font-size: 0.85rem; color: #94a3b8; font-weight: 600;">
+                      <i class="far fa-calendar-alt" style="margin-right: 4px;"></i> {{ recuerdo.fechaCreacion || ('RECUERDOS.FECHA_NO_REGISTRADA' | translate) }}
+                    </span>
+                  </div>
+                  <span class="story-badge" style="background: #c6f6d5; color: #166534; padding: 6px 14px; border-radius: 20px; font-weight: 700; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 4px;">
+                    @if (recuerdo.tipoRecuerdo === 'TEXTO') { <i class="fas fa-pen-fancy"></i> {{ 'RECUERDOS.TIPO_RELATO' | translate }} }
+                    @if (recuerdo.tipoRecuerdo === 'AUDIO') { <i class="fas fa-microphone"></i> {{ 'RECUERDOS.TIPO_AUDIO' | translate }} }
+                    @if (recuerdo.tipoRecuerdo === 'FOTO') { <i class="fas fa-camera"></i> {{ 'RECUERDOS.TIPO_FOTO' | translate }} }
+                  </span>
+                </div>
+
+                <div style="flex-grow: 1; margin-bottom: 20px;">
+                  @if (recuerdo.tipoRecuerdo === 'FOTO') {
+                    <div class="polaroid-frame-mini" style="text-align: center;">
+                      <img [src]="recuerdo.contenido" class="polaroid-image-mini" [alt]="'LEGADO.TITULO_PANEL' | translate"
+                           style="width: 100%; max-height: 220px; object-fit: cover; border-radius: 12px; border: 1px solid #e2e8f0; padding: 6px; background: white; box-shadow: 0 4px 10px rgba(0,0,0,0.03);">
+                    </div>
+                  } @else if (recuerdo.tipoRecuerdo === 'AUDIO') {
+                    <div class="audio-player-card-mini" style="width: 100%; text-align: center; background: #fff0f5; padding: 15px; border-radius: 16px; border: 1px solid #ffb3c6; display: flex; justify-content: center; align-items: center;">
+                      <audio [src]="recuerdo.contenido" controls style="width: 100%; max-width: 280px;"></audio>
+                    </div>
+                  } @else {
+                    <p class="story-body" style="font-size: 1.05rem; color: #475569; line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; margin: 0;">
+                      {{ recuerdo.contenido }}
+                    </p>
+                  }
+                </div>
+
+
+                <div class="story-footer" style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #edf2f7; padding-top: 15px; margin-top: auto;">
+                  <div style="display: flex; gap: 10px;">
+                    <button mat-icon-button class="action-btn-mini fav-toggle" (click)="toggleFavorito(recuerdo)" [title]="'LEGADO.QUITAR_FAV' | translate"
+                            style="background: #fee2e2; border: none; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #ef4444; transition: all 0.2s ease;">
+                      <i class="fas fa-heart"></i>
+                    </button>
+                    <button mat-icon-button class="action-btn-mini download-btn" (click)="exportarLegado(recuerdo)" [title]="'GALERIA.IMPRIMIR' | translate"
+                            style="background: #f1f5f9; border: none; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #6200ea; transition: all 0.2s ease;">
+                      <i class="fas fa-print"></i>
+                    </button>
+                  </div>
+                </div>
+
+              </mat-card>
+            }
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>
