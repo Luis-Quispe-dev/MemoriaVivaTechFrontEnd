@@ -1,0 +1,360 @@
+<div class="dashboard-container">
+
+  <div class="ambient-glows">
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+  </div>
+
+  <header class="classic-navbar">
+    <div class="logo-section">
+      <i class="fas fa-heart logo-heart"></i>
+      <span class="logo-text">SoulStory</span>
+    </div>
+
+    <nav class="nav-links">
+      <button class="nav-btn" routerLink="/inicio-cuidador">
+        <i class="fas fa-home"></i> {{ 'NAV.INICIO' | translate }}
+      </button>
+      <button class="nav-btn" routerLink="/ver-paciente">
+        <i class="fas fa-users"></i> {{ 'CUID.MIS_PACIENTES' | translate }}
+      </button>
+      <button class="nav-btn" routerLink="/calendario-cuidador-inicio">
+        <i class="fas fa-chevron-left"></i> {{ 'CCA.CAMBIAR_PACIENTE' | translate }}
+      </button>
+    </nav>
+
+    <div class="profile-logout-section">
+      <button class="profile-btn" routerLink="/perfil-cuidador" [title]="'NAV.PERFIL' | translate">
+        <div class="user-profile">
+          <div class="avatar-circle" style="overflow: hidden; display: flex; align-items: center; justify-content: center;">
+            @if (fotoPerfil) {
+              <img [src]="fotoPerfil" style="width: 100%; height: 100%; object-fit: cover;" [alt]="'NAV.PERFIL' | translate">
+            } @else {
+              <i class="fas fa-user-shield"></i>
+            }
+          </div>
+          <div class="profile-text">
+            <span class="profile-name">{{ nombreUsuario }}</span>
+            <span class="profile-role">{{ 'NAV.ROL_CUIDADOR' | translate }}</span>
+          </div>
+        </div>
+      </button>
+
+      <button class="btn-logout-square" (click)="cerrarSesion()" [title]="'NAV.CERRAR_SESION' | translate">
+        <i class="fas fa-sign-out-alt"></i>
+      </button>
+    </div>
+  </header>
+
+  <div class="calendar-main-layout animate-fade-in">
+
+    <aside class="calendar-sidebar">
+
+      <div class="mini-calendar-card">
+        <h2 class="sidebar-title">{{ 'CAL.TITULO' | translate }}</h2>
+
+        <div class="mini-calendar-header" style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+          <button class="arrow-nav-btn" (click)="mesAnterior()" [title]="'CAL.PREV_MONTH' | translate">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+
+          <div class="dropdown-selectors">
+            <select class="custom-select" [(ngModel)]="mesSeleccionado" (change)="onMonthOrYearChange()">
+              @for (mes of mesesAbreviados; track $index) {
+                <option [value]="$index">{{ 'CAL.MONTH_' + $index | translate }}</option>
+              }
+            </select>
+
+            <select class="custom-select" [(ngModel)]="anioSeleccionado" (change)="onMonthOrYearChange()">
+              @for (anio of anios; track anio) {
+                <option [value]="anio">{{ anio }}</option>
+              }
+            </select>
+          </div>
+
+          <button class="arrow-nav-btn" (click)="mesSiguiente()" [title]="'CAL.NEXT_MONTH' | translate">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+
+        <div class="mini-calendar-weekdays">
+          <span>{{ 'CAL.WD_LU' | translate }}</span>
+          <span>{{ 'CAL.WD_MA' | translate }}</span>
+          <span>{{ 'CAL.WD_MI' | translate }}</span>
+          <span>{{ 'CAL.WD_JU' | translate }}</span>
+          <span>{{ 'CAL.WD_VI' | translate }}</span>
+          <span>{{ 'CAL.WD_SA' | translate }}</span>
+          <span>{{ 'CAL.WD_DO' | translate }}</span>
+        </div>
+
+        <div class="mini-calendar-grid">
+          @for (dia of diasMiniCalendario; track $index) {
+            <button
+              class="mini-day-cell"
+              [ngClass]="{
+                'different-month': !dia.esDeEsteMes,
+                'selected-day': dia.esDeEsteMes && dia.numero === diaSeleccionado
+              }"
+              (click)="seleccionarDiaMini(dia)"
+              [disabled]="!dia.numero">
+              {{ dia.numero }}
+            </button>
+          }
+        </div>
+      </div>
+
+      <button class="btn-crear-evento" (click)="abrirModalCrearEvento()" [title]="'CAL.CREAR_EVENTO' | translate">
+        <span class="plus-icon"><i class="fas fa-plus"></i></span>
+        <span class="btn-text">{{ 'CAL.CREAR_EVENTO' | translate }}</span>
+      </button>
+
+      <div class="sidebar-activities-list-card">
+        <h3 class="sidebar-list-title">{{ 'CCA.AGENDA_PACIENTE' | translate }} {{ nombrePaciente }}</h3>
+
+        <div class="sidebar-activities-scroll">
+          @if (eventos.length === 0) {
+            <div class="sidebar-no-activities">
+              <i class="far fa-calendar-times"></i>
+              <p>{{ 'CAL.SIN_ACTIVIDADES' | translate }}</p>
+            </div>
+          } @else {
+            @for (evento of ordenarEventosPorFecha(eventos); track evento.id) {
+              <div class="sidebar-activity-item"
+                   [ngClass]="evento.color"
+                   (click)="irAFecha(evento.fecha)"
+                   title="Haga clic para ver en el calendario">
+                <div class="activity-color-bar"></div>
+                <div class="activity-item-details">
+                  <span class="activity-item-title">{{ evento.titulo }}</span>
+                  <span class="activity-item-meta">
+                    <i class="far fa-calendar-alt"></i> {{ formatearFechaListado(evento.fecha) }}
+                  </span>
+                  <span class="activity-item-time">
+                    <i class="far fa-clock"></i> {{ evento.horaInicio }} - {{ evento.horaFin }}
+                  </span>
+                  <span class="activity-item-creator">
+                    <i class="fas" [ngClass]="evento.creadoPor === 'CUIDADOR' ? 'fa-user-shield' : 'fa-user'"></i>
+                    {{ 'CAL.CREADO_POR' | translate }}: {{ evento.creadoPor === 'CUIDADOR' ? ('CAL.CREADOR_YO' | translate) : ('NAV.ROL' | translate) }}
+                  </span>
+                </div>
+                <button class="btn-edit-sidebar-event"
+                        (click)="abrirModalEditarEvento(evento, $event)"
+                        [title]="'CAL.MODAL_EDIT_TITLE' | translate">
+                  <i class="fas fa-pencil-alt"></i>
+                </button>
+              </div>
+            }
+          }
+        </div>
+      </div>
+
+    </aside>
+
+    <main class="weekly-calendar-container">
+      <div class="weekly-calendar-card">
+
+        @if (!cargandoAsignacion) {
+          <div class="caregiver-status-banner success animate-fade-in">
+            <div class="banner-icon-circle">
+              <i class="fas fa-user-shield"></i>
+            </div>
+            <div class="banner-content">
+              <h4>{{ 'CCA.BANNER.TITULO' | translate }} <strong style="color: var(--accent-purple);">{{ nombrePaciente }}</strong></h4>
+              <p>{{ 'CCA.BANNER.DESC' | translate }}</p>
+            </div>
+            <span class="sync-badge">
+              <span class="sync-dot"></span> {{ 'CAL.SINCRONIZADO_BADGE' | translate }}
+            </span>
+          </div>
+        } @else {
+          <div class="caregiver-status-banner loading animate-fade-in" style="background: #f8fafc; border: 1.5px dashed #cbd5e1; margin-bottom: 20px;">
+            <div class="banner-icon-circle" style="background: #e2e8f0; color: #94a3b8;">
+              <i class="fas fa-spinner fa-spin"></i>
+            </div>
+            <div class="banner-content">
+              <h4 style="color: #64748b; margin: 0 0 3px 0; font-size: 1.08rem; font-weight: 750;">{{ 'CAL.LOADING_TITULO' | translate }}</h4>
+              <p style="color: #94a3b8; margin: 0; font-size: 0.9rem;">{{ 'CAL.LOADING_DESC' | translate }}</p>
+            </div>
+          </div>
+        }
+
+        <div class="weekly-calendar-header">
+          <div class="range-navigator">
+            <button class="arrow-nav-btn" (click)="semanaAnterior()" [title]="'CAL.PREV_WEEK' | translate">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <span class="range-text">{{ rangoSemanaTexto }}</span>
+            <button class="arrow-nav-btn" (click)="semanaSiguiente()" [title]="'CAL.NEXT_WEEK' | translate">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="weekly-grid-viewport">
+
+          <div class="weekly-grid-headers">
+            <div class="hour-header-corner"></div>
+
+            @for (dia of diasSemana; track dia.fechaString) {
+              <div class="day-column-header" [ngClass]="{'active-header': dia.esHoy}">
+                <div class="header-pill">
+                  <span class="day-name">{{ dia.nombre }}</span>
+                  <span class="day-number">{{ dia.numero }}</span>
+                </div>
+              </div>
+            }
+          </div>
+
+          <div class="weekly-timeline-grid">
+
+            <div class="hours-labels-column">
+              @for (hora of horasGrid; track hora) {
+                <div class="hour-label-cell">
+                  <span>{{ hora }}</span>
+                </div>
+              }
+            </div>
+
+            <div class="days-columns-grid">
+
+              <div class="grid-rows-background">
+                @for (hora of horasGrid; track hora) {
+                  <div class="grid-row-line"></div>
+                }
+              </div>
+
+              <div class="columns-wrapper">
+                @for (dia of diasSemana; track dia.fechaString) {
+                  <div class="day-grid-column"
+                       [ngClass]="{'active-column': dia.esHoy}"
+                       (mouseenter)="onMouseEnterColumna(dia.fechaString)"
+                       (dblclick)="abrirModalCrearEvento(dia.fechaString)"
+                       [title]="'CAL.CREAR_EVENTO' | translate">
+
+                    @for (evento of obtenerEventosDelDia(dia.fechaString); track evento.id) {
+                      <div class="event-card animate-scale-up"
+                           [ngStyle]="calcularEstiloEvento(evento)"
+                           [ngClass]="[evento.color, calcularClaseTamano(evento)]"
+                           [class.dragging]="eventoArrastrado === evento"
+                           (mousedown)="iniciarArrastre(evento, $event)"
+                           [title]="evento.descripcion || evento.titulo">
+                        <div class="event-time">
+                          {{ evento.horaInicio }} - {{ evento.horaFin }}
+                        </div>
+                        <div class="event-creator-tag">
+                          <i class="fas" [ngClass]="evento.creadoPor === 'CUIDADOR' ? 'fa-user-shield' : 'fa-user'"></i>
+                          {{ evento.creadoPor === 'CUIDADOR' ? ('CAL.CREADOR_YO' | translate) : ('NAV.ROL' | translate) }}
+                        </div>
+                        <div class="event-title-text">{{ evento.titulo }}</div>
+                        @if (evento.descripcion) {
+                          <div class="event-desc-text">{{ evento.descripcion }}</div>
+                        }
+                        <button class="btn-edit-event"
+                                (mousedown)="$event.stopPropagation()"
+                                (click)="abrirModalEditarEvento(evento, $event)"
+                                [title]="'CAL.MODAL_EDIT_TITLE' | translate">
+                          <i class="fas fa-pencil-alt"></i>
+                        </button>
+                        <button class="btn-delete-event"
+                                (mousedown)="$event.stopPropagation()"
+                                (click)="eliminarEvento(evento.id, $event, evento.esDelBackend)"
+                                [title]="'CAL.ALERT_DELETE_CONFIRM_TITLE' | translate">
+                          <i class="fas fa-times"></i>
+                        </button>
+                        <div class="event-resize-handle" (mousedown)="iniciarRedimension(evento, $event)"></div>
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </main>
+
+  </div>
+
+  @if (mostrarCrearEventoModal) {
+    <div class="modal-overlay animate-fade-in" (click)="cerrarModalCrearEvento()">
+      <div class="modal-container animate-scale-up" (click)="$event.stopPropagation()">
+
+        <header class="modal-header">
+          <h3>
+            <i class="fas" [ngClass]="esModoEdicion ? 'fa-edit text-purple' : 'fa-calendar-plus text-purple'"></i>
+            {{ esModoEdicion ? ('CAL.MODAL_EDIT_TITLE' | translate) : ('CAL.MODAL_ADD_TITLE' | translate) }}
+          </h3>
+          <button class="modal-close-btn" (click)="cerrarModalCrearEvento()">
+            <i class="fas fa-times"></i>
+          </button>
+        </header>
+
+        <form [formGroup]="eventForm" (ngSubmit)="guardarEvento()" class="modal-form">
+          <div class="form-group">
+            <label for="eventTitle">{{ 'CCA.FORM.QUESTION' | translate }}{{ nombrePaciente }}{{ 'CCA.FORM.QUESTION_SUFIX' | translate }}</label>
+            <input
+              type="text"
+              id="eventTitle"
+              formControlName="nuevoTitulo"
+              class="form-control"
+              [placeholder]="'CAL.FORM_TITLE_PLACEHOLDER' | translate">
+          </div>
+
+          <div class="form-group">
+            <label for="eventDesc">{{ 'CAL.FORM_DESC_LABEL' | translate }}</label>
+            <textarea
+              id="eventDesc"
+              formControlName="nuevaDescripcion"
+              class="form-control"
+              [placeholder]="'CAL.FORM_DESC_PLACEHOLDER' | translate"
+              rows="3"></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-6">
+              <label for="eventDate">{{ 'CAL.FORM_FECHA' | translate }}</label>
+              <input
+                type="date"
+                id="eventDate"
+                formControlName="nuevoDiaString"
+                class="form-control">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-6">
+              <label for="eventStart">{{ 'CAL.FORM_HORA_INICIO' | translate }}</label>
+              <input
+                type="time"
+                id="eventStart"
+                formControlName="nuevaHoraInicio"
+                class="form-control">
+            </div>
+
+            <div class="form-group col-6">
+              <label for="eventEnd">{{ 'CAL.FORM_HORA_FIN' | translate }}</label>
+              <input
+                type="time"
+                id="eventEnd"
+                formControlName="nuevaHoraFin"
+                class="form-control">
+            </div>
+          </div>
+
+          <footer class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="cerrarModalCrearEvento()">{{ 'BOTON.CANCELAR' | translate }}</button>
+            <button type="submit" class="btn btn-primary">
+              {{ esModoEdicion ? ('CAL.FORM_BOTON_SAVE_EDIT' | translate) : ('CAL.FORM_BOTON_SAVE_ADD' | translate) }}
+            </button>
+          </footer>
+        </form>
+
+      </div>
+    </div>
+  }
+
+</div>
