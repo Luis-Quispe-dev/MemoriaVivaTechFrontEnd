@@ -10,6 +10,8 @@ import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import Swal from 'sweetalert2';
 import {UsuarioService} from '../../services/usuario-service';
 import {TranslatePipe} from '@ngx-translate/core';
+import {ConfiguracionService} from '../../services/configuracion-service';
+import {LenguajeService} from '../../services/lenguaje.service';
 
 @Component({
   selector: 'app-iniciar-sesion',
@@ -99,7 +101,7 @@ export class IniciarSesion {
       },
       error: (err) => {
         this.cargando = false;
-        console.error("Error al iniciar sesión", err);
+        console.error("Error al iniciar sesión!", err);
         Swal.fire({
           title: this.lenguajeService.translate('LOGIN.ERROR_TITLE') || 'Error de ingreso',
           text: this.lenguajeService.translate('LOGIN.ERROR_TEXT') || 'Credenciales inválidas. Por favor, verifica tu correo y contraseña.',

@@ -1,16 +1,18 @@
-/* Contenedor principal que divide la pantalla en dos */
-.login-page-container {
+/* ========================================================
+   --- ESTRUCTURA PRINCIPAL (SPLIT LAYOUT) ---
+   ======================================================== */
+.registro-page-container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #ffffff; /* Fondo totalmente blanco */
-  gap: 100px; /* Separación entre el logo y el formulario */
-  padding: 20px;
+  background-color: #ffffff;
+  gap: 100px; /* Separación entre logo y form */
+  padding: 40px 20px;
 }
 
 /* ========================================================
-   LADO IZQUIERDO: MARCA
+   --- LADO IZQUIERDO: MARCA ---
    ======================================================== */
 .brand-section {
   text-align: center;
@@ -34,7 +36,7 @@
   margin-bottom: 30px;
 }
 
-.btn-crear-cuenta {
+.btn-outline-morado {
   border: 2px solid var(--accent-purple) !important;
   color: var(--accent-purple) !important;
   border-radius: 30px !important;
@@ -44,14 +46,14 @@
 }
 
 /* ========================================================
-   LADO DERECHO: TARJETA DE FORMULARIO
+   --- LADO DERECHO: TARJETA DE FORMULARIO ---
    ======================================================== */
 .form-section {
   width: 100%;
   max-width: 450px;
 }
 
-.login-card {
+.registro-card {
   padding: 40px;
   border-radius: 30px !important;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08) !important;
@@ -59,16 +61,28 @@
   background-color: #ffffff !important;
 }
 
-.form-title {
+/* Títulos Centrados */
+.form-title-container {
   text-align: center;
+  margin-bottom: 30px;
+}
+
+.form-title {
   font-weight: 800;
   font-size: 2rem;
-  margin-bottom: 30px;
+  margin: 0;
+  color: var(--text-dark);
+}
+
+.form-subtitle {
+  font-weight: 800;
+  font-size: 1.8rem;
+  margin: 0;
   color: var(--text-dark);
 }
 
 /* ========================================================
-   INPUTS Y ETIQUETAS DE MATERIAL
+   --- INPUTS Y ETIQUETAS DE MATERIAL ---
    ======================================================== */
 .custom-label {
   font-weight: 800;
@@ -77,98 +91,56 @@
   margin-bottom: 5px;
 }
 
-.custom-label i { margin-right: 8px; }
+.custom-label i {
+  margin-right: 8px;
+}
 
 .mat-form-full {
   width: 100%;
-  margin-bottom: 10px;
+  margin-bottom: 15px; /* Un poco más de espacio para que respiren */
+  display: block;
 }
 
+/* Forzamos el redondeo y quitamos el fondo gris por defecto de Material 3 */
 ::ng-deep .mat-form-full .mat-mdc-text-field-wrapper {
-  border-radius: 12px !important;
+  border-radius: 15px !important;
+  background-color: #ffffff !important;
 }
 
 /* ========================================================
-   BOTONES VERDES Y BOTÓN VOLVER
+   --- BOTÓN VERDE (TIPO PÍLDORA) ---
    ======================================================== */
 .botones-accion {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 15px;
-  margin-top: 20px;
+  margin-top: 15px;
 }
 
 .btn-verde-pill {
   background-color: var(--primary-green) !important;
   color: var(--text-dark) !important;
   border-radius: 30px !important;
-  width: 80%;
+  width: 85%;
   padding: 25px 0 !important;
   font-weight: 800 !important;
   font-size: 1.1rem !important;
+  border: none !important;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+  cursor: pointer;
 }
 
-.btn-verde-pill i { margin-right: 10px; }
-
-.volver-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 25px;
-  width: 100%;
+.btn-verde-pill i {
+  margin-right: 10px;
 }
 
 /* ========================================================
-   RESPONSIVE (Para celulares)
+   --- RESPONSIVE (Para celulares) ---
    ======================================================== */
 @media (max-width: 900px) {
-  .login-page-container {
+  .registro-page-container {
     flex-direction: column;
     gap: 40px;
-    padding: 40px 20px;
+    padding: 30px 15px;
   }
-}
-
-
-/* ========================================================
-   --- LIMPIEZA ABSOLUTA DEL MENÚ MÓVIL (BLANCO TOTAL) ---
-   ======================================================== */
-
-.menu-movil-premium.mat-mdc-menu-panel,
-.mat-mdc-menu-panel.menu-movil-premium {
-  min-width: 300px !important; /* Más ancho */
-  background-color: #ffffff !important;
-}
-
-.menu-movil-premium .mat-mdc-menu-item {
-  font-size: 1.25rem !important;
-  min-height: 60px !important;
-  line-height: 60px !important;
-  padding: 0 25px !important;
-  background-color: transparent !important;
-}
-
-.menu-movil-premium .menu-icon {
-  font-size: 1.4rem !important;
-  margin-right: 15px !important;
-}
-
-.menu-movil-premium .mat-mdc-menu-item:not([disabled]):hover,
-.menu-movil-premium .mat-mdc-menu-item.cdk-program-focused:not([disabled]),
-.menu-movil-premium .mat-mdc-menu-item.cdk-keyboard-focused:not([disabled]),
-.menu-movil-premium .mat-mdc-menu-item-highlighted:not([disabled]) {
-  background-color: transparent !important;
-}
-
-.menu-movil-premium .mat-mdc-menu-item .mat-ripple {
-  display: none !important;
-}
-
-.menu-movil-premium .mat-mdc-menu-item:hover {
-  background-color: var(--primary-green) !important;
-  color: var(--text-dark) !important;
-}
-
-.menu-movil-premium .mat-mdc-menu-item:hover .mdc-list-item__primary-text {
-  color: var(--text-dark) !important;
 }

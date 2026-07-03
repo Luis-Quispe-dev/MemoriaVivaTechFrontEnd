@@ -1,0 +1,55 @@
+@import "../inicio-adulto-mayor/inicio-adulto-mayor.css";
+
+/* --- ACCIONES DEL PERFIL CON DISEÑO OFICIAL VERDE SOULSTORY --- */
+.profile-action-btn {
+  width: 100%;
+  background: #c6f6d5 !important;
+  color: #166534 !important;
+  border: none !important;
+  padding: 16px 25px !important;
+  border-radius: 16px !important;
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
+  text-align: left !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center;
+  gap: 12px;
+  transition: var(--transition) !important;
+  box-shadow: 0 4px 10px rgba(22, 101, 52, 0.04) !important;
+}
+
+.profile-action-btn i {
+  font-size: 1.45rem;
+  color: #166534;
+  width: 24px;
+  text-align: center;
+}
+
+.profile-action-btn:hover {
+  background: #b7e4c7 !important;
+  color: #14532d !important;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(22, 101, 52, 0.12) !important;
+}
+
+.profile-action-btn:active {
+  transform: translateY(-1px);
+}
+
+/* Specific class to make navbar profile button look active on this page */
+.classic-navbar .profile-btn.active {
+  background: #c6f6d5 !important;
+  border-radius: 16px;
+}
+
+
+/* Animations */
+.animate-fade-in {
+  animation: fadeIn 0.35s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}

@@ -1,0 +1,160 @@
+<div class="dashboard-container">
+
+  <header class="classic-navbar">
+    <div class="logo-section">
+      <i class="fas fa-heart logo-heart"></i>
+      <span class="logo-text">SoulStory</span>
+    </div>
+
+    <!-- Navigation links -->
+    <nav class="nav-links">
+      <button class="nav-btn" routerLink="/inicio-cuidador">
+        <i class="fas fa-home"></i> {{ 'NAV.INICIO' | translate }}
+      </button>
+    </nav>
+
+    <!-- User Profile & Notifications & Logout -->
+    <div class="profile-logout-section">
+      <button class="bell-btn" [title]="'CONF.NOTIF' | translate" style="background: white; border: 1px solid #cbd5e1; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #475569; font-size: 1.15rem; transition: all 0.2s ease;">
+        <i class="fas fa-bell"></i>
+      </button>
+
+      <button class="profile-btn active" routerLink="/perfil-cuidador" [title]="'NAV.PERFIL' | translate" style="background: #c6f6d5; border: none; padding: 6px 14px; border-radius: 16px; cursor: pointer; display: flex; align-items: center;">
+        <div class="user-profile" style="display: flex; align-items: center; gap: 10px;">
+          <div class="avatar-circle" style="width: 48px; height: 48px; border-radius: 50%; background: #e2e8f0; display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 1.4rem; border: 1px solid #cbd5e1; overflow: hidden;">
+            <img *ngIf="fotoPerfil" [src]="fotoPerfil" style="width: 100%; height: 100%; object-fit: cover;" [alt]="'NAV.PERFIL' | translate">
+            <i *ngIf="!fotoPerfil" class="fas fa-user"></i>
+          </div>
+          <div class="profile-text" style="display: flex; flex-direction: column; text-align: left;">
+            <span class="profile-name" style="font-size: 1.15rem; font-weight: 700; color: #166534;">{{ profileForm.get('nombreUsuario')?.value }}</span>
+            <span class="profile-role" style="font-size: 0.85rem; color: #166534; font-weight: 600;">{{ 'NAV.ROL_CUIDADOR' | translate }}</span>
+          </div>
+        </div>
+      </button>
+
+      <button class="btn-logout-square" (click)="cerrarSesion()" [title]="'NAV.CERRAR_SESION' | translate">
+        <i class="fas fa-sign-out-alt"></i>
+      </button>
+    </div>
+  </header>
+
+  <div class="container" style="display: flex; justify-content: center; align-items: center; min-height: 75vh; padding: 40px 0 80px 0;">
+
+    <mat-card class="glass-panel main-panel animate-fade-in edit-profile-card" [formGroup]="profileForm">
+
+      <!-- Back Link -->
+      <div style="margin-bottom: 25px; text-align: left;">
+        <a routerLink="/perfil-cuidador" class="back-link">
+          <i class="fas fa-chevron-left"></i> {{ 'PERF.VOLVER_PERFIL' | translate }}
+        </a>
+      </div>
+
+      <!-- Card Title and Icon -->
+      <div class="card-header-accent">
+        <div class="icon-bubble">
+          <i class="fas fa-user-shield"></i>
+        </div>
+        <h2 class="header-title">{{ 'EDC.TITULO' | translate }}</h2>
+        <p class="header-subtitle">{{ 'EDC.SUBTITULO' | translate }}</p>
+      </div>
+
+      <!-- Row 1: Avatar and Name Input -->
+      <div class="edit-row-top" style="display: flex; gap: 30px; align-items: center; margin-bottom: 25px; flex-wrap: wrap; text-align: left;">
+
+        <!-- Left: Avatar editing frame -->
+        <div style="display: flex; flex-direction: column; align-items: center; width: 150px; position: relative;">
+          <div style="position: relative; width: 150px; height: 150px;">
+            <div (click)="triggerFileSelect()" class="avatar-edit-container">
+              <img *ngIf="nuevaFotoBase64" [src]="nuevaFotoBase64" style="width: 100%; height: 100%; object-fit: cover;">
+              <img *ngIf="!nuevaFotoBase64 && fotoPerfil" [src]="fotoPerfil" style="width: 100%; height: 100%; object-fit: cover;">
+              <i *ngIf="!nuevaFotoBase64 && !fotoPerfil" class="fas fa-user" style="font-size: 5.5rem; color: #a0aec0; transform: translateY(8px);"></i>
+              <video #webcamVideo autoplay playsinline *ngIf="webcamStream" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%; position: absolute; top: 0; left: 0;"></video>
+              <div class="camera-flash" [class.flash-active]="flashActivo"></div>
+            </div>
+            <button (click)="triggerFileSelect()" class="avatar-floating-btn" [title]="'PERF.SUBIR_FOTO' | translate">
+              <i class="fas fa-pen"></i>
+            </button>
+            <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" style="display: none;">
+          </div>
+
+          <a *ngIf="!webcamStream" (click)="startCamera()" href="javascript:void(0)" class="camera-toggle-link">
+            <i class="fas fa-video"></i> {{ 'PERF.USAR_CAMARA' | translate }}
+          </a>
+          <a *ngIf="webcamStream" (click)="stopCamera()" href="javascript:void(0)" class="camera-cancel-link">
+            <i class="fas fa-times-circle"></i> {{ 'BOTON.CANCELAR' | translate }}
+          </a>
+
+          <button *ngIf="webcamStream" (click)="capturePhoto()" class="capture-btn">
+            <i class="fas fa-camera"></i> {{ 'PERF.CAPTURAR_FOTO' | translate }}
+          </button>
+        </div>
+
+        <!-- Right: Name input, Phone input and Guardar cambios button -->
+        <div style="flex: 1; min-width: 280px; display: flex; flex-direction: column; gap: 15px;">
+          <div class="input-wrapper">
+            <input formControlName="nombreUsuario" class="custom-input name-input" [placeholder]="'PERF.PLACEHOLDER_NOMBRE' | translate">
+            <i class="fas fa-user input-icon-right"></i>
+          </div>
+
+          <div class="input-wrapper">
+            <input formControlName="telefonoUsuario" class="custom-input tel-input" [placeholder]="'EDC.PLACEHOLDER_TELEFONO' | translate" style="font-size: 1.15rem; color: #475569; font-weight: 700;">
+            <i class="fas fa-phone input-icon-right"></i>
+          </div>
+
+          <button (click)="guardarCambios()" class="action-btn theme-accent-btn" [disabled]="cargandoCambios" style="width: 100%;">
+            <i class="fas" [ngClass]="cargandoCambios ? 'fa-spinner fa-spin' : 'fa-check-double'"></i> {{ 'CONF.GUARDAR' | translate }}
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Biography section -->
+      <div class="biography-section" style="margin-bottom: 25px; text-align: left;">
+        <label class="section-label" style="font-weight: 800; color: #166534; font-size: 1.05rem; display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+          <i class="fas fa-id-card"></i> {{ 'EDC.BIO_LABEL' | translate }}
+        </label>
+        <div class="textarea-wrapper" style="position: relative;">
+          <textarea formControlName="biografiaUsuario" maxlength="300" class="custom-textarea" [placeholder]="'EDC.BIO_PLACEHOLDER' | translate"></textarea>
+          <i class="fas fa-pen-nib textarea-icon"></i>
+          <span class="char-counter" style="position: absolute; bottom: 10px; right: 15px; font-size: 0.8rem; color: #94a3b8; font-weight: 700;">{{ (profileForm.get('biografiaUsuario')?.value || '').length }}/300</span>
+        </div>
+      </div>
+
+      <!-- Row 2: Email verification and input -->
+      <div class="edit-row-middle" style="display: flex; gap: 15px; align-items: center; margin-bottom: 25px; flex-wrap: wrap; text-align: left;">
+        <div class="input-wrapper" style="flex: 1.6; min-width: 250px; height: 52px;">
+          <input formControlName="emailUsuario" class="custom-input email-input" [placeholder]="'PERF.PLACEHOLDER_EMAIL' | translate" style="height: 100%;">
+          <i class="fas fa-envelope input-icon-right"></i>
+        </div>
+        <button (click)="enviarCodigo()" class="action-btn theme-accent-btn" style="flex: 0.8; min-width: 120px; height: 52px; font-size: 0.95rem;">
+          <i class="fas fa-paper-plane"></i> {{ 'PERF.ENVIAR_CODIGO' | translate }}
+        </button>
+        <button (click)="verificarCorreo()" class="action-btn" [ngClass]="correoVerificado ? 'verified-btn' : 'verify-btn'" style="flex: 0.8; min-width: 120px; height: 52px; font-size: 0.95rem;">
+          <i class="fas" [ngClass]="correoVerificado ? 'fa-check-circle' : 'fa-shield-alt'"></i>
+          {{ (correoVerificado ? 'PERF.VERIFICADO' : 'PERF.VERIFICAR_CORREO') | translate }}
+        </button>
+      </div>
+
+      <!-- Code verification box -->
+      <div class="code-box" [class.active]="mostrarCodigoBox">
+        <div style="flex: 1;">
+          <label class="code-label">
+            <i class="fas fa-key"></i> {{ 'PERF.CODIGO_VERIFICACION' | translate }}
+          </label>
+          <input formControlName="codigoIngresado" placeholder="0 0 0 0 0 0" maxlength="6" class="code-input-field">
+        </div>
+        <button (click)="confirmarCodigo()" class="action-btn validate-btn">
+          <i class="fas fa-unlock-alt"></i> {{ 'PERF.VALIDAR' | translate }}
+        </button>
+      </div>
+
+      <!-- Row 3: Guardar Correo Button -->
+      <button (click)="guardarCorreo()" class="action-btn theme-accent-btn full-width-btn" style="font-size: 1.15rem; padding: 18px;" [disabled]="cargandoCorreo">
+        <i class="fas" [ngClass]="cargandoCorreo ? 'fa-spinner fa-spin' : 'fa-envelope-open-text'"></i> {{ 'PERF.GUARDAR_CORREO' | translate }}
+      </button>
+
+    </mat-card>
+
+  </div>
+
+</div>

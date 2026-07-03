@@ -1,0 +1,46 @@
+<div class="page-wrapper">
+
+  <div class="main-container">
+
+    <div class="header-section">
+      <button mat-stroked-button class="btn-retroceder" routerLink="/lading-page">
+        <i class="fas fa-heart"></i> Cancelar
+      </button>
+      <h2 class="main-title">Tipo de Cuenta</h2>
+    </div>
+
+    <div class="selection-grid">
+
+      <div class="account-option-card"
+           (click)="seleccionar('mayor')"
+           [class.selected]="tipoSeleccionado === 'mayor'">
+        <div class="icon-circle bg-teal">
+          <i class="fa-solid fa-person-cane"></i>
+        </div>
+        <h3>Mayor de Edad</h3>
+        <p>Para registrar y almacenar Recuerdos y Memorias</p>
+      </div>
+
+      <div class="account-option-card"
+           (click)="seleccionar('cuidador')"
+           [class.selected]="tipoSeleccionado === 'cuidador'">
+        <div class="icon-circle bg-teal">
+          <i class="fas fa-user-md"></i>
+        </div>
+        <h3>Cuidador</h3>
+        <p>Apoyar y cuidar a mayores de edad o familiares mayores</p>
+      </div>
+
+    </div>
+
+    <div class="footer-section">
+      <button mat-flat-button class="btn-verde-pill"
+              [routerLink]="rutaDestino"
+              [disabled]="tipoSeleccionado === ''">
+        <i class="fas fa-arrow-right"></i> Crear cuenta SoulStory
+      </button>
+    </div>
+
+  </div>
+
+</div>

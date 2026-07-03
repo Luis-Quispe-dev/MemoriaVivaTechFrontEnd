@@ -1,0 +1,773 @@
+/* ========================================================
+   --- CLASICO DISENIO CSS DE SOULSTORY (ADULTO MAYOR) ---
+   ======================================================== */
+.dashboard-container {
+  --bg-color: #ffffff; /* Fondo blanco clásico */
+  --card-bg: #ffffff;
+  --card-border: #e2e8f0;
+
+  /* Colores del sitio web */
+  --primary-blue: #a6c9e2;
+  --primary-green: #b7e4c7;
+  --accent-blue: #286de0;
+  --accent-purple: #6200ea;
+
+  --text-dark: #000000;
+  --text-light: #5a6c7d;
+  --text-dim: #94a3b8;
+
+  --shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+  --shadow-hover: 0 15px 35px rgba(98, 0, 234, 0.1);
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --border-radius: 28px; /* Redondeado idéntico a las tarjetas del ejemplo */
+
+  background-color: var(--bg-color);
+  color: var(--text-dark);
+  min-height: 100vh;
+  padding: 0;
+  margin: 0;
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Sutiles orbes de fondo pastel */
+.ambient-glows {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0.15;
+}
+
+.glow-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(140px);
+}
+
+.orb-1 {
+  top: -10%;
+  right: 5%;
+  width: 45vw;
+  height: 45vw;
+  background: radial-gradient(circle, var(--primary-blue) 0%, transparent 70%);
+}
+
+.orb-2 {
+  bottom: -10%;
+  left: 5%;
+  width: 50vw;
+  height: 50vw;
+  background: radial-gradient(circle, var(--primary-green) 0%, transparent 70%);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px 80px 20px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ========================================================
+   --- HEADER NAVBAR CLASICO (RECREACION DE PNG) ---
+   ======================================================== */
+.classic-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 40px;
+  background: #ffffff;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-heart {
+  font-size: 2.2rem;
+  color: var(--accent-purple);
+}
+
+.logo-text {
+  font-size: 1.9rem;
+  font-weight: 800;
+  color: var(--accent-purple);
+  letter-spacing: -0.5px;
+}
+
+/* Enlaces de Navegación */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.nav-btn {
+  background: transparent;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 14px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #5a6c7d;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: var(--transition);
+}
+
+.nav-btn i {
+  font-size: 1.25rem;
+  color: #5a6c7d;
+}
+
+.nav-btn:hover {
+  background: rgba(0, 0, 0, 0.03);
+  color: var(--text-dark);
+}
+
+/* Estado Activo (Cápsula Verde Pastel) */
+.nav-btn.active {
+  background: #c6f6d5;
+  color: #166534;
+}
+
+.nav-btn.active i {
+  color: #166534;
+}
+
+/* Sección Perfil y Logout */
+.profile-logout-section {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* BOTÓN DE PERFIL DE USUARIO INTERACTIVO */
+.profile-btn {
+  background: transparent;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: var(--transition);
+}
+
+.profile-btn:hover {
+  background: #f1f5f9;
+  transform: translateY(-2px);
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  font-size: 1.4rem;
+  border: 1px solid #cbd5e1;
+}
+
+.profile-text {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.profile-name {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.profile-role {
+  font-size: 0.85rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+/* Botón Salir Cuadrado Rojo */
+.btn-logout-square {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: #e11d48;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  box-shadow: 0 4px 12px rgba(225, 29, 72, 0.2);
+  transition: var(--transition);
+}
+
+.btn-logout-square:hover {
+  background: #be123c;
+  transform: scale(1.05);
+}
+
+/* ========================================================
+   --- TITULO DE BIENVENIDA ---
+   ======================================================== */
+.menu-header-classic {
+  margin-top: 60px;
+  margin-bottom: 50px;
+  text-align: center;
+}
+
+.welcome-title-classic {
+  font-size: 3.3rem;
+  font-weight: 800;
+  color: #000000;
+  margin-bottom: 12px;
+  letter-spacing: -0.5px;
+}
+
+.welcome-subtitle-classic {
+  font-size: 1.4rem;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+/* ========================================================
+   --- DISENIO EN COLUMNAS CON ESENCIA DE BOTON DEL PNG ---
+   ======================================================== */
+.menu-grid-classic {
+  display: flex;
+  flex-direction: column; /* Alineación vertical: uno encima de otro */
+  align-items: center;    /* Centrado exacto de los botones en la página */
+  gap: 35px;
+  padding-bottom: 80px;
+}
+
+/* Tarjetas de botón idénticas a la de la captura de pantalla */
+.menu-card-classic {
+  background: #ffffff;
+  border: 2px solid #e2e8f0; /* Borde fino gris del PNG */
+  border-radius: var(--border-radius);
+  padding: 40px 30px; /* Relleno refinado para balance visual */
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  transition: var(--transition);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; /* Mascara perfectamente la barra de neón superior */
+
+  /* Mantienen la esencia de botón grande del PNG */
+  width: 100%;
+  max-width: 540px; /* Proporción ideal y elegante */
+  min-height: 330px; /* Altura perfecta y no excesiva */
+}
+
+.menu-card-classic:hover {
+  transform: translateY(-6px);
+  border-color: #cbd5e1; /* Borde sutil del ejemplo */
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.06); /* Sombra elegante */
+}
+
+/* Borde superior con gradiente de luz de neón (Hover PNG) */
+.menu-card-classic::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  opacity: 0;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.menu-card-classic:hover::before {
+  opacity: 1;
+}
+
+/* Gradientes específicos para la luz de neón superior basados en la opción */
+.menu-card-classic:has(.gradient-purple):hover::before {
+  background: linear-gradient(90deg, #c084fc 0%, #e879f9 100%);
+  box-shadow: 0 3px 10px rgba(192, 132, 252, 0.3);
+}
+
+.menu-card-classic:has(.gradient-pink):hover::before {
+  background: linear-gradient(90deg, #f472b6 0%, #f43f5e 100%);
+  box-shadow: 0 3px 10px rgba(244, 114, 182, 0.3);
+}
+
+.menu-card-classic:has(.gradient-teal):hover::before {
+  background: linear-gradient(90deg, #2dd4bf 0%, #34d399 100%);
+  box-shadow: 0 3px 10px rgba(45, 212, 191, 0.3);
+}
+
+.menu-card-classic:has(.gradient-blue):hover::before {
+  background: linear-gradient(90deg, #60a5fa 0%, #818cf8 100%);
+  box-shadow: 0 3px 10px rgba(96, 165, 250, 0.3);
+}
+
+.menu-card-classic:has(.gradient-indigo):hover::before {
+  background: linear-gradient(90deg, #818cf8 0%, #c084fc 100%);
+  box-shadow: 0 3px 10px rgba(129, 140, 248, 0.3);
+}
+
+.menu-card-classic:has(.gradient-red):hover::before {
+  background: linear-gradient(90deg, #f87171 0%, #fb923c 100%);
+  box-shadow: 0 3px 10px rgba(248, 113, 113, 0.3);
+}
+
+.menu-card-classic:has(.gradient-cyan-green):hover::before {
+  /* Gradiente morado/azul neón exacto de tu captura hover */
+  background: linear-gradient(90deg, #6200ea 0%, #286de0 100%);
+  box-shadow: 0 4px 12px rgba(98, 0, 234, 0.4);
+}
+
+/* Círculos gigantescos de gradiente sutil con icono centrado del ejemplo */
+.emblem-circle {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  box-shadow: inset 0 2px 4px rgba(255,255,255,0.2), 0 4px 15px rgba(0,0,0,0.03);
+  transition: var(--transition);
+}
+
+.menu-card-classic:hover .emblem-circle {
+  transform: scale(1.06);
+}
+
+.emblem-icon {
+  font-size: 3.2rem;
+  color: #ffffff;
+}
+
+/* Tipografía súper centrada y legible del PNG */
+.menu-card-classic h3 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 12px;
+}
+
+.menu-card-classic p {
+  font-size: 1.15rem;
+  color: #64748b;
+  line-height: 1.5;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Gradientes específicos para las tarjetas */
+.gradient-purple { background: linear-gradient(135deg, #c084fc 0%, #e879f9 100%); }
+.gradient-pink { background: linear-gradient(135deg, #f472b6 0%, #f43f5e 100%); }
+.gradient-teal { background: linear-gradient(135deg, #2dd4bf 0%, #34d399 100%); }
+.gradient-blue { background: linear-gradient(135deg, #60a5fa 0%, #818cf8 100%); }
+.gradient-indigo { background: linear-gradient(135deg, #818cf8 0%, #c084fc 100%); }
+.gradient-red { background: linear-gradient(135deg, #f87171 0%, #fb923c 100%); }
+
+/* Gradiente celeste-verde pastel exacto del Calendario en la captura */
+.gradient-cyan-green {
+  background: linear-gradient(135deg, #93c5fd 0%, #a7f3d0 100%);
+}
+
+/* Micro-animaciones de entrada */
+.animate-fade-in {
+  animation: slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Ajustes Responsivos */
+@media (max-width: 900px) {
+  .classic-navbar {
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px 20px;
+  }
+  .nav-links {
+    width: 100%;
+    justify-content: center;
+  }
+  .profile-logout-section {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 550px) {
+  .welcome-title-classic { font-size: 2.4rem; }
+  .welcome-subtitle-classic { font-size: 1.15rem; }
+  .menu-card-classic {
+    padding: 35px 20px;
+    min-height: 320px;
+  }
+  .emblem-circle {
+    width: 110px;
+    height: 110px;
+  }
+  .emblem-icon {
+    font-size: 3rem;
+  }
+  .menu-card-classic h3 {
+    font-size: 1.6rem;
+  }
+  .menu-card-classic p {
+    font-size: 1rem;
+  }
+}
+
+/* ========================================================
+   --- FLOATING CHAT BUTTON & DRAWER (Official green/purple) ---
+   ======================================================== */
+.floating-chat-btn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  border-radius: 50%;
+  background: #6200ea !important;
+  color: white !important;
+  width: 65px;
+  height: 65px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(98, 0, 234, 0.35);
+  transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 999;
+}
+
+.floating-chat-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 25px rgba(98, 0, 234, 0.5);
+  background: #5000ca !important;
+}
+
+.chat-drawer-container {
+  position: fixed;
+  bottom: 110px;
+  right: 30px;
+  width: 400px;
+  height: 520px;
+  background: white;
+  border: 2px solid #cbd5e1;
+  border-radius: 24px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 999;
+}
+
+/* Light Green Header (Matching PNG exactly) */
+.chat-drawer-header {
+  background: #c6f6d5;
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #b7e4c7;
+  border-radius: 22px 22px 0 0;
+}
+
+.chat-user-details {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.chat-avatar-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #718096;
+  font-size: 1.3rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+}
+
+.chat-profile-text {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.chat-profile-name {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #1a4f2e;
+}
+
+.chat-profile-role {
+  font-size: 0.85rem;
+  color: #166534;
+  font-weight: 600;
+}
+
+.chat-close-btn {
+  background: transparent;
+  border: none;
+  color: #166534;
+  font-size: 1.35rem;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+.chat-close-btn:hover {
+  transform: rotate(90deg);
+  background: rgba(22, 101, 52, 0.06);
+}
+
+/* Scrollable message container */
+.chat-drawer-body {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.chat-loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #94a3b8;
+  text-align: center;
+  padding: 0 20px;
+  animation: loadingPulse 1.2s infinite ease-in-out;
+}
+
+.chat-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #94a3b8;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.chat-loading-state i {
+  font-size: 2.5rem;
+  color: #6200ea;
+  margin-bottom: 15px;
+  filter: drop-shadow(0 4px 10px rgba(98, 0, 234, 0.15));
+  animation: spinnerRotate 1s infinite linear !important;
+}
+
+@keyframes loadingPulse {
+  0% { transform: scale(0.97); opacity: 0.75; }
+  50% { transform: scale(1.03); opacity: 1; }
+  100% { transform: scale(0.97); opacity: 0.75; }
+}
+
+@keyframes spinnerRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.chat-empty-state i {
+  font-size: 2.5rem;
+  color: #cbd5e1;
+  margin-bottom: 15px;
+}
+
+.chat-empty-state p {
+  font-size: 1.05rem;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.chat-messages-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.chat-bubble-wrapper {
+  display: flex;
+  width: 100%;
+  margin-bottom: 2px;
+}
+
+.chat-bubble-wrapper.sent {
+  justify-content: flex-end;
+}
+
+.chat-bubble-wrapper.received {
+  justify-content: flex-start;
+}
+
+.chat-bubble {
+  position: relative;
+  max-width: 75%;
+  padding: 10px 14px 22px 14px; /* Aumentar espacio abajo para fecha y ticks */
+  font-size: 1.05rem;
+  line-height: 1.5;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.01);
+}
+
+.chat-bubble-wrapper.sent .chat-bubble {
+  background: #e0e7ff;
+  color: #1e1b4b;
+  border-radius: 18px 18px 0 18px;
+  text-align: left;
+}
+
+.chat-bubble-wrapper.received .chat-bubble {
+  background: #f1f5f9;
+  color: #0f172a;
+  border-radius: 18px 18px 18px 0;
+  text-align: left;
+}
+
+.chat-bubble p {
+  margin: 0 0 4px 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Metadata de Burbuja: Hora + Ticks de Lectura */
+.chat-bubble-meta {
+  position: absolute;
+  bottom: 4px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.72rem;
+  color: #64748b;
+  font-weight: 600;
+  user-select: none;
+}
+
+.chat-bubble-wrapper.sent .chat-bubble-meta {
+  color: #6366f1; /* Color índigo sutil para la hora de enviados */
+}
+
+.chat-bubble-time {
+  font-size: 0.72rem;
+}
+
+.tick-read {
+  color: #3b82f6; /* Azul WhatsApp para mensajes leídos */
+  font-size: 0.82rem;
+}
+
+.tick-sent {
+  color: #94a3b8; /* Gris sutil para mensajes no leídos aún */
+  font-size: 0.82rem;
+}
+
+/* Bottom Input Area */
+.chat-drawer-footer {
+  padding: 14px 20px;
+  background: #f8fafc;
+  border-top: 1px solid #edf2f7;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 0 0 22px 22px;
+}
+
+.chat-drawer-footer input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 8px 0;
+  font-size: 1.05rem;
+  outline: none;
+  color: #0f172a;
+  font-family: inherit;
+}
+
+.chat-drawer-footer input::placeholder {
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.chat-send-btn {
+  background: transparent;
+  border: none;
+  color: #64748b;
+  font-size: 1.6rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+}
+
+.chat-send-btn:hover {
+  color: #6200ea;
+  background: rgba(98, 0, 234, 0.05);
+  transform: scale(1.05);
+}
+
+@media (max-width: 480px) {
+  .chat-drawer-container {
+    width: calc(100% - 40px);
+    right: 20px;
+    left: 20px;
+    bottom: 100px;
+  }
+}
+

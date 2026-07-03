@@ -1,0 +1,18 @@
+@import "../inicio-adulto-mayor/inicio-adulto-mayor.css";
+
+.action-btn-mini.edit-btn:hover {
+  background: #f3e8ff;
+  border-color: #d8b4fe;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(98, 0, 234, 0.1);
+  transition: all 0.2s ease;
+}
+
+.action-btn-mini.edit-btn:hover i {
+  color: #7c3aed !important;
+}
+
+.action-btn-mini.edit-btn {
+  transition: all 0.2s ease;
+}
+
