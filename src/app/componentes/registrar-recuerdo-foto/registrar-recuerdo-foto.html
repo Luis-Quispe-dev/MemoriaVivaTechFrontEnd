@@ -1,0 +1,116 @@
+<div class="dashboard-container">
+
+  <header class="classic-navbar">
+    <div class="logo-section">
+      <i class="fas fa-heart logo-heart"></i>
+      <span class="logo-text">SoulStory</span>
+    </div>
+
+    <nav class="nav-links">
+      <button class="nav-btn" routerLink="/inicio-adulto-mayor">
+        <i class="fas fa-home"></i> {{ 'NAV.INICIO' | translate }}
+      </button>
+      <button class="nav-btn" routerLink="/ver-recuerdos">
+        <i class="fas fa-memory"></i> {{ 'NAV.RECUERDOS' | translate }}
+      </button>
+      <button class="nav-btn" routerLink="/galeria-ia">
+        <i class="fas fa-image"></i> {{ 'NAV.GALERIA' | translate }}
+      </button>
+    </nav>
+
+    <div class="profile-logout-section">
+      <button class="profile-btn" routerLink="/perfil-adulto-mayor" [title]="'NAV.PERFIL' | translate">
+        <div class="user-profile">
+          <div class="avatar-circle" style="overflow: hidden; display: flex; align-items: center; justify-content: center;">
+            @if (fotoPerfil) {
+              <img [src]="fotoPerfil" style="width: 100%; height: 100%; object-fit: cover;" alt="Foto de perfil">
+            } @else {
+              <i class="fas fa-user"></i>
+            }
+          </div>
+          <div class="profile-text">
+            <span class="profile-name">{{ nombreUsuario }}</span>
+            <span class="profile-role">{{ 'NAV.ROL' | translate }}</span>
+          </div>
+        </div>
+      </button>
+
+      <button class="btn-logout-square" (click)="cerrarSesion()" [title]="'NAV.CERRAR_SESION' | translate">
+        <i class="fas fa-sign-out-alt"></i>
+      </button>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="glass-panel main-panel animate-fade-in">
+      <div class="panel-header">
+        <button mat-button class="btn btn-retroceder" routerLink="/inicio-adulto-mayor">
+          <i class="fas fa-arrow-left"></i> {{ 'BOTON.VOLVER' | translate }}
+        </button>
+        <h2 class="panel-title">
+          <i class="fas fa-camera text-purple"></i> {{ 'REC_FOTO.TITULO' | translate }}
+        </h2>
+      </div>
+
+      <p class="panel-intro">{{ 'REC_FOTO.INTRO' | translate }}</p>
+
+      <form (ngSubmit)="guardarRecuerdo()" class="senior-form">
+        <div class="form-group">
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>{{ 'REC_FOTO.LABEL_TITULO' | translate }}</mat-label>
+            <input matInput type="text" id="titulo-foto" name="tituloRecuerdo" required
+                   [placeholder]="'REC_FOTO.PLACEHOLDER_TITULO' | translate"
+                   [(ngModel)]="nuevoRecuerdo.tituloRecuerdo">
+          </mat-form-field>
+        </div>
+
+        <div class="photo-dashboard-card">
+          @if (fotoMockUrl) {
+            <div class="polaroid-frame animate-fade-in">
+              <img [src]="fotoMockUrl" class="polaroid-image" alt="Momento familiar">
+              <div class="polaroid-caption">{{ nuevoRecuerdo.tituloRecuerdo || ('REC_FOTO.DEFAULT_CAPTION' | translate) }}</div>
+            </div>
+            <button mat-button type="button" class="btn btn-retroceder" (click)="cambiarFoto()" style="margin-top: 20px;">
+              <i class="fas fa-redo"></i> {{ 'REC_FOTO.BOTON_CAMBIAR' | translate }}
+            </button>
+          }
+
+          @else if (usandoCamara) {
+            <div class="camera-container animate-fade-in">
+              <video id="camera-preview" autoplay playsinline class="video-preview"></video>
+              <div class="camera-actions">
+                <button mat-flat-button type="button" class="btn bg-purple-btn" (click)="capturarFoto()">
+                  <i class="fas fa-camera"></i> {{ 'REC_FOTO.TOMAR_FOTO' | translate }}
+                </button>
+                <button mat-button type="button" class="btn btn-retroceder" (click)="detenerCamara()">
+                  <i class="fas fa-times"></i> {{ 'REC_FOTO.CANCELAR_CAMARA' | translate }}
+                </button>
+              </div>
+            </div>
+          }
+
+          @else {
+            <div class="photo-options-container">
+              <div class="photo-uploader-box" (click)="fileInput.click()">
+                <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                <span class="upload-label">{{ 'REC_FOTO.CLICK_CARGAR' | translate }}</span>
+                <span class="upload-subtext">{{ 'REC_FOTO.FORMATOS_ADMITIDOS' | translate }}</span>
+              </div>
+              <input #fileInput type="file" accept="image/*" style="display: none" (change)="onFileSelected($event)">
+
+              <div class="divider-text">{{ 'REC_FOTO.DIVIDER_O' | translate }}</div>
+
+              <button mat-button type="button" class="btn btn-retroceder" (click)="iniciarCamara()" style="background: #e0f2fe !important; color: #0369a1 !important; border-color: #bae6fd !important;">
+                <i class="fas fa-video"></i> {{ 'REC_FOTO.USAR_CAMARA' | translate }}
+              </button>
+            </div>
+          }
+        </div>
+
+        <button type="submit" mat-flat-button class="btn btn-save bg-purple-btn" [disabled]="cargando || !fotoMockUrl" style="margin-top: 20px;">
+          <i class="fas fa-save"></i> {{ 'REC_FOTO.BOTON_SAVE' | translate }}
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

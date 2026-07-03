@@ -1,0 +1,78 @@
+@import "../inicio-adulto-mayor/inicio-adulto-mayor.css";
+
+/* Override standard teal with SoulStory Purple for visual coherence */
+.photo-dashboard-card {
+  background: #f5f0ff !important;
+  border-color: #d8c5ff !important;
+}
+
+.upload-icon {
+  color: var(--accent-purple) !important;
+}
+
+/* Estilos de cámara y subida de archivos */
+.photo-options-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+}
+
+.divider-text {
+  font-size: 1.1rem;
+  color: #94a3b8;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  width: 100%;
+  text-align: center;
+  margin: 10px 0;
+}
+
+.divider-text::before,
+.divider-text::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 30%;
+  height: 2px;
+  background-color: #e2e8f0;
+}
+
+.divider-text::before {
+  left: 5%;
+}
+
+.divider-text::after {
+  right: 5%;
+}
+
+.camera-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 500px;
+}
+
+.video-preview {
+  width: 100%;
+  height: auto;
+  max-height: 350px;
+  border-radius: 16px;
+  background-color: #000000;
+  transform: scaleX(-1); /* Efecto espejo natural para selfies */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  border: 4px solid #ffffff;
+}
+
+.camera-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  width: 100%;
+  flex-wrap: wrap;
+}
