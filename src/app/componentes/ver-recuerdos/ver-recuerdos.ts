@@ -104,6 +104,7 @@ export class VerRecuerdos implements OnInit {
     this.aplicarFiltros();
   }
 
+
   aplicarFiltros() {
     let temporal = [...this.recuerdos];
 
