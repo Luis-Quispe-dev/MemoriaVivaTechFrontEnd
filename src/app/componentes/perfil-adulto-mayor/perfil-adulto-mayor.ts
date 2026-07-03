@@ -97,7 +97,7 @@ export class PerfilAdultoMayor implements OnInit {
         this.cdr.detectChanges();
       },
       error: (err) => {
-        console.warn('No se pudo cargar cuidador activo, buscando solicitudes pendientes:', err);
+        console.warn('No fue posible cargar el cuidador activo. Se están buscando solicitudes pendientes...', err);
         this.tieneCuidador = false;
         this.nombreCuidador = 'Ninguno';
         this.fotoCuidador = null;
