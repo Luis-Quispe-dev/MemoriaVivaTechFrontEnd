@@ -1,0 +1,432 @@
+@import "../inicio-adulto-mayor/inicio-adulto-mayor.css";
+
+.edit-profile-card {
+  max-width: 720px;
+  width: 100%;
+  border-radius: 40px !important;
+  border: 2px solid #cbd5e1 !important;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.03) !important;
+  background: white;
+  padding: 45px 40px;
+  transition: all 0.3s ease;
+}
+
+.back-link {
+  color: #166534;
+  text-decoration: none;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.05rem;
+  transition: all 0.2s ease;
+}
+
+.back-link:hover {
+  transform: translateX(-4px);
+  color: #14532d;
+}
+
+.card-header-accent {
+  text-align: center;
+  margin-bottom: 35px;
+}
+
+.icon-bubble {
+  background: #f0fdf4;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 15px auto;
+  box-shadow: 0 8px 16px rgba(22, 101, 52, 0.06);
+  transition: all 0.3s ease;
+}
+
+.icon-bubble i {
+  color: #166534;
+  font-size: 2.2rem;
+}
+
+.edit-profile-card:hover .icon-bubble {
+  transform: scale(1.08) rotate(5deg);
+}
+
+.header-title {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #1e293b;
+  margin: 0;
+  letter-spacing: -0.5px;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.header-subtitle {
+  color: #64748b;
+  font-size: 0.95rem;
+  margin: 6px 0 0 0;
+  font-weight: 500;
+}
+
+.avatar-edit-container {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: #edf2f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 4px solid #cbd5e1;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.avatar-edit-container img {
+  animation: imageFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes imageFadeIn {
+  from { opacity: 0; filter: blur(8px) scale(0.95); }
+  to { opacity: 1; filter: blur(0) scale(1); }
+}
+
+.avatar-edit-container:hover {
+  border-color: #166534;
+  box-shadow: 0 0 0 4px rgba(22, 101, 52, 0.1);
+  transform: scale(1.02);
+}
+
+.avatar-floating-btn {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  background: white;
+  color: #475569;
+  border: 2.5px solid #cbd5e1;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.avatar-floating-btn:hover {
+  background: #166534;
+  color: white;
+  border-color: #166534;
+  transform: scale(1.1);
+}
+
+.camera-flash {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: white;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 50;
+  border-radius: 50%;
+}
+
+.camera-flash.flash-active {
+  animation: cameraFlashAnim 0.4s ease-out;
+}
+
+@keyframes cameraFlashAnim {
+  0% { opacity: 0.95; }
+  100% { opacity: 0; }
+}
+
+.camera-toggle-link {
+  font-size: 0.85rem;
+  color: #166534;
+  text-decoration: none;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 12px;
+  transition: all 0.2s ease;
+}
+
+.camera-toggle-link:hover {
+  color: #14532d;
+  transform: scale(1.05);
+}
+
+.camera-cancel-link {
+  font-size: 0.85rem;
+  color: #ef4444;
+  text-decoration: none;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 12px;
+  transition: all 0.2s ease;
+}
+
+.camera-cancel-link:hover {
+  transform: scale(1.05);
+}
+
+.capture-btn {
+  background: #10b981;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  margin-top: 8px;
+  cursor: pointer;
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  transition: all 0.2s;
+}
+
+.capture-btn:hover {
+  background: #059669;
+}
+
+.input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.custom-input {
+  width: 100%;
+  border-radius: 12px;
+  border: 1.5px solid #cbd5e1;
+  padding: 12px 48px 12px 16px;
+  box-sizing: border-box;
+  outline: none;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  transition: all 0.25s ease-in-out;
+  background: white;
+  font-weight: 700;
+}
+
+.name-input {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #1e293b;
+}
+
+.email-input {
+  font-size: 1.05rem;
+  color: #475569;
+}
+
+.custom-input:focus {
+  border-color: #166534;
+  box-shadow: 0 0 0 3px rgba(22, 101, 52, 0.12);
+}
+
+.input-icon-right {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  font-size: 1.25rem;
+  pointer-events: none;
+  transition: all 0.25s ease;
+}
+
+.input-wrapper:focus-within .input-icon-right {
+  color: #166534;
+  transform: translateY(-50%) scale(1.15);
+}
+
+.action-btn {
+  border-radius: 12px;
+  border: none;
+  font-weight: 700;
+  padding: 12px 20px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease-in-out;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.action-btn:hover {
+  filter: brightness(0.95);
+}
+
+.action-btn:active {
+  transform: scale(0.98);
+}
+
+.action-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.theme-accent-btn {
+  background: #c6f6d5;
+  color: #166534;
+}
+
+.verify-btn {
+  background: white;
+  color: #475569;
+  border: 1.5px solid #cbd5e1;
+}
+
+.verified-btn {
+  background: #d1fae5;
+  color: #065f46;
+  border: 1.5px solid #a7f3d0;
+  animation: verifiedPulse 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes verifiedPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.08); box-shadow: 0 0 0 10px rgba(16, 185, 129, 0.15); }
+  100% { transform: scale(1); }
+}
+
+.code-box {
+  background: #f8fafc;
+  border: 2px dashed transparent;
+  border-radius: 20px;
+  padding: 0 20px;
+  margin-bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.code-box.active {
+  max-height: 180px;
+  opacity: 1;
+  padding: 20px;
+  border-color: #cbd5e1;
+  margin-bottom: 25px;
+}
+
+.code-label {
+  font-weight: 700;
+  color: #475569;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.code-input-field {
+  font-size: 1.35rem;
+  letter-spacing: 4px;
+  text-align: center;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  outline: none;
+  font-weight: 800;
+  color: #1e293b;
+  transition: all 0.2s;
+}
+
+.code-input-field:focus {
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.12);
+}
+
+.validate-btn {
+  background: #10b981;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  padding: 12px 25px;
+  cursor: pointer;
+  font-size: 1rem;
+  height: 50px;
+  margin-top: 28px;
+}
+
+.validate-btn:hover {
+  background: #059669;
+}
+
+.full-width-btn {
+  width: 100%;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.custom-textarea {
+  width: 100%;
+  height: 110px;
+  border-radius: 16px;
+  border: 1.5px solid #cbd5e1;
+  padding: 14px 20px 14px 48px;
+  box-sizing: border-box;
+  outline: none;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: #475569;
+  background: #f8fafc;
+  resize: none;
+  transition: all 0.25s ease-in-out;
+}
+
+.custom-textarea:focus {
+  border-color: #166534;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(22, 101, 52, 0.12);
+}
+
+.textarea-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.textarea-icon {
+  position: absolute;
+  left: 20px;
+  top: 18px;
+  color: #94a3b8;
+  font-size: 1.15rem;
+  pointer-events: none;
+  transition: all 0.25s ease;
+}
+
+.textarea-wrapper:focus-within .textarea-icon {
+  color: #166534;
+  transform: scale(1.15);
+}
