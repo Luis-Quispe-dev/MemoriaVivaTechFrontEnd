@@ -1,0 +1,235 @@
+/* Contenedor que centra todo en la pantalla */
+.page-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #ffffff;
+  padding: 20px;
+}
+
+/* Caja principal con borde gris suave */
+.main-container {
+  width: 100%;
+  max-width: 900px;
+  border: 2px solid #e0e0e0;
+  border-radius: 40px; /* Bordes muy redondeados */
+  padding: 40px;
+  position: relative;
+  background-color: #fff;
+}
+
+/* Header: Botón retroceder y Título */
+.header-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-bottom: 40px;
+}
+
+.btn-retroceder {
+  position: absolute;
+  left: 0;
+  border-radius: 20px !important;
+  border: 2px solid var(--accent-purple) !important;
+  color: var(--accent-purple) !important;
+  font-weight: 600 !important;
+  padding: 0 20px !important;
+}
+
+.btn-retroceder i {
+  margin-right: 8px;
+  font-size: 0.9rem;
+}
+
+.main-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin: 0;
+  color: var(--text-dark);
+}
+
+/* Grid de las dos opciones */
+.selection-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-bottom: 50px;
+}
+
+/* ========================================================
+   --- TARJETAS CON ANIMACIÓN RGB AL HOVER (VOLVER ACTUALIZADO) ---
+   ======================================================== */
+
+/* 1. Definimos la propiedad para la animación (necesario en Chrome/Edge modernos) */
+@property --gradient-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+/* 2. Keyframes para la rotación infinita del color */
+@keyframes rgbRotate {
+  0% { --gradient-angle: 0deg; }
+  100% { --gradient-angle: 360deg; }
+}
+
+.account-option-card {
+  /* Truco para el borde con gradiente animado y radius */
+  border: 2px solid transparent !important; /* Borde transparente base */
+  border-radius: 30px;
+  padding: 40px 20px;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+  z-index: 1; /* Definimos contexto de apilamiento */
+
+  /* Gradiente base (gris) que se aplica al borde */
+  background-image:
+    linear-gradient(white, white),
+    linear-gradient(#d0d0d0, #d0d0d0);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+/* 3. El Efecto HOVER DINÁMICO (Con la paleta de SoulStory) */
+.account-option-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 15px 40px rgba(98, 0, 234, 0.15);
+
+  background-image:
+    linear-gradient(white, white),
+    conic-gradient(
+      from var(--gradient-angle),
+      var(--accent-purple),   /* Empieza en morado */
+      var(--accent-blue),     /* Pasa al azul fuerte */
+      var(--primary-blue),    /* Se suaviza al azul claro */
+      var(--primary-green),   /* Toca tu verde claro */
+      var(--accent-blue),     /* Vuelve al azul */
+      var(--accent-purple)    /* Termina en morado para que el giro sea invisible */
+    );
+
+  /* Activamos la animación de rotación suave */
+  animation: rgbRotate 3.5s linear infinite; /* Le subí a 3.5s para que sea un giro más relajante */
+}
+
+/* 4. Mantenemos el estilo de los íconos */
+.icon-circle {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3.5rem;
+  color: #333;
+  transition: transform 0.3s ease;
+}
+
+/* Pequeña animación del ícono al hover */
+.account-option-card:hover .icon-circle {
+  transform: scale(1.1);
+}
+
+.bg-grey { background-color: #cedcdf; }
+.bg-teal { background-color: #a9d6d1; }
+
+.account-option-card h3 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin-bottom: 10px;
+  color: var(--text-dark);
+}
+
+.account-option-card p {
+  font-size: 1.1rem;
+  color: #888;
+  line-height: 1.4;
+  margin: 0 auto;
+  max-width: 200px;
+}
+
+/* ======================================================== */
+
+/* Botón inferior verde */
+.footer-section {
+  display: flex;
+  justify-content: center;
+}
+
+.btn-verde-pill {
+  background-color: var(--primary-green) !important;
+  color: var(--text-dark) !important;
+  border-radius: 30px !important;
+  padding: 25px 40px !important;
+  font-weight: 800 !important;
+  font-size: 1.2rem !important;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+}
+
+.btn-verde-pill i {
+  margin-right: 10px;
+}
+
+/* Responsive para celulares */
+@media (max-width: 768px) {
+  .main-container {
+    padding: 20px;
+    border-radius: 25px;
+  }
+
+  .header-section {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .btn-retroceder {
+    position: static;
+  }
+
+  .selection-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .main-title {
+    font-size: 2rem;
+  }
+}
+/* ========================================================
+   --- ESTADO SELECCIONADO (COLOR VERDE COMPLETO) ---
+   ======================================================== */
+
+.account-option-card.selected {
+  /* Forzamos el fondo verde claro de SoulStory */
+  background-color: var(--primary-green) !important;
+  background-image: none !important; /* Quitamos el gradiente de fondo para que sea sólido */
+  border: 2px solid var(--accent-purple) !important; /* Un borde morado para que resalte la selección */
+  transform: translateY(-5px); /* Se queda un poquito levantada */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Cambiamos el color de los textos dentro de la tarjeta seleccionada para que se vean bien */
+.account-option-card.selected h3,
+.account-option-card.selected p {
+  color: var(--text-dark) !important;
+}
+
+/* Hacemos que el círculo del ícono sea un poco más blanco/brillante al estar seleccionado */
+.account-option-card.selected .icon-circle {
+  background-color: rgba(255, 255, 255, 0.5) !important;
+  transform: scale(1.1);
+}
+
+/* ========================================================
+   --- BOTÓN APAGADO (Cuando no ha elegido nada) ---
+   ======================================================== */
+.btn-verde-pill:disabled {
+  background-color: #e0e0e0 !important; /* Un gris neutro */
+  color: #999999 !important; /* Texto gris más oscuro */
+  box-shadow: none !important; /* Le quitamos el brillo/sombra */
+  cursor: not-allowed !important; /* El mouse muestra un símbolo de prohibido */
+  transform: none !important; /* Que no se mueva */
+}
