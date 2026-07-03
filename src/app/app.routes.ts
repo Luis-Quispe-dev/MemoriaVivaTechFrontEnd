@@ -43,3 +43,23 @@ export const routes: Routes = [
   { path: 'ver-recuerdos', component: VerRecuerdos, canActivate: [AuthGuard], data: { roles: ['ROLE_ADULTO_MAYOR'] } },
   { path: 'galeria-ia', component: GaleriaIa, canActivate: [AuthGuard], data: { roles: ['ROLE_ADULTO_MAYOR'] } },
   { path: 'mi-legado', component: MiLegado, canActivate: [AuthGuard], data: { roles: ['ROLE_ADULTO_MAYOR'] } },
+ { path: 'calendario-adulto-mayor', component: CalendarioAdultoMayor, canActivate: [AuthGuard], data: { roles: ['ROLE_ADULTO_MAYOR'] } },
+  { path: 'perfil-adulto-mayor', component: PerfilAdultoMayor, canActivate: [AuthGuard], data: { roles: ['ROLE_ADULTO_MAYOR'] } },
+  { path: 'editar-adulto-mayor', component: EditarAdultoMayor, canActivate: [AuthGuard], data: { roles: ['ROLE_ADULTO_MAYOR'] } },
+  { path: 'configuracion-adulto-mayor', component: ConfiguracionAdultoMayor, canActivate: [AuthGuard], data: { roles: ['ROLE_ADULTO_MAYOR'] } },
+  { path: 'suscripcion-adultomayor', component: SuscripcionAdultomayor, canActivate: [AuthGuard], data: { roles: ['ROLE_ADULTO_MAYOR'] } },
+  { path: 'cambiar-suscripcion', component: CambiarSuscripcion, canActivate: [AuthGuard], data: { roles: ['ROLE_ADULTO_MAYOR'] } },
+  { path: 'pago-suscripcion', component: PagoSuscripcion, canActivate: [AuthGuard], data: { roles: ['ROLE_ADULTO_MAYOR'] } },
+
+  // Rutas protegidas para Cuidador
+  { path: 'inicio-cuidador', component: InicioCuidador, canActivate: [AuthGuard], data: { roles: ['ROLE_CUIDADOR'] } },
+  { path: 'calendario-cuidador-inicio', component: CalendarioCuidadorInicio, canActivate: [AuthGuard], data: { roles: ['ROLE_CUIDADOR'] } },
+  { path: 'calendario-cuidador-adultomayor', component: CalendarioCuidadorAdultomayor, canActivate: [AuthGuard], data: { roles: ['ROLE_CUIDADOR'] } },
+  { path: 'perfil-cuidador', component: PerfilCuidador, canActivate: [AuthGuard], data: { roles: ['ROLE_CUIDADOR'] } },
+  { path: 'editar-cuidador', component: EditarCuidador, canActivate: [AuthGuard], data: { roles: ['ROLE_CUIDADOR'] } },
+  { path: 'ver-paciente', component: VerPaciente, canActivate: [AuthGuard], data: { roles: ['ROLE_CUIDADOR'] } },
+  { path: 'configuracion-cuidador', component: ConfiguracionCuidador, canActivate: [AuthGuard], data: { roles: ['ROLE_CUIDADOR'] } },
+
+  // Comodín
+  { path: '**', component: LandingPage }
+];
