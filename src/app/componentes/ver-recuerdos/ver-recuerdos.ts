@@ -26,7 +26,7 @@ import { MatCardModule } from '@angular/material/card';
     MatButtonModule,
     MatIconModule,
     MatCardModule,
-    TranslatePipe,
+    TranslatePipe
   ],
   templateUrl: './ver-recuerdos.html',
   styleUrl: './ver-recuerdos.css',
@@ -85,13 +85,13 @@ export class VerRecuerdos implements OnInit {
         }, 1500);
       },
       error: (err) => {
-        console.error('Error al cargar los recuerdos:', err);
+        console.error("Error al cargar recuerdos:", err);
 
         setTimeout(() => {
           this.cargando = false;
           this.cdr.detectChanges();
         }, 1500);
-      },
+      }
     });
   }
 
@@ -104,22 +104,20 @@ export class VerRecuerdos implements OnInit {
     this.aplicarFiltros();
   }
 
-
   aplicarFiltros() {
     let temporal = [...this.recuerdos];
 
     if (this.filtroActual !== 'TODOS' && this.filtroActual !== 'FAVORITOS') {
-      temporal = temporal.filter((r) => r.tipoRecuerdo === this.filtroActual);
+      temporal = temporal.filter(r => r.tipoRecuerdo === this.filtroActual);
     } else if (this.filtroActual === 'FAVORITOS') {
-      temporal = temporal.filter((r) => r.esFavorito);
+      temporal = temporal.filter(r => r.esFavorito);
     }
 
     if (this.busquedaQuery.trim()) {
       const query = this.busquedaQuery.toLowerCase().trim();
-      temporal = temporal.filter(
-        (r) =>
-          r.tituloRecuerdo.toLowerCase().includes(query) ||
-          r.contenido.toLowerCase().includes(query),
+      temporal = temporal.filter(r =>
+        r.tituloRecuerdo.toLowerCase().includes(query) ||
+        r.contenido.toLowerCase().includes(query)
       );
     }
 
@@ -137,28 +135,26 @@ export class VerRecuerdos implements OnInit {
         if (recuerdo.esFavorito) {
           Swal.fire({
             title: this.lenguajeService.translate('RECUERDOS.FAV_ADD_TITLE'),
-            text:
-              this.lenguajeService.translate('RECUERDOS.FAV_ADD_DESC') + recuerdo.tituloRecuerdo,
+            text: this.lenguajeService.translate('RECUERDOS.FAV_ADD_DESC') + recuerdo.tituloRecuerdo,
             timer: 2000,
             showConfirmButton: false,
             position: 'top-end',
-            toast: true,
+            toast: true
           });
         } else {
           Swal.fire({
             title: this.lenguajeService.translate('RECUERDOS.FAV_REM_TITLE'),
-            text:
-              this.lenguajeService.translate('RECUERDOS.FAV_REM_DESC') + recuerdo.tituloRecuerdo,
+            text: this.lenguajeService.translate('RECUERDOS.FAV_REM_DESC') + recuerdo.tituloRecuerdo,
             timer: 2000,
             showConfirmButton: false,
             position: 'top-end',
-            toast: true,
+            toast: true
           });
         }
       },
       error: (err) => {
-        console.error('Error al cambiar favorito:', err);
-      },
+        console.error("Error al cambiar favorito:", err);
+      }
     });
   }
 
@@ -171,7 +167,7 @@ export class VerRecuerdos implements OnInit {
       confirmButtonColor: '#ff007f',
       cancelButtonColor: '#3085d6',
       confirmButtonText: this.lenguajeService.translate('RECUERDOS.CONFIRM_DELETE_YES'),
-      cancelButtonText: this.lenguajeService.translate('BOTON.CANCELAR'),
+      cancelButtonText: this.lenguajeService.translate('BOTON.CANCELAR')
     }).then((result) => {
       if (result.isConfirmed) {
         this.recuerdoService.eliminarRecuerdo(id).subscribe({
@@ -179,32 +175,29 @@ export class VerRecuerdos implements OnInit {
             Swal.fire(
               this.lenguajeService.translate('RECUERDOS.DELETE_SUCCESS_TITLE'),
               this.lenguajeService.translate('RECUERDOS.DELETE_SUCCESS_DESC'),
-              'success',
+              'success'
             );
             this.cargarRecuerdos();
           },
           error: (err) => {
-            console.error('Error al eliminar recuerdo:', err);
+            console.error("Error al eliminar recuerdo:", err);
             Swal.fire(
               this.lenguajeService.translate('REC_TEXTO.SAVE_ERROR_TITLE'),
               this.lenguajeService.translate('RECUERDOS.DELETE_ERROR_DESC'),
-              'error',
+              'error'
             );
-          },
+          }
         });
       }
     });
   }
 
   abrirEditarRecuerdoModal(recuerdo: RecuerdoRespondeDTO) {
-    const titleLabel =
-      this.lenguajeService.translate('RECUERDOS.EDITAR_TITULO_LABEL') || 'Título del recuerdo';
-    const contentLabel =
-      this.lenguajeService.translate('RECUERDOS.EDITAR_CONTENIDO_LABEL') || 'Contenido / Relato';
+    const titleLabel = this.lenguajeService.translate('RECUERDOS.EDITAR_TITULO_LABEL') || 'Título del recuerdo';
+    const contentLabel = this.lenguajeService.translate('RECUERDOS.EDITAR_CONTENIDO_LABEL') || 'Contenido / Relato';
     const submitText = this.lenguajeService.translate('CONF.GUARDAR') || 'Guardar';
     const cancelText = this.lenguajeService.translate('BOTON.CANCELAR') || 'Cancelar';
-    const modalTitle =
-      this.lenguajeService.translate('RECUERDOS.EDITAR_MODAL_TITLE') || 'Editar Recuerdo';
+    const modalTitle = this.lenguajeService.translate('RECUERDOS.EDITAR_MODAL_TITLE') || 'Editar Recuerdo';
 
     let contentHtml = '';
 
@@ -243,25 +236,15 @@ export class VerRecuerdos implements OnInit {
       cancelButtonColor: '#64748b',
       focusConfirm: false,
       preConfirm: () => {
-        const nuevoTitulo = (
-          document.getElementById('edit-recuerdo-titulo') as HTMLInputElement
-        ).value.trim();
-        const nuevoContenido = (
-          document.getElementById('edit-recuerdo-contenido') as HTMLInputElement
-        ).value.trim();
+        const nuevoTitulo = (document.getElementById('edit-recuerdo-titulo') as HTMLInputElement).value.trim();
+        const nuevoContenido = (document.getElementById('edit-recuerdo-contenido') as HTMLInputElement).value.trim();
 
         if (!nuevoTitulo) {
-          Swal.showValidationMessage(
-            this.lenguajeService.translate('RECUERDOS.VALIDATION_TITLE_REQ') ||
-              'El título es obligatorio.',
-          );
+          Swal.showValidationMessage(this.lenguajeService.translate('RECUERDOS.VALIDATION_TITLE_REQ') || 'El título es obligatorio.');
           return false;
         }
         if (!nuevoContenido) {
-          Swal.showValidationMessage(
-            this.lenguajeService.translate('RECUERDOS.VALIDATION_CONTENT_REQ') ||
-              'El contenido es obligatorio.',
-          );
+          Swal.showValidationMessage(this.lenguajeService.translate('RECUERDOS.VALIDATION_CONTENT_REQ') || 'El contenido es obligatorio.');
           return false;
         }
 
@@ -270,9 +253,9 @@ export class VerRecuerdos implements OnInit {
           tituloRecuerdo: nuevoTitulo,
           tipoRecuerdo: recuerdo.tipoRecuerdo,
           contenido: nuevoContenido,
-          formato: recuerdo.formato || '',
+          formato: recuerdo.formato || ''
         };
-      },
+      }
     }).then((result) => {
       if (result.isConfirmed && result.value) {
         Swal.showLoading();
@@ -281,28 +264,22 @@ export class VerRecuerdos implements OnInit {
             Swal.close();
             Swal.fire({
               icon: 'success',
-              title:
-                this.lenguajeService.translate('RECUERDOS.EDITAR_SUCCESS_TITLE') ||
-                'Recuerdo Actualizado',
-              text:
-                this.lenguajeService.translate('RECUERDOS.EDITAR_SUCCESS_DESC') ||
-                'El recuerdo ha sido modificado con éxito.',
-              confirmButtonColor: '#10b981',
+              title: this.lenguajeService.translate('RECUERDOS.EDITAR_SUCCESS_TITLE') || 'Recuerdo Actualizado',
+              text: this.lenguajeService.translate('RECUERDOS.EDITAR_SUCCESS_DESC') || 'El recuerdo ha sido modificado con éxito.',
+              confirmButtonColor: '#10b981'
             });
             this.cargarRecuerdos();
           },
           error: (err) => {
             Swal.close();
-            console.error('Error al editar recuerdo:', err);
+            console.error("Error al editar recuerdo:", err);
             Swal.fire({
               icon: 'error',
               title: this.lenguajeService.translate('REC_TEXTO.SAVE_ERROR_TITLE') || 'Error',
-              text:
-                this.lenguajeService.translate('RECUERDOS.EDITAR_ERROR_DESC') ||
-                'No se pudo guardar la modificación del recuerdo.',
-              confirmButtonColor: '#10b981',
+              text: this.lenguajeService.translate('RECUERDOS.EDITAR_ERROR_DESC') || 'No se pudo guardar la modificación del recuerdo.',
+              confirmButtonColor: '#10b981'
             });
-          },
+          }
         });
       }
     });
@@ -319,18 +296,189 @@ export class VerRecuerdos implements OnInit {
                    <hr style="border-color: rgba(0,0,0,0.05); margin: 10px 0;">
                    <p style="white-space: pre-wrap; font-family: monospace; font-size: 0.95rem;">${exportData.contenido || recuerdo.contenido}</p>
                  </div>`,
-          confirmButtonText: 'Descargar e Imprimir.',
-          confirmButtonColor: '#6200ea',
+          confirmButtonText: 'Descargar e Imprimir',
+          confirmButtonColor: '#6200ea'
         });
       },
       error: (err) => {
-        console.error('Error al exportar el recuerdo:', err);
-        Swal.fire(
-          'Error',
-          'No se pudo realizar la exportación del legado en este momento.',
-          'error',
+        console.error("Error al exportar recuerdo:", err);
+        Swal.fire('Error', 'No se pudo realizar la exportación del legado en este momento.', 'error');
+      }
+    });
+  }
+
+  descargarRecuerdo(recuerdo: RecuerdoRespondeDTO) {
+    Swal.fire({
+      title: this.lenguajeService.translate('GALERIA.DESCARGANDO') || 'Descargando...',
+      timer: 1000,
+      showConfirmButton: false,
+      position: 'top-end',
+      toast: true
+    });
+
+    const nombreArchivo = `${recuerdo.tituloRecuerdo.toLowerCase().replace(/\s+/g, '-') || 'recuerdo'}`;
+
+    if (recuerdo.tipoRecuerdo === 'TEXTO') {
+      const contenidoTexto = `==================================================
+   SOULSTORY - LEGADO FAMILIAR Y RECUERDOS
+==================================================
+Título: ${recuerdo.tituloRecuerdo}
+Fecha: ${recuerdo.fechaCreacion || 'No registrada'}
+Tipo: Relato Escrito (Texto)
+==================================================
+
+${recuerdo.contenido}
+
+==================================================
+Guardado con amor en SoulStory.
+Preservando la memoria viva de nuestra familia.
+==================================================`;
+
+      const blob = new Blob([contenidoTexto], { type: 'text/plain;charset=utf-8' });
+      const localUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = localUrl;
+      link.download = `${nombreArchivo}.txt`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(localUrl);
+    } else {
+      const url = recuerdo.contenido;
+      let ext = 'png';
+      if (recuerdo.tipoRecuerdo === 'AUDIO') {
+        ext = 'mp3';
+        if (url.includes('ogg') || url.includes('audio/ogg')) ext = 'ogg';
+        else if (url.includes('wav')) ext = 'wav';
+      } else {
+        if (url.includes('jpeg') || url.includes('jpg')) ext = 'jpg';
+        else if (url.includes('gif')) ext = 'gif';
+      }
+
+      fetch(url)
+        .then(response => {
+          if (!response.ok) throw new Error('CORS restriction or network error');
+          return response.blob();
+        })
+        .then(blob => {
+          const localUrl = window.URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = localUrl;
+          link.download = `${nombreArchivo}.${ext}`;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          window.URL.revokeObjectURL(localUrl);
+        })
+        .catch(err => {
+          console.warn("Fallo descarga directa de archivo, usando fallback de navegador:", err);
+          const link = document.createElement('a');
+          link.href = url;
+          link.target = '_blank';
+          link.download = `${nombreArchivo}.${ext}`;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        });
+    }
+  }
+
+  compartirRecuerdo(recuerdo: RecuerdoRespondeDTO) {
+    Swal.fire({
+      title: this.lenguajeService.translate('GALERIA.COMPARTIR_CARGANDO') || 'Cargando enlaces...',
+      didOpen: () => {
+        Swal.showLoading();
+      },
+      allowOutsideClick: false,
+      showConfirmButton: false
+    });
+
+    this.recuerdoService.exportarRecuerdo(recuerdo.idRecuerdo).subscribe({
+      next: (exportData) => {
+        Swal.close();
+        this.mostrarModalCompartir(
+          recuerdo.tituloRecuerdo,
+          recuerdo.tipoRecuerdo,
+          recuerdo.contenido,
+          exportData.linkWhatsapp,
+          exportData.linkFacebook,
+          exportData.linkInstagram
         );
       },
+      error: (err) => {
+        Swal.close();
+        console.error("Error al obtener enlaces del backend:", err);
+        const textToShare = `${recuerdo.tituloRecuerdo}: ${recuerdo.tipoRecuerdo === 'TEXTO' ? recuerdo.contenido : ''}`;
+        const linkWhatsapp = `https://api.whatsapp.com/send?text=${encodeURIComponent(textToShare)}`;
+        const linkFacebook = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(recuerdo.tipoRecuerdo !== 'TEXTO' ? recuerdo.contenido : window.location.href)}`;
+        const linkInstagram = `https://www.instagram.com/`;
+
+        this.mostrarModalCompartir(
+          recuerdo.tituloRecuerdo,
+          recuerdo.tipoRecuerdo,
+          recuerdo.contenido,
+          linkWhatsapp,
+          linkFacebook,
+          linkInstagram
+        );
+      }
+    });
+  }
+
+  mostrarModalCompartir(titulo: string, tipo: string, contenido: string, linkWhatsapp: string, linkFacebook: string, linkInstagram: string) {
+    let previewHtml = '';
+
+    if (tipo === 'FOTO') {
+      previewHtml = `<img src="${contenido}" style="width: 100%; max-width: 250px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 1px solid #e2e8f0;">`;
+    } else if (tipo === 'AUDIO') {
+      previewHtml = `
+        <div style="background: #fff0f5; border: 1px solid #ffb3c6; border-radius: 12px; padding: 15px; margin-bottom: 20px; display: inline-block; width: 100%; max-width: 280px; box-sizing: border-box;">
+          <i class="fas fa-microphone" style="font-size: 2rem; color: #ff007f; margin-bottom: 8px;"></i>
+          <p style="margin: 0; font-size: 0.85rem; color: #ff007f; font-weight: 700;">Mensaje de voz / Audio</p>
+        </div>
+      `;
+    } else {
+      const truncContent = contenido.length > 100 ? contenido.substring(0, 97) + '...' : contenido;
+      previewHtml = `
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 15px; margin-bottom: 20px; text-align: left; font-family: monospace; font-size: 0.85rem; color: #334155;">
+          <p style="margin: 0; white-space: pre-wrap;">"${truncContent}"</p>
+        </div>
+      `;
+    }
+
+    Swal.fire({
+      title: this.lenguajeService.translate('GALERIA.COMPARTIR_TITULO') || '📤 Compartir Recuerdo Familiar',
+      html: `
+        <div style="text-align: center; font-family: 'Segoe UI', system-ui, sans-serif; padding: 15px 0;">
+          <h4 style="color: #6200ea; margin-bottom: 15px; font-weight: 700;">${titulo}</h4>
+          ${previewHtml}
+
+          <div style="display: flex; justify-content: center; gap: 15px; margin-top: 15px;">
+            <a href="${linkWhatsapp}" target="_blank" style="text-decoration: none; display: flex; flex-direction: column; align-items: center; color: #25d366; width: 80px;">
+              <div style="width: 50px; height: 50px; border-radius: 50%; background: #e8faf0; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 5px; box-shadow: 0 4px 8px rgba(37, 211, 102, 0.15); transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                <i class="fab fa-whatsapp"></i>
+              </div>
+              <span style="font-size: 0.8rem; font-weight: 600; color: #334155;">WhatsApp</span>
+            </a>
+
+            <a href="${linkFacebook}" target="_blank" style="text-decoration: none; display: flex; flex-direction: column; align-items: center; color: #1877f2; width: 80px;">
+              <div style="width: 50px; height: 50px; border-radius: 50%; background: #e8f2fe; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 5px; box-shadow: 0 4px 8px rgba(24, 119, 242, 0.15); transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                <i class="fab fa-facebook-f"></i>
+              </div>
+              <span style="font-size: 0.8rem; font-weight: 600; color: #334155;">Facebook</span>
+            </a>
+
+            <a href="${linkInstagram}" target="_blank" style="text-decoration: none; display: flex; flex-direction: column; align-items: center; color: #e1306c; width: 80px;">
+              <div style="width: 50px; height: 50px; border-radius: 50%; background: #fdf2f8; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 5px; box-shadow: 0 4px 8px rgba(225, 48, 108, 0.15); transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                <i class="fab fa-instagram"></i>
+              </div>
+              <span style="font-size: 0.8rem; font-weight: 600; color: #334155;">Instagram</span>
+            </a>
+          </div>
+        </div>
+      `,
+      showConfirmButton: false,
+      showCloseButton: true
     });
   }
 
