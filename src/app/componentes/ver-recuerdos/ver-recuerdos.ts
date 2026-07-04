@@ -4,6 +4,7 @@ import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { UsuarioService } from '../../services/usuario-service';
 import { RecuerdoService } from '../../services/recuerdo-service';
+import { SolicitudService } from '../../services/solicitud-service';
 import { RecuerdoRespondeDTO } from '../../model/recuerdo-responde-dto';
 import Swal from 'sweetalert2';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -42,8 +43,12 @@ export class VerRecuerdos implements OnInit {
   filtroActual = 'TODOS';
   busquedaQuery = '';
 
+  tieneSolicitudPendiente = false;
+  fotoCuidadorPendiente: string | null = null;
+
   private usuarioService = inject(UsuarioService);
   private recuerdoService = inject(RecuerdoService);
+  private solicitudService = inject(SolicitudService);
   private lenguajeService = inject(LenguajeService);
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
@@ -60,6 +65,7 @@ export class VerRecuerdos implements OnInit {
 
     if (this.userId) {
       this.cargarRecuerdos();
+      this.verificarSolicitudesPendientes();
     }
   }
 
@@ -479,6 +485,26 @@ Preservando la memoria viva de nuestra familia.
       `,
       showConfirmButton: false,
       showCloseButton: true
+    });
+  }
+
+  verificarSolicitudesPendientes() {
+    if (!this.userId) return;
+    this.solicitudService.obtenerPendientesAdulto(this.userId).subscribe({
+      next: (res) => {
+        const pendientes = res ? res.filter(s => s.iniciadoPor === 'CUIDADOR' && s.estado === 'PENDIENTE') : [];
+        if (pendientes.length > 0) {
+          this.tieneSolicitudPendiente = true;
+          this.fotoCuidadorPendiente = pendientes[0].fotoCuidador || null;
+        } else {
+          this.tieneSolicitudPendiente = false;
+          this.fotoCuidadorPendiente = null;
+        }
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.warn("Error al verificar solicitudes pendientes:", err);
+      }
     });
   }
 
