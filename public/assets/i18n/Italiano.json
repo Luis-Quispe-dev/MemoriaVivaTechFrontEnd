@@ -524,5 +524,10 @@
   "RECUERDOS.VALIDATION_CONTENT_REQ": "Il contenuto è obbligatorio.",
   "RECUERDOS.EDITAR_SUCCESS_TITLE": "Ricordo Aggiornato",
   "RECUERDOS.EDITAR_SUCCESS_DESC": "Il ricordo è stato modificato con successo.",
-  "RECUERDOS.EDITAR_ERROR_DESC": "Impossibile salvare le modifiche del ricordo."
+  "RECUERDOS.EDITAR_ERROR_DESC": "Impossibile salvare le modifiche del ricordo.",
+  "GALERIA.DESCARGANDO": "Download in corso...",
+  "GALERIA.COMPARTIR_CARGANDO": "Caricamento link di condivisione...",
+  "GALERIA.COMPARTIR_TITULO": "Condividi ricordo",
+  "PERF.SOLI.BUSCAR_POPUP_VACIO_BUSQUEDA_CUIDADORES": "Nessun caregiver corrisponde alla ricerca.",
+  "PERF.SOLI.BUSCAR_POPUP_VACIO_BUSQUEDA_PACIENTES": "Nessun anziano corrisponde alla ricerca."
 }

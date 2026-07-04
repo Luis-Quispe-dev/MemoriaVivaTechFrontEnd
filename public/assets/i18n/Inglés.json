@@ -524,5 +524,10 @@
   "RECUERDOS.VALIDATION_CONTENT_REQ": "Content is required.",
   "RECUERDOS.EDITAR_SUCCESS_TITLE": "Memory Updated",
   "RECUERDOS.EDITAR_SUCCESS_DESC": "The memory has been successfully updated.",
-  "RECUERDOS.EDITAR_ERROR_DESC": "Could not save memory changes."
+  "RECUERDOS.EDITAR_ERROR_DESC": "Could not save memory changes.",
+  "GALERIA.DESCARGANDO": "Downloading...",
+  "GALERIA.COMPARTIR_CARGANDO": "Loading sharing links...",
+  "GALERIA.COMPARTIR_TITULO": "Share Memory",
+  "PERF.SOLI.BUSCAR_POPUP_VACIO_BUSQUEDA_CUIDADORES": "No caregivers matched the search query.",
+  "PERF.SOLI.BUSCAR_POPUP_VACIO_BUSQUEDA_PACIENTES": "No older adults matched the search query."
 }

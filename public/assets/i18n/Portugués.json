@@ -524,5 +524,10 @@
   "RECUERDOS.VALIDATION_CONTENT_REQ": "O conteúdo é obrigatório.",
   "RECUERDOS.EDITAR_SUCCESS_TITLE": "Lembrança Actualizada",
   "RECUERDOS.EDITAR_SUCCESS_DESC": "A lembrança foi modificada com sucesso.",
-  "RECUERDOS.EDITAR_ERROR_DESC": "Não foi posible salvar as alterações da lembrança."
+  "RECUERDOS.EDITAR_ERROR_DESC": "Não foi posible salvar as alterações da lembrança.",
+  "GALERIA.DESCARGANDO": "Baixando...",
+  "GALERIA.COMPARTIR_CARGANDO": "Carregando links de compartilhamento...",
+  "GALERIA.COMPARTIR_TITULO": "Compartilhar Lembrança",
+  "PERF.SOLI.BUSCAR_POPUP_VACIO_BUSQUEDA_CUIDADORES": "Nenhum cuidador correspondeu à pesquisa.",
+  "PERF.SOLI.BUSCAR_POPUP_VACIO_BUSQUEDA_PACIENTES": "Nenhum idoso correspondeu à pesquisa."
 }

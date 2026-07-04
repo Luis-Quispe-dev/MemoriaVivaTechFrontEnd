@@ -524,5 +524,10 @@
   "RECUERDOS.VALIDATION_CONTENT_REQ": "El contenido es obligatorio.",
   "RECUERDOS.EDITAR_SUCCESS_TITLE": "Recuerdo Actualizado",
   "RECUERDOS.EDITAR_SUCCESS_DESC": "El recuerdo ha sido modificado con éxito.",
-  "RECUERDOS.EDITAR_ERROR_DESC": "No se pudo guardar la modificación del recuerdo."
+  "RECUERDOS.EDITAR_ERROR_DESC": "No se pudo guardar la modificación del recuerdo.",
+  "GALERIA.DESCARGANDO": "Descargando...",
+  "GALERIA.COMPARTIR_CARGANDO": "Cargando enlaces de compartido...",
+  "GALERIA.COMPARTIR_TITULO": "Compartir Recuerdo",
+  "PERF.SOLI.BUSCAR_POPUP_VACIO_BUSQUEDA_CUIDADORES": "No se encontraron cuidadores que coincidan con la búsqueda.",
+  "PERF.SOLI.BUSCAR_POPUP_VACIO_BUSQUEDA_PACIENTES": "No se encontraron adultos mayores que coincidan con la búsqueda."
 }
