@@ -83,6 +83,10 @@ export class UsuarioService {
     return this.httpClient.get<CuidadorRespuestaDTO>(`${this.apiUrl}/cuidador/${id}`);
   }
 
+  obtenerAdultoMayorPorId(id: number): Observable<AdultoMayorRespuestaDTO> {
+    return this.httpClient.get<AdultoMayorRespuestaDTO>(`${this.apiUrl}/cuidador/adulto-mayor/${id}`);
+  }
+
   recuperarContrasena(dto: RecuperarContrasenaDTO): Observable<any> {
     return this.httpClient.put(`${this.apiUrl}/recuperar-contrasena`, dto, { responseType: 'text' });
   }

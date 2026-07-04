@@ -36,15 +36,17 @@ export class PerfilCuidador implements OnInit {
   nombreUsuario = 'Cuidador';
   emailUsuario = 'correo@ejemplo.com';
   userId: number | null = null;
-  solicitudMensaje = '';
+  solicitudMensaje = ''; // Bindable text for custom request invitation message
   cuidadoresList: any[] = [];
   busquedaQuery = '';
 
-  asignacionesActivas: AsignacionRespondeDTO[] = [];
+  asignacionesActivas: any[] = [];
   solicitudesPendientes: any[] = [];
   cargando = false;
   indicePacienteActual = 0;
   fotoPerfil: string | null = null;
+  tieneSolicitudPendiente = false;
+  fotoAdultoMayorPendiente: string | null = null;
 
   private usuarioService = inject(UsuarioService);
   private solicitudService = inject(SolicitudService);
@@ -76,9 +78,47 @@ export class PerfilCuidador implements OnInit {
 
     this.solicitudService.obtenerAsignacionesActivasCuidador(this.userId).subscribe({
       next: (res) => {
-        this.asignacionesActivas = res || [];
-        this.indicePacienteActual = 0;
-        this.cargarSolicitudesPendientes();
+        const asignaciones = res || [];
+        const calls = asignaciones.map(asig => {
+          return new Promise<any>((resolve) => {
+            this.usuarioService.obtenerAdultoMayorPorId(asig.idAdultoMayor).subscribe({
+              next: (am) => {
+                let edad = '';
+                if (am.fechaNacimiento) {
+                  try {
+                    const cumple = new Date(am.fechaNacimiento);
+                    const hoy = new Date();
+                    let calcEdad = hoy.getFullYear() - cumple.getFullYear();
+                    const m = hoy.getMonth() - cumple.getMonth();
+                    if (m < 0 || (m === 0 && hoy.getDate() < cumple.getDate())) {
+                      calcEdad--;
+                    }
+                    if (calcEdad > 0) {
+                      edad = `${calcEdad} años`;
+                    }
+                  } catch (e) {}
+                }
+                resolve({
+                  ...asig,
+                  fotoAdultoMayor: am.contenidoFoto || asig.fotoAdultoMayor || null,
+                  edadAdultoMayor: edad
+                });
+              },
+              error: () => {
+                resolve({
+                  ...asig,
+                  edadAdultoMayor: ''
+                });
+              }
+            });
+          });
+        });
+
+        Promise.all(calls).then((mappedAsignaciones) => {
+          this.asignacionesActivas = mappedAsignaciones;
+          this.indicePacienteActual = 0;
+          this.cargarSolicitudesPendientes();
+        });
       },
       error: (err) => {
         console.warn("No se pudieron cargar las asignaciones activas:", err);
@@ -93,9 +133,56 @@ export class PerfilCuidador implements OnInit {
     if (!this.userId) return;
     this.solicitudService.obtenerPendientesCuidador(this.userId).subscribe({
       next: (res) => {
-        this.solicitudesPendientes = res || [];
-        this.cargando = false;
-        this.cdr.detectChanges();
+        const solicitudes = res || [];
+        const calls = solicitudes.map(soli => {
+          return new Promise<any>((resolve) => {
+            this.usuarioService.obtenerAdultoMayorPorId(soli.idAdultoMayor).subscribe({
+              next: (am) => {
+                let edad = '';
+                if (am.fechaNacimiento) {
+                  try {
+                    const cumple = new Date(am.fechaNacimiento);
+                    const hoy = new Date();
+                    let calcEdad = hoy.getFullYear() - cumple.getFullYear();
+                    const m = hoy.getMonth() - cumple.getMonth();
+                    if (m < 0 || (m === 0 && hoy.getDate() < cumple.getDate())) {
+                      calcEdad--;
+                    }
+                    if (calcEdad > 0) {
+                      edad = `${calcEdad} años`;
+                    }
+                  } catch (e) {}
+                }
+                resolve({
+                  ...soli,
+                  fotoAdultoMayor: am.contenidoFoto || null,
+                  edadAdultoMayor: edad
+                });
+              },
+              error: () => {
+                resolve({
+                  ...soli,
+                  fotoAdultoMayor: null,
+                  edadAdultoMayor: ''
+                });
+              }
+            });
+          });
+        });
+
+        Promise.all(calls).then((mappedSolicitudes) => {
+          this.solicitudesPendientes = mappedSolicitudes;
+          const pendientesAcompanamiento = mappedSolicitudes.filter(s => s.iniciadoPor === 'ADULTO_MAYOR' && s.estado === 'PENDIENTE');
+          if (pendientesAcompanamiento.length > 0) {
+            this.tieneSolicitudPendiente = true;
+            this.fotoAdultoMayorPendiente = pendientesAcompanamiento[0].fotoAdultoMayor || null;
+          } else {
+            this.tieneSolicitudPendiente = false;
+            this.fotoAdultoMayorPendiente = null;
+          }
+          this.cargando = false;
+          this.cdr.detectChanges();
+        });
       },
       error: (err) => {
         console.warn("No se pudieron cargar las solicitudes pendientes:", err);
@@ -170,8 +257,8 @@ export class PerfilCuidador implements OnInit {
 
         if (!data || data.length === 0) {
           Swal.fire(
-            this.lenguajeService.translate('PERF.ALERT_NO_CAREGIVERS_TITLE'),
-            this.lenguajeService.translate('PERF.SOLI.BUSCAR_POPUP_VACIO'),
+            this.lenguajeService.translate('PERF.ALERT_NO_CAREGIVERS_TITLE') || 'Búsqueda',
+            this.lenguajeService.translate('PERF.SOLI.BUSCAR_POPUP_VACIO') || 'No hay pacientes registrados.',
             'info'
           );
           return;
@@ -182,35 +269,81 @@ export class PerfilCuidador implements OnInit {
 
         if (disponibles.length === 0) {
           Swal.fire(
-            this.lenguajeService.translate('PERF.ALERT_ALREADY_VERIFIED_TITLE'),
-            this.lenguajeService.translate('PERF.SOLI.BUSCAR_POPUP_VINCULADOS_TODOS'),
+            this.lenguajeService.translate('PERF.ALERT_ALREADY_VERIFIED_TITLE') || 'Búsqueda',
+            this.lenguajeService.translate('PERF.SOLI.BUSCAR_POPUP_VINCULADOS_TODOS') || 'Todos los pacientes ya están vinculados.',
             'info'
           );
           return;
         }
 
         let htmlContent = `
-          <div style="max-height: 400px; overflow-y: auto; text-align: left; padding: 10px; font-family: 'Segoe UI', sans-serif;">
-            <p style="color: #64748b; font-size: 1rem; margin-bottom: 20px;">
-              ${this.lenguajeService.translate('PERF.SOLI.BUSCAR_POPUP_INTRO')}
+          <div style="font-family: 'Segoe UI', system-ui, sans-serif; text-align: left; padding: 5px;">
+            <p style="color: #64748b; font-size: 0.95rem; margin-bottom: 12px;">
+              ${this.lenguajeService.translate('PERF.SOLI.BUSCAR_POPUP_INTRO') || 'Selecciona un adulto mayor de la lista para enviarle una invitación:'}
             </p>
+
+            <!-- Barra de búsqueda interactiva -->
+            <div style="position: relative; margin-bottom: 18px;">
+              <i class="fas fa-search" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #64748b; font-size: 1rem;"></i>
+              <input type="text" id="patient-search-input" placeholder="Buscar por nombre o correo..."
+                     style="width: 100%; padding: 12px 12px 12px 42px; border-radius: 12px; border: 2px solid #cbd5e1; font-size: 0.95rem; box-sizing: border-box; outline: none; transition: border-color 0.2s;"
+                     onfocus="this.style.borderColor='#166534'" onblur="this.style.borderColor='#cbd5e1'">
+            </div>
+
+            <div id="patients-list-container" style="max-height: 350px; overflow-y: auto; padding-right: 5px;">
         `;
 
         disponibles.forEach(am => {
+          let edadStr = '';
+          if (am.fechaNacimiento) {
+            try {
+              const cumple = new Date(am.fechaNacimiento);
+              const hoy = new Date();
+              let edad = hoy.getFullYear() - cumple.getFullYear();
+              const m = hoy.getMonth() - cumple.getMonth();
+              if (m < 0 || (m === 0 && hoy.getDate() < cumple.getDate())) {
+                edad--;
+              }
+              if (edad > 0) {
+                edadStr = ` | 🎂 ${edad} años`;
+              }
+            } catch (e) {}
+          }
+
+          const fotoHtml = am.contenidoFoto
+            ? `<img src="${am.contenidoFoto}" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2.5px solid #166534; flex-shrink: 0;">`
+            : `<div style="width: 48px; height: 48px; border-radius: 50%; background: #e2e8f0; display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 1.2rem; flex-shrink: 0;"><i class="fas fa-user"></i></div>`;
+
+          const vincularLabel = this.lenguajeService.translate('PERF.SOLI.BUSCAR_POPUP_BOTON') || 'Vincular';
+
           htmlContent += `
-            <div style="background: #f8fafc; border: 2px solid #edf2f7; border-radius: 18px; padding: 18px; margin-bottom: 15px; display: flex; flex-direction: column; gap: 8px;">
-              <div style="display: flex; justify-content: space-between; align-items: center;">
-                <h4 style="margin: 0; font-size: 1.2rem; font-weight: 800; color: #0f172a;">${am.nombreCompleto}</h4>
-                <button onclick="window.solicitarAcompanamiento('${am.idAdultoMayor}', '${am.nombreCompleto.replace(/'/g, "\\'")}')" style="background: #c6f6d5; color: #166534; border: 2px solid #86efac; font-weight: 700; border-radius: 10px; padding: 8px 16px; font-size: 0.95rem; cursor: pointer; transition: all 0.2s;">
-                  ${this.lenguajeService.translate('PERF.SOLI.BUSCAR_POPUP_BOTON')}
-                </button>
+            <div class="patient-card"
+                 data-nombre="${am.nombreCompleto.toLowerCase()}"
+                 data-email="${am.email.toLowerCase()}"
+                 style="background: #f8fafc; border: 2px solid #edf2f7; border-radius: 16px; padding: 12px 15px; margin-bottom: 12px; display: flex; align-items: center; gap: 12px; transition: all 0.2s;">
+              ${fotoHtml}
+              <div style="flex: 1; min-width: 0;">
+                <h4 style="margin: 0; font-size: 1.1rem; font-weight: 800; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${am.nombreCompleto}</h4>
+                <p style="font-size: 0.85rem; color: #64748b; margin: 3px 0 0 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">📧 ${am.email}${edadStr}</p>
               </div>
-              <p style="font-size: 0.9rem; color: #64748b; margin: 0;"> @ ${am.email}</p>
+              <button onclick="window.solicitarAcompanamiento('${am.idAdultoMayor}', '${am.nombreCompleto.replace(/'/g, "\\'")}')"
+                      style="background: #c6f6d5; color: #166534; border: 2px solid #86efac; font-weight: 700; border-radius: 10px; padding: 6px 14px; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; flex-shrink: 0;"
+                      onmouseover="this.style.background='#bbf7d0'" onmouseout="this.style.background='#c6f6d5'">
+                💖 ${vincularLabel}
+              </button>
             </div>
           `;
         });
 
-        htmlContent += '</div>';
+        htmlContent += `
+            </div>
+            <!-- Div para cuando no hay resultados -->
+            <div id="no-results-message-am" style="display: none; text-align: center; padding: 25px 10px; color: #64748b;">
+              <i class="fas fa-search" style="font-size: 2.2rem; color: #cbd5e1; margin-bottom: 10px;"></i>
+              <p style="margin: 0; font-size: 0.95rem; font-weight: 600;">No se encontraron adultos mayores que coincidan con la búsqueda.</p>
+            </div>
+          </div>
+        `;
 
         (window as any).solicitarAcompanamiento = (idAdulto: string, nombreCompleto: string) => {
           Swal.close();
@@ -237,7 +370,34 @@ export class PerfilCuidador implements OnInit {
           html: htmlContent,
           showCloseButton: true,
           showConfirmButton: false,
-          width: '600px'
+          width: '550px',
+          didOpen: () => {
+            const searchInput = document.getElementById('patient-search-input') as HTMLInputElement;
+            const noResults = document.getElementById('no-results-message-am');
+            if (searchInput) {
+              searchInput.addEventListener('input', (e: any) => {
+                const query = e.target.value.toLowerCase().trim();
+                const cards = document.querySelectorAll('.patient-card');
+                let visibleCount = 0;
+
+                cards.forEach((card: any) => {
+                  const name = card.getAttribute('data-nombre') || '';
+                  const email = card.getAttribute('data-email') || '';
+
+                  if (name.includes(query) || email.includes(query)) {
+                    card.style.display = 'flex';
+                    visibleCount++;
+                  } else {
+                    card.style.display = 'none';
+                  }
+                });
+
+                if (noResults) {
+                  noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+                }
+              });
+            }
+          }
         });
       },
       error: (err) => {

@@ -4,6 +4,8 @@ import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { UsuarioService } from '../../services/usuario-service';
 import { RecuerdoService } from '../../services/recuerdo-service';
+import { SolicitudService } from '../../services/solicitud-service';
+import {GaleriaIaService} from '../../services/galeria-ia-services';
 import { GaleriaIARespondeDTO } from '../../model/galeria-ia-responde-dto';
 import { GaleriaIALlamadoDTO } from '../../model/galeria-ia-llamado-dto';
 import { GaleriaIAGenerarLlamadoDTO } from '../../model/galeria-ia-generar-llamado-dto';
@@ -14,8 +16,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { TranslatePipe } from '@ngx-translate/core';
 import { LenguajeService } from '../../services/lenguaje.service';
-import {GaleriaIaService} from '../../services/galeria-ia-services';
-
 import Swal from 'sweetalert2';
 
 @Component({
@@ -52,8 +52,12 @@ export class GaleriaIa implements OnInit {
   imagenGeneradaUrl = '';
   retratoSeleccionado: GaleriaIARespondeDTO | null = null;
 
+  tieneSolicitudPendiente = false;
+  fotoCuidadorPendiente: string | null = null;
+
   private usuarioService = inject(UsuarioService);
   private recuerdoService = inject(RecuerdoService);
+  private solicitudService = inject(SolicitudService);
   private galeriaIaService = inject(GaleriaIaService);
   private lenguajeService = inject(LenguajeService);
   private router = inject(Router);
@@ -71,6 +75,7 @@ export class GaleriaIa implements OnInit {
 
     if (this.userId) {
       this.cargarGaleria();
+      this.verificarSolicitudesPendientes();
     }
   }
 
@@ -355,6 +360,26 @@ export class GaleriaIa implements OnInit {
   cerrarPrevisualizacion() {
     this.retratoSeleccionado = null;
     this.cdr.detectChanges();
+  }
+
+  verificarSolicitudesPendientes() {
+    if (!this.userId) return;
+    this.solicitudService.obtenerPendientesAdulto(this.userId).subscribe({
+      next: (res) => {
+        const pendientes = res ? res.filter(s => s.iniciadoPor === 'CUIDADOR' && s.estado === 'PENDIENTE') : [];
+        if (pendientes.length > 0) {
+          this.tieneSolicitudPendiente = true;
+          this.fotoCuidadorPendiente = pendientes[0].fotoCuidador || null;
+        } else {
+          this.tieneSolicitudPendiente = false;
+          this.fotoCuidadorPendiente = null;
+        }
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.warn("Error al verificar solicitudes pendientes:", err);
+      }
+    });
   }
 
   cerrarSesion() {
