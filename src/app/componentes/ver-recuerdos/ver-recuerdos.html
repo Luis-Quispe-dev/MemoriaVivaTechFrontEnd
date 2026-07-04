@@ -44,7 +44,6 @@
     </div>
   </header>
 
-
   <div class="container">
     <div class="glass-panel main-panel animate-fade-in">
       <div class="panel-header">
@@ -144,8 +143,11 @@
                             (click)="toggleFavorito(recuerdo)" title="Favorito">
                       <i [ngClass]="recuerdo.esFavorito ? 'fas fa-heart' : 'far fa-heart'" [style.color]="recuerdo.esFavorito ? '#ef4444' : '#64748b'"></i>
                     </button>
-                    <button class="action-btn-mini download-btn" (click)="exportarLegado(recuerdo)" [title]="'GALERIA.IMPRIMIR' | translate">
-                      <i class="fas fa-print"></i>
+                    <button class="action-btn-mini download-btn" (click)="descargarRecuerdo(recuerdo)" title="Descargar recuerdo">
+                      <i class="fas fa-download" style="color: #10b981;"></i>
+                    </button>
+                    <button class="action-btn-mini share-btn" (click)="compartirRecuerdo(recuerdo)" title="Compartir recuerdo">
+                      <i class="fas fa-share-alt" style="color: #0284c7;"></i>
                     </button>
                     <button class="action-btn-mini edit-btn" (click)="abrirEditarRecuerdoModal(recuerdo)" [title]="'RECUERDOS.EDITAR' | translate">
                       <i class="fas fa-pencil-alt" style="color: #6200ea;"></i>
