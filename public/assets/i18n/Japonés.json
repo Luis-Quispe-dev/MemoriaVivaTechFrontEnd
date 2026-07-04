@@ -524,5 +524,10 @@
   "RECUERDOS.VALIDATION_CONTENT_REQ": "内容は必須です。",
   "RECUERDOS.EDITAR_SUCCESS_TITLE": "思い出が更新されました",
   "RECUERDOS.EDITAR_SUCCESS_DESC": "思い出が正常に変更されました。",
-  "RECUERDOS.EDITAR_ERROR_DESC": "変更を保存できませんでした。"
+  "RECUERDOS.EDITAR_ERROR_DESC": "変更を保存できませんでした。",
+  "GALERIA.DESCARGANDO": "ダウンロード中...",
+  "GALERIA.COMPARTIR_CARGANDO": "共有リンクを読み込み中...",
+  "GALERIA.COMPARTIR_TITULO": "思い出を共有する",
+  "PERF.SOLI.BUSCAR_POPUP_VACIO_BUSQUEDA_CUIDADORES": "検索条件に一致する介護者が見つかりません。",
+  "PERF.SOLI.BUSCAR_POPUP_VACIO_BUSQUEDA_PACIENTES": "検索条件に一致する高齢者が見つかりません。"
 }

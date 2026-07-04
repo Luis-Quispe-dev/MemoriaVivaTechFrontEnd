@@ -524,5 +524,10 @@
   "RECUERDOS.VALIDATION_CONTENT_REQ": "Le contenu est obligatoire.",
   "RECUERDOS.EDITAR_SUCCESS_TITLE": "Souvenir mis à jour",
   "RECUERDOS.EDITAR_SUCCESS_DESC": "Le souvenir a été modifié avec succès.",
-  "RECUERDOS.EDITAR_ERROR_DESC": "Impossible d'enregistrer les modifications du souvenir."
+  "RECUERDOS.EDITAR_ERROR_DESC": "Impossible d'enregistrer les modifications du souvenir.",
+  "GALERIA.DESCARGANDO": "Téléchargement...",
+  "GALERIA.COMPARTIR_CARGANDO": "Chargement des liens de partage...",
+  "GALERIA.COMPARTIR_TITULO": "Partager le souvenir",
+  "PERF.SOLI.BUSCAR_POPUP_VACIO_BUSQUEDA_CUIDADORES": "Aucun aidant ne correspond à la recherche.",
+  "PERF.SOLI.BUSCAR_POPUP_VACIO_BUSQUEDA_PACIENTES": "Aucun aîné ne correspond à la recherche."
 }
