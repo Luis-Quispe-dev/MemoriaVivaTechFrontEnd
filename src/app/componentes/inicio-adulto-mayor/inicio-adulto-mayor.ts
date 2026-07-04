@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -12,7 +12,6 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { UsuarioService } from '../../services/usuario-service';
 import { SolicitudService } from '../../services/solicitud-service';
 import { MensajeService } from '../../services/mensaje-service';
-import { environment } from '../../../environments/environment';
 import { AsignacionRespondeDTO } from '../../model/asignacion-responde-dto';
 import { MensajeRespondeDTO } from '../../model/mensaje-responde-dto';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -32,7 +31,7 @@ import Swal from 'sweetalert2';
     MatIconModule,
     MatSelectModule,
     MatButtonToggleModule,
-    TranslatePipe,
+    TranslatePipe
   ],
   templateUrl: './inicio-adulto-mayor.html',
   styleUrl: './inicio-adulto-mayor.css',
@@ -52,18 +51,20 @@ export class InicioAdultoMayor implements OnInit, OnDestroy {
   nuevoMensaje = '';
   cargandoMensajes = false;
   noLeidosCount = 0; // NUEVO: Contador de mensajes no leídos del cuidador
+  tieneSolicitudPendiente = false;
+  fotoCuidadorPendiente: string | null = null;
 
   private intervalId: any = null;
   private timerConteoId: any = null; // NUEVO: Temporizador para contar mensajes no leídos en segundo plano
 
-  constructor(
-    private usuarioService: UsuarioService,
-    private solicitudService: SolicitudService,
-    private mensajeService: MensajeService,
-    private lenguajeService: LenguajeService,
-    private router: Router,
-    private cdr: ChangeDetectorRef,
-  ) {}
+  private usuarioService = inject(UsuarioService);
+  private solicitudService = inject(SolicitudService);
+  private mensajeService = inject(MensajeService);
+  private lenguajeService = inject(LenguajeService);
+  private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
+
+  constructor() {}
 
   ngOnInit() {
     if (!this.usuarioService.estaLogueado()) {
@@ -79,6 +80,7 @@ export class InicioAdultoMayor implements OnInit, OnDestroy {
     if (this.userId) {
       this.cargarCuidadorActivo();
       this.iniciarPollingConteo(); // NUEVO: Monitorear notificaciones de chat en segundo plano
+      this.verificarSolicitudesPendientes();
     }
   }
 
@@ -103,12 +105,12 @@ export class InicioAdultoMayor implements OnInit, OnDestroy {
         this.cdr.detectChanges();
       },
       error: (err) => {
-        console.warn('No se pudo cargar cuidador activo para el chat:', err);
+        console.warn("No se pudo cargar cuidador activo para el chat:", err);
         this.tieneCuidadorActivo = false;
         this.asignacionActiva = null;
         this.noLeidosCount = 0;
         this.cdr.detectChanges();
-      },
+      }
     });
   }
 
@@ -121,7 +123,7 @@ export class InicioAdultoMayor implements OnInit, OnDestroy {
         confirmButtonText: this.lenguajeService.translate('CHAT.IR_PERFIL'),
         confirmButtonColor: '#6200ea',
         showCancelButton: true,
-        cancelButtonText: this.lenguajeService.translate('BOTON.CANCELAR'),
+        cancelButtonText: this.lenguajeService.translate('BOTON.CANCELAR')
       }).then((result) => {
         if (result.isConfirmed) {
           this.router.navigate(['/perfil-adulto-mayor']);
@@ -155,9 +157,7 @@ export class InicioAdultoMayor implements OnInit, OnDestroy {
           this.noLeidosCount = 0;
           this.marcarMensajesComoLeidos();
         } else {
-          this.noLeidosCount = this.mensajes.filter(
-            (m) => m.tipoRemitente === 'CUIDADOR' && !m.leido,
-          ).length;
+          this.noLeidosCount = this.mensajes.filter(m => m.tipoRemitente === 'CUIDADOR' && !m.leido).length;
         }
 
         if (this.cargandoMensajes) {
@@ -172,7 +172,7 @@ export class InicioAdultoMayor implements OnInit, OnDestroy {
         }
       },
       error: (err) => {
-        console.error('Error al cargar mensajes del chat:', err);
+        console.error("Error al cargar mensajes del chat:", err);
         if (this.cargandoMensajes) {
           setTimeout(() => {
             this.cargandoMensajes = false;
@@ -182,7 +182,7 @@ export class InicioAdultoMayor implements OnInit, OnDestroy {
           this.cargandoMensajes = false;
           this.cdr.detectChanges();
         }
-      },
+      }
     });
   }
 
@@ -195,7 +195,7 @@ export class InicioAdultoMayor implements OnInit, OnDestroy {
     const dto = {
       idAsignacion: this.asignacionActiva.idAsignacion,
       contenido: mensajeTexto,
-      tipoRemitente: 'ADULTO_MAYOR',
+      tipoRemitente: 'ADULTO_MAYOR'
     };
 
     this.mensajeService.enviarMensaje(dto).subscribe({
@@ -203,16 +203,16 @@ export class InicioAdultoMayor implements OnInit, OnDestroy {
         this.cargarMensajes();
       },
       error: (err) => {
-        console.error('Error al enviar mensaje:', err);
+        console.error("Error al enviar mensaje:", err);
         Swal.fire('Error', 'No se pudo enviar el mensaje en este momento.', 'error');
-      },
+      }
     });
   }
 
   marcarMensajesComoLeidos() {
     if (!this.asignacionActiva) return;
     this.mensajeService.marcarMensajesComoLeidos(this.asignacionActiva.idAsignacion).subscribe({
-      error: (err) => console.warn('No se pudo marcar mensajes como leídos:', err),
+      error: (err) => console.warn("No se pudo marcar mensajes como leídos:", err)
     });
   }
 
@@ -245,7 +245,7 @@ export class InicioAdultoMayor implements OnInit, OnDestroy {
           this.scrollToBottom();
           this.marcarMensajesComoLeidos();
         }
-      },
+      }
     });
   }
 
@@ -254,18 +254,14 @@ export class InicioAdultoMayor implements OnInit, OnDestroy {
     this.detenerPollingConteo();
     // Cargar el conteo inicial
     if (this.asignacionActiva) {
-      this.mensajeService
-        .obtenerMensajesPorAsignacion(this.asignacionActiva.idAsignacion)
-        .subscribe({
-          next: (msgs) => {
-            if (msgs) {
-              this.noLeidosCount = msgs.filter(
-                (m) => m.tipoRemitente === 'CUIDADOR' && !m.leido,
-              ).length;
-              this.cdr.detectChanges();
-            }
-          },
-        });
+      this.mensajeService.obtenerMensajesPorAsignacion(this.asignacionActiva.idAsignacion).subscribe({
+        next: (msgs) => {
+          if (msgs) {
+            this.noLeidosCount = msgs.filter(m => m.tipoRemitente === 'CUIDADOR' && !m.leido).length;
+            this.cdr.detectChanges();
+          }
+        }
+      });
     }
     this.timerConteoId = setInterval(() => {
       this.obtenerConteoNoLeidosSilencioso();
@@ -281,19 +277,15 @@ export class InicioAdultoMayor implements OnInit, OnDestroy {
 
   obtenerConteoNoLeidosSilencioso() {
     if (this.tieneCuidadorActivo && !this.mostrarChat && this.asignacionActiva) {
-      this.mensajeService
-        .obtenerMensajesPorAsignacion(this.asignacionActiva.idAsignacion)
-        .subscribe({
-          next: (msgs) => {
-            if (msgs) {
-              this.noLeidosCount = msgs.filter(
-                (m) => m.tipoRemitente === 'CUIDADOR' && !m.leido,
-              ).length;
-              this.cdr.detectChanges();
-            }
-          },
-          error: () => {},
-        });
+      this.mensajeService.obtenerMensajesPorAsignacion(this.asignacionActiva.idAsignacion).subscribe({
+        next: (msgs) => {
+          if (msgs) {
+            this.noLeidosCount = msgs.filter(m => m.tipoRemitente === 'CUIDADOR' && !m.leido).length;
+            this.cdr.detectChanges();
+          }
+        },
+        error: () => {}
+      });
     }
   }
 
@@ -328,6 +320,26 @@ export class InicioAdultoMayor implements OnInit, OnDestroy {
         container.scrollTop = container.scrollHeight;
       }
     }, 100);
+  }
+
+  verificarSolicitudesPendientes() {
+    if (!this.userId) return;
+    this.solicitudService.obtenerPendientesAdulto(this.userId).subscribe({
+      next: (res) => {
+        const pendientes = res ? res.filter(s => s.iniciadoPor === 'CUIDADOR' && s.estado === 'PENDIENTE') : [];
+        if (pendientes.length > 0) {
+          this.tieneSolicitudPendiente = true;
+          this.fotoCuidadorPendiente = pendientes[0].fotoCuidador || null;
+        } else {
+          this.tieneSolicitudPendiente = false;
+          this.fotoCuidadorPendiente = null;
+        }
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.warn("Error al verificar solicitudes pendientes:", err);
+      }
+    });
   }
 
   cerrarSesion() {

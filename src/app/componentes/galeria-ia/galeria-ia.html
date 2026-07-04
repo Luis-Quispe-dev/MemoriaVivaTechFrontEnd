@@ -22,7 +22,7 @@
 
     <!-- User Profile (Wrapped as a Clickable Button) & Logout -->
     <div class="profile-logout-section">
-      <button class="profile-btn" routerLink="/perfil-adulto-mayor" [title]="'NAV.PERFIL' | translate">
+      <button class="profile-btn" routerLink="/perfil-adulto-mayor" [title]="'NAV.PERFIL' | translate" style="position: relative; overflow: visible;">
         <div class="user-profile">
           <div class="avatar-circle" style="overflow: hidden; display: flex; align-items: center; justify-content: center;">
             @if (fotoPerfil) {
@@ -36,6 +36,16 @@
             <span class="profile-role">{{ 'NAV.ROL' | translate }}</span>
           </div>
         </div>
+        @if (tieneSolicitudPendiente) {
+          <span class="pulse-notification-badge" style="display: flex; align-items: center; gap: 6px; padding: 3px 10px 3px 5px;">
+            @if (fotoCuidadorPendiente) {
+              <img [src]="fotoCuidadorPendiente" style="width: 20px; height: 20px; border-radius: 50%; object-fit: cover; border: 1.5px solid white;">
+            } @else {
+              <i class="fas fa-user-shield" style="font-size: 0.9rem;"></i>
+            }
+            {{ 'PERF.INVITACION_RECIBIDA' | translate }}
+          </span>
+        }
       </button>
 
       <button class="btn-logout-square" (click)="cerrarSesion()" [title]="'NAV.CERRAR_SESION' | translate">
@@ -164,8 +174,11 @@
                       <button class="gallery-print-btn" (click)="abrirPrevisualizacion(retrato)" title="Ver en Grande / Detalle">
                         <i class="fas fa-search-plus"></i>
                       </button>
-                      <button class="gallery-print-btn" (click)="exportarLegado(retrato)" [title]="'GALERIA.IMPRIMIR' | translate">
-                        <i class="fas fa-print"></i>
+                      <button class="gallery-print-btn" (click)="compartirRetrato(retrato)" title="Compartir retrato">
+                        <i class="fas fa-share-alt"></i>
+                      </button>
+                      <button class="gallery-print-btn" (click)="descargarImagen(retrato.urlImagen, retrato.titulo)" title="Descargar imagen">
+                        <i class="fas fa-download"></i>
                       </button>
                       <button class="gallery-print-btn" (click)="eliminarRetrato(retrato.idRetratoIa)" [title]="'RECUERDOS.BORRAR' | translate" style="color: #ef4444;">
                         <i class="fas fa-trash-alt"></i>
@@ -208,8 +221,11 @@
               {{ retratoSeleccionado.fechaCreacion ? (retratoSeleccionado.fechaCreacion | date:'dd/MM/yyyy HH:mm') : ('RECUERDOS.FECHA_NO_REGISTRADA' | translate) }}
             </span>
             <div class="lightbox-actions">
-              <button mat-flat-button class="btn" (click)="exportarLegado(retratoSeleccionado)" style="background: #6200ea !important; color: white !important; font-weight: 700; border-radius: 12px; padding: 10px 20px; font-size: 1rem; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 10px rgba(98, 0, 234, 0.2);">
-                <i class="fas fa-print"></i> {{ 'GALERIA.IMPRIMIR' | translate }}
+              <button mat-flat-button class="btn" (click)="compartirRetrato(retratoSeleccionado)" style="background: #6200ea !important; color: white !important; font-weight: 700; border-radius: 12px; padding: 10px 20px; font-size: 1rem; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 10px rgba(98, 0, 234, 0.2);">
+                <i class="fas fa-share-alt"></i> Compartir
+              </button>
+              <button mat-flat-button class="btn" (click)="descargarImagen(retratoSeleccionado.urlImagen, retratoSeleccionado.titulo)" style="background: #10b981 !important; color: white !important; font-weight: 700; border-radius: 12px; padding: 10px 20px; font-size: 1rem; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2); margin-right: 8px;">
+                <i class="fas fa-download"></i> Descargar
               </button>
               <button mat-button class="btn" (click)="eliminarRetrato(retratoSeleccionado.idRetratoIa); cerrarPrevisualizacion()" style="background: #fee2e2 !important; color: #dc2626 !important; font-weight: 700; border-radius: 12px; padding: 10px 20px; font-size: 1rem; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
                 <i class="fas fa-trash-alt"></i> {{ 'RECUERDOS.BORRAR' | translate }}

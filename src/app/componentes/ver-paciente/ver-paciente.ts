@@ -44,6 +44,8 @@ export class VerPaciente implements OnInit, OnDestroy {
   mostrarDetalleModal = false;
   detallePaciente: any = null;
   cantidadActividadesPendientes = 0;
+  tieneSolicitudPendiente = false;
+  fotoAdultoMayorPendiente: string | null = null;
 
   todosLosSeniorsDetails: any[] = [];
 
@@ -65,7 +67,8 @@ export class VerPaciente implements OnInit, OnDestroy {
     this.fotoPerfil = this.usuarioService.obtenerFotoPerfil();
 
     this.cargarAdultosMayores();
-    this.cargarTodosLosSeniorsDetails(); // Pre-load all details locally for robust instant rendering
+    this.cargarTodosLosSeniorsDetails();
+    this.verificarSolicitudesPendientes();
   }
 
   ngOnDestroy() {}
@@ -182,6 +185,35 @@ export class VerPaciente implements OnInit, OnDestroy {
     } catch (e) {
       return 'N/D';
     }
+  }
+
+  verificarSolicitudesPendientes() {
+    if (!this.userId) return;
+    this.solicitudService.obtenerPendientesCuidador(this.userId).subscribe({
+      next: (res) => {
+        const pendientes = res ? res.filter(s => s.iniciadoPor === 'ADULTO_MAYOR' && s.estado === 'PENDIENTE') : [];
+        if (pendientes.length > 0) {
+          this.tieneSolicitudPendiente = true;
+          this.usuarioService.obtenerAdultoMayorPorId(pendientes[0].idAdultoMayor).subscribe({
+            next: (am) => {
+              this.fotoAdultoMayorPendiente = am.contenidoFoto || null;
+              this.cdr.detectChanges();
+            },
+            error: () => {
+              this.fotoAdultoMayorPendiente = null;
+              this.cdr.detectChanges();
+            }
+          });
+        } else {
+          this.tieneSolicitudPendiente = false;
+          this.fotoAdultoMayorPendiente = null;
+          this.cdr.detectChanges();
+        }
+      },
+      error: (err) => {
+        console.warn("Error al verificar solicitudes pendientes:", err);
+      }
+    });
   }
 
   irAlPerfil() {

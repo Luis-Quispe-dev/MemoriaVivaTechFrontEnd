@@ -22,7 +22,7 @@
 
     <!-- User Profile & Logout -->
     <div class="profile-logout-section">
-      <button class="profile-btn" routerLink="/perfil-adulto-mayor" [title]="'NAV.PERFIL' | translate">
+      <button class="profile-btn" routerLink="/perfil-adulto-mayor" [title]="'NAV.PERFIL' | translate" style="position: relative; overflow: visible;">
         <div class="user-profile">
           <div class="avatar-circle" style="overflow: hidden; display: flex; align-items: center; justify-content: center;">
             @if (fotoPerfil) {
@@ -36,6 +36,16 @@
             <span class="profile-role">{{ 'NAV.ROL' | translate }}</span>
           </div>
         </div>
+        @if (tieneSolicitudPendiente) {
+          <span class="pulse-notification-badge" style="display: flex; align-items: center; gap: 6px; padding: 3px 10px 3px 5px;">
+            @if (fotoCuidadorPendiente) {
+              <img [src]="fotoCuidadorPendiente" style="width: 20px; height: 20px; border-radius: 50%; object-fit: cover; border: 1.5px solid white;">
+            } @else {
+              <i class="fas fa-user-shield" style="font-size: 0.9rem;"></i>
+            }
+            {{ 'PERF.INVITACION_RECIBIDA' | translate }}
+          </span>
+        }
       </button>
 
       <button class="btn-logout-square" (click)="cerrarSesion()" [title]="'NAV.CERRAR_SESION' | translate">
@@ -43,7 +53,6 @@
       </button>
     </div>
   </header>
-
 
   <div class="container">
     <div class="glass-panel main-panel animate-fade-in">
@@ -144,8 +153,11 @@
                             (click)="toggleFavorito(recuerdo)" title="Favorito">
                       <i [ngClass]="recuerdo.esFavorito ? 'fas fa-heart' : 'far fa-heart'" [style.color]="recuerdo.esFavorito ? '#ef4444' : '#64748b'"></i>
                     </button>
-                    <button class="action-btn-mini download-btn" (click)="exportarLegado(recuerdo)" [title]="'GALERIA.IMPRIMIR' | translate">
-                      <i class="fas fa-print"></i>
+                    <button class="action-btn-mini download-btn" (click)="descargarRecuerdo(recuerdo)" title="Descargar recuerdo">
+                      <i class="fas fa-download" style="color: #10b981;"></i>
+                    </button>
+                    <button class="action-btn-mini share-btn" (click)="compartirRecuerdo(recuerdo)" title="Compartir recuerdo">
+                      <i class="fas fa-share-alt" style="color: #0284c7;"></i>
                     </button>
                     <button class="action-btn-mini edit-btn" (click)="abrirEditarRecuerdoModal(recuerdo)" [title]="'RECUERDOS.EDITAR' | translate">
                       <i class="fas fa-pencil-alt" style="color: #6200ea;"></i>
