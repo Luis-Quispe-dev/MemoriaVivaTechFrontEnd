@@ -1,14 +1,12 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { UsuarioService } from '../../services/usuario-service';
+import { RecuerdoService } from '../../services/recuerdo-service';
 import { GaleriaIARespondeDTO } from '../../model/galeria-ia-responde-dto';
 import { GaleriaIALlamadoDTO } from '../../model/galeria-ia-llamado-dto';
 import { GaleriaIAGenerarLlamadoDTO } from '../../model/galeria-ia-generar-llamado-dto';
-import {GaleriaIaService} from '../../services/galeria-ia-services';
-import Swal from 'sweetalert2';
-
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -16,6 +14,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { TranslatePipe } from '@ngx-translate/core';
 import { LenguajeService } from '../../services/lenguaje.service';
+import {GaleriaIaService} from '../../services/galeria-ia-services';
+
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-galeria-ia',
@@ -51,13 +52,12 @@ export class GaleriaIa implements OnInit {
   imagenGeneradaUrl = '';
   retratoSeleccionado: GaleriaIARespondeDTO | null = null;
 
-  constructor(
-    private usuarioService: UsuarioService,
-    private galeriaIaService: GaleriaIaService,
-    private lenguajeService: LenguajeService,
-    private router: Router,
-    private cdr: ChangeDetectorRef
-  ) {}
+  private usuarioService = inject(UsuarioService);
+  private recuerdoService = inject(RecuerdoService);
+  private galeriaIaService = inject(GaleriaIaService);
+  private lenguajeService = inject(LenguajeService);
+  private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
 
   ngOnInit() {
     if (!this.usuarioService.estaLogueado()) {
@@ -228,6 +228,123 @@ export class GaleriaIa implements OnInit {
       confirmButtonText: this.lenguajeService.translate('GALERIA.EXPORT_DOWNLOAD'),
       confirmButtonColor: '#6200ea'
     });
+  }
+
+  compartirRetrato(retrato: GaleriaIARespondeDTO) {
+    Swal.fire({
+      title: this.lenguajeService.translate('GALERIA.COMPARTIR_CARGANDO') || 'Cargando enlaces...',
+      didOpen: () => {
+        Swal.showLoading();
+      },
+      allowOutsideClick: false,
+      showConfirmButton: false
+    });
+
+    // Intentamos consumir el endpoint de exportar del backend
+    this.recuerdoService.exportarRecuerdo(retrato.idRetratoIa).subscribe({
+      next: (exportData) => {
+        Swal.close();
+        this.mostrarModalCompartir(
+          retrato.titulo,
+          retrato.urlImagen,
+          exportData.linkWhatsapp || `https://api.whatsapp.com/send?text=${encodeURIComponent(retrato.titulo + ' ' + retrato.urlImagen)}`,
+          exportData.linkFacebook || `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(retrato.urlImagen)}`,
+          exportData.linkInstagram || `https://www.instagram.com/`
+        );
+      },
+      error: (err) => {
+        Swal.close();
+        console.warn("Llamada al backend falló (id de retrato no es un id de recuerdo). Utilizando generación local de enlaces.", err);
+        const linkWhatsapp = `https://api.whatsapp.com/send?text=${encodeURIComponent(retrato.titulo + ' ' + retrato.urlImagen)}`;
+        const linkFacebook = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(retrato.urlImagen)}`;
+        const linkInstagram = `https://www.instagram.com/`;
+
+        this.mostrarModalCompartir(
+          retrato.titulo,
+          retrato.urlImagen,
+          linkWhatsapp,
+          linkFacebook,
+          linkInstagram
+        );
+      }
+    });
+  }
+
+  mostrarModalCompartir(titulo: string, url: string, linkWhatsapp: string, linkFacebook: string, linkInstagram: string) {
+    Swal.fire({
+      title: this.lenguajeService.translate('GALERIA.COMPARTIR_TITULO') || '📤 Compartir Retrato Familiar',
+      html: `
+        <div style="text-align: center; font-family: 'Segoe UI', system-ui, sans-serif; padding: 15px 0;">
+          <h4 style="color: #6200ea; margin-bottom: 15px; font-weight: 700;">${titulo}</h4>
+          <img src="${url}" style="width: 100%; max-width: 250px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 1px solid #e2e8f0;">
+
+          <div style="display: flex; justify-content: center; gap: 15px; margin-top: 15px;">
+            <a href="${linkWhatsapp}" target="_blank" style="text-decoration: none; display: flex; flex-direction: column; align-items: center; color: #25d366; width: 80px;">
+              <div style="width: 50px; height: 50px; border-radius: 50%; background: #e8faf0; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 5px; box-shadow: 0 4px 8px rgba(37, 211, 102, 0.15); transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                <i class="fab fa-whatsapp"></i>
+              </div>
+              <span style="font-size: 0.8rem; font-weight: 600; color: #334155;">WhatsApp</span>
+            </a>
+
+            <a href="${linkFacebook}" target="_blank" style="text-decoration: none; display: flex; flex-direction: column; align-items: center; color: #1877f2; width: 80px;">
+              <div style="width: 50px; height: 50px; border-radius: 50%; background: #e8f2fe; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 5px; box-shadow: 0 4px 8px rgba(24, 119, 242, 0.15); transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                <i class="fab fa-facebook-f"></i>
+              </div>
+              <span style="font-size: 0.8rem; font-weight: 600; color: #334155;">Facebook</span>
+            </a>
+
+            <a href="${linkInstagram}" target="_blank" style="text-decoration: none; display: flex; flex-direction: column; align-items: center; color: #e1306c; width: 80px;">
+              <div style="width: 50px; height: 50px; border-radius: 50%; background: #fdf2f8; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 5px; box-shadow: 0 4px 8px rgba(225, 48, 108, 0.15); transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                <i class="fab fa-instagram"></i>
+              </div>
+              <span style="font-size: 0.8rem; font-weight: 600; color: #334155;">Instagram</span>
+            </a>
+          </div>
+        </div>
+      `,
+      showConfirmButton: false,
+      showCloseButton: true
+    });
+  }
+
+  descargarImagen(url: string, titulo: string) {
+    if (!url) return;
+
+    Swal.fire({
+      title: this.lenguajeService.translate('GALERIA.DESCARGANDO') || 'Descargando...',
+      timer: 1000,
+      showConfirmButton: false,
+      position: 'top-end',
+      toast: true
+    });
+
+    const nombreArchivo = `${titulo.toLowerCase().replace(/\s+/g, '-') || 'retrato-ia'}.png`;
+
+    fetch(url, { mode: 'cors' })
+      .then(response => {
+        if (!response.ok) throw new Error('CORS restriction or network error');
+        return response.blob();
+      })
+      .then(blob => {
+        const localUrl = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = localUrl;
+        link.download = nombreArchivo;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(localUrl);
+      })
+      .catch(err => {
+        console.warn("Fallo descarga CORS. Utilizando fallback de descarga por navegador:", err);
+        const link = document.createElement('a');
+        link.href = url;
+        link.target = '_blank';
+        link.download = nombreArchivo;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      });
   }
 
   abrirPrevisualizacion(retrato: GaleriaIARespondeDTO) {
