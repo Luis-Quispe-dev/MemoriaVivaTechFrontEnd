@@ -19,11 +19,8 @@
     </nav>
 
     <div class="profile-logout-section">
-      <button class="bell-btn" [title]="'CONF.NOTIF' | translate" style="background: white; border: 1px solid #cbd5e1; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #475569; font-size: 1.15rem; transition: all 0.2s ease;">
-        <i class="fas fa-bell"></i>
-      </button>
 
-      <button class="profile-btn active" routerLink="/perfil-adulto-mayor" [title]="'NAV.PERFIL' | translate" style="background: #c6f6d5; border: none; padding: 6px 14px; border-radius: 16px; cursor: pointer; display: flex; align-items: center;">
+      <button class="profile-btn active" routerLink="/perfil-adulto-mayor" [title]="'NAV.PERFIL' | translate" style="background: #c6f6d5; border: none; padding: 6px 14px; border-radius: 16px; cursor: pointer; display: flex; align-items: center; position: relative; overflow: visible;">
         <div class="user-profile" style="display: flex; align-items: center; gap: 10px;">
           <div class="avatar-circle" style="width: 48px; height: 48px; border-radius: 50%; background: #e2e8f0; display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 1.4rem; border: 1px solid #cbd5e1; overflow: hidden;">
             @if (fotoPerfil) {
@@ -37,6 +34,16 @@
             <span class="profile-role" style="font-size: 0.85rem; color: #166534; font-weight: 600;">{{ 'NAV.ROL' | translate }}</span>
           </div>
         </div>
+        @if (tieneSolicitudPendiente) {
+          <span class="pulse-notification-badge" style="display: flex; align-items: center; gap: 6px; padding: 3px 10px 3px 5px;">
+            @if (fotoCuidadorPendiente) {
+              <img [src]="fotoCuidadorPendiente" style="width: 20px; height: 20px; border-radius: 50%; object-fit: cover; border: 1.5px solid white;">
+            } @else {
+              <i class="fas fa-user-shield" style="font-size: 0.9rem;"></i>
+            }
+            {{ 'PERF.INVITACION_RECIBIDA' | translate }}
+          </span>
+        }
       </button>
 
       <button class="btn-logout-square" (click)="cerrarSesion()" [title]="'NAV.CERRAR_SESION' | translate">
@@ -122,7 +129,7 @@
               </div>
 
               <p style="font-size: 1rem; font-style: italic; color: #4b5563; margin: 5px 0; background: #f9fafb; padding: 14px 18px; border-radius: 14px; border-left: 4px solid #6200ea;">
-                "{{ solicitudPendiente.mensaje || 'Hola, me encantaría acompañarte como tu cuidador en SoulStory.' }}"
+                "{{ solicitudPendiente.mensaje || 'Hola, me gustaría vincularme como tu cuidador en SoulStory.' }}"
               </p>
 
               <div style="display: flex; gap: 12px; margin-top: 5px;">
