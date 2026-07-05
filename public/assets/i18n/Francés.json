@@ -530,5 +530,6 @@
   "GALERIA.COMPARTIR_TITULO": "Partager le souvenir",
   "PERF.SOLI.BUSCAR_POPUP_VACIO_BUSQUEDA_CUIDADORES": "Aucun aidant ne correspond à la recherche.",
   "PERF.SOLI.BUSCAR_POPUP_VACIO_BUSQUEDA_PACIENTES": "Aucun aîné ne correspond à la recherche.",
-  "LOGIN.CAPTCHA_REQUIRED_TITLE": "Vérification requise"
+  "LOGIN.CAPTCHA_REQUIRED_TITLE": "Vérification requise.",
+  "LOGIN.CAPTCHA_REQUIRED_TEXT": "Veuillez cocher la case \"Je ne suis pas un robot\"."
 }

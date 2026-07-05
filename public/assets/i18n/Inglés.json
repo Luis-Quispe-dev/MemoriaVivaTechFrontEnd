@@ -529,5 +529,7 @@
   "GALERIA.COMPARTIR_CARGANDO": "Loading sharing links...",
   "GALERIA.COMPARTIR_TITULO": "Share Memory",
   "PERF.SOLI.BUSCAR_POPUP_VACIO_BUSQUEDA_CUIDADORES": "No caregivers matched the search query.",
-  "PERF.SOLI.BUSCAR_POPUP_VACIO_BUSQUEDA_PACIENTES": "No older adults matched the search query."
+  "PERF.SOLI.BUSCAR_POPUP_VACIO_BUSQUEDA_PACIENTES": "No older adults matched the search query.",
+  "LOGIN.CAPTCHA_REQUIRED_TITLE": "Verification required",
+  "LOGIN.CAPTCHA_REQUIRED_TEXT": "Please complete the \"I'm not a robot\" checkbox."
 }
