@@ -529,5 +529,10 @@
   "GALERIA.COMPARTIR_CARGANDO": "Cargando enlaces de compartido...",
   "GALERIA.COMPARTIR_TITULO": "Compartir Recuerdo",
   "PERF.SOLI.BUSCAR_POPUP_VACIO_BUSQUEDA_CUIDADORES": "No se encontraron cuidadores que coincidan con la búsqueda.",
-  "PERF.SOLI.BUSCAR_POPUP_VACIO_BUSQUEDA_PACIENTES": "No se encontraron adultos mayores que coincidan con la búsqueda."
+  "PERF.SOLI.BUSCAR_POPUP_VACIO_BUSQUEDA_PACIENTES": "No se encontraron adultos mayores que coincidan con la búsqueda.",
+  "LOGIN.CAPTCHA_REQUIRED_TITLE": "Verificación requerida.",
+  "LOGIN.CAPTCHA_REQUIRED_TEXT": "Por favor, completa la casilla \",No soy un robot\"."
+
+
+
 }
