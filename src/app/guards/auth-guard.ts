@@ -43,7 +43,7 @@ export class AuthGuard implements CanActivate {
       const hasRole = expectedRoles.some(role => userRoles.includes(role));
       if (!hasRole) {
         Swal.fire({
-          title: 'Sin Autorización',
+          title: 'Sin Autorización!!',
           text: 'No tienes el rol requerido para acceder a esta sección.',
           icon: 'error',
           confirmButtonText: 'Entendido',

@@ -14,11 +14,8 @@
     </nav>
 
     <div class="profile-logout-section">
-      <button class="bell-btn" [title]="'CONF.NOTIF' | translate">
-        <i class="fas fa-bell"></i>
-      </button>
 
-      <button class="profile-btn" [title]="'NAV.PERFIL' | translate" (click)="irAlPerfil()">
+      <button class="profile-btn" [title]="'NAV.PERFIL' | translate" (click)="irAlPerfil()" style="position: relative; overflow: visible;">
         <div class="user-profile">
           <div class="avatar-circle" style="overflow: hidden; display: flex; align-items: center; justify-content: center;">
             @if (fotoPerfil) {
@@ -32,6 +29,16 @@
             <span class="profile-role">{{ 'NAV.ROL_CUIDADOR' | translate }}</span>
           </div>
         </div>
+        @if (tieneSolicitudPendiente) {
+          <span class="pulse-notification-badge" style="display: flex; align-items: center; gap: 6px; padding: 3px 10px 3px 5px;">
+            @if (fotoAdultoMayorPendiente) {
+              <img [src]="fotoAdultoMayorPendiente" style="width: 20px; height: 20px; border-radius: 50%; object-fit: cover; border: 1.5px solid white;">
+            } @else {
+              <i class="fas fa-user-shield" style="font-size: 0.9rem;"></i>
+            }
+            {{ 'PERF.INVITACION_RECIBIDA' | translate }}
+          </span>
+        }
       </button>
 
       <button class="btn-logout-square" (click)="cerrarSesion()" [title]="'NAV.CERRAR_SESION' | translate">

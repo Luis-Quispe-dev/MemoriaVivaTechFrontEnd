@@ -17,11 +17,7 @@
     <!-- User Profile & Notifications & Logout -->
     <div class="profile-logout-section">
       <!-- Notification circular Bell icon -->
-      <button class="bell-btn" [title]="'CONF.NOTIF' | translate" style="background: white; border: 1px solid #cbd5e1; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #475569; font-size: 1.15rem; transition: all 0.2s ease;">
-        <i class="fas fa-bell"></i>
-      </button>
-
-      <button class="profile-btn active" (click)="irAlPerfil()" [title]="'NAV.PERFIL' | translate" style="background: #c6f6d5; border: none; padding: 6px 14px; border-radius: 16px; cursor: pointer; display: flex; align-items: center;">
+      <button class="profile-btn active" (click)="irAlPerfil()" [title]="'NAV.PERFIL' | translate" style="background: #c6f6d5; border: none; padding: 6px 14px; border-radius: 16px; cursor: pointer; display: flex; align-items: center; position: relative; overflow: visible;">
         <div class="user-profile" style="display: flex; align-items: center; gap: 10px;">
           <div class="avatar-circle" style="width: 48px; height: 48px; border-radius: 50%; background: #e2e8f0; display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 1.4rem; border: 1px solid #cbd5e1; overflow: hidden;">
             @if (fotoPerfil) {
@@ -35,6 +31,16 @@
             <span class="profile-role" style="font-size: 0.85rem; color: #166534; font-weight: 600;">{{ 'NAV.ROL_CUIDADOR' | translate }}</span>
           </div>
         </div>
+        @if (tieneSolicitudPendiente) {
+          <span class="pulse-notification-badge" style="display: flex; align-items: center; gap: 6px; padding: 3px 10px 3px 5px;">
+            @if (fotoAdultoMayorPendiente) {
+              <img [src]="fotoAdultoMayorPendiente" style="width: 20px; height: 20px; border-radius: 50%; object-fit: cover; border: 1.5px solid white;">
+            } @else {
+              <i class="fas fa-user-shield" style="font-size: 0.9rem;"></i>
+            }
+            {{ 'PERF.INVITACION_RECIBIDA' | translate }}
+          </span>
+        }
       </button>
 
       <button class="btn-logout-square" (click)="cerrarSesion()" [title]="'NAV.CERRAR_SESION' | translate">
@@ -107,6 +113,9 @@
                 <div>
                   <p style="font-size: 1.15rem; font-weight: 800; color: #1e293b; margin: 0;">
                     {{ asignacionesActivas[indicePacienteActual].nombreAdultoMayor }}
+                    @if (asignacionesActivas[indicePacienteActual].edadAdultoMayor) {
+                      <span style="font-size: 0.9rem; font-weight: 600; color: #64748b; margin-left: 5px;">({{ asignacionesActivas[indicePacienteActual].edadAdultoMayor }})</span>
+                    }
                   </p>
                   <p style="font-size: 0.85rem; color: #64748b; margin: 3px 0 0 0; font-weight: 500;">
                     {{ 'PERF.VINCULO_DESDE' | translate }} {{ formatearFecha(asignacionesActivas[indicePacienteActual].fechaInicio) }}
@@ -161,9 +170,23 @@
             @for (soli of solicitudesPendientes; track soli.idSolicitud) {
               <div style="background: white; border-radius: 18px; border: 1px solid #fde68a; padding: 18px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.01);">
                 <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; flex-wrap: wrap;">
-                  <div>
-                    <h5 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #1e293b;">{{ soli.nombreAdultoMayor }}</h5>
-                    <span style="font-size: 0.8rem; color: #94a3b8; font-weight: 600;">{{ 'PERF.INVITACION_RECIBIDA' | translate }} {{ formatearFecha(soli.fechaCreacion) }}</span>
+                  <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="width: 45px; height: 45px; border-radius: 50%; background: #edf2f7; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 1px solid #cbd5e1; flex-shrink: 0;">
+                      @if (soli.fotoAdultoMayor) {
+                        <img [src]="soli.fotoAdultoMayor" style="width: 100%; height: 100%; object-fit: cover;" [alt]="soli.nombreAdultoMayor">
+                      } @else {
+                        <i class="fas fa-user" style="color: #718096; font-size: 1.25rem;"></i>
+                      }
+                    </div>
+                    <div>
+                      <h5 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 6px;">
+                        {{ soli.nombreAdultoMayor }}
+                        @if (soli.edadAdultoMayor) {
+                          <span style="font-size: 0.85rem; font-weight: 600; color: #64748b;">({{ soli.edadAdultoMayor }})</span>
+                        }
+                      </h5>
+                      <span style="font-size: 0.8rem; color: #94a3b8; font-weight: 600;">{{ 'PERF.INVITACION_RECIBIDA' | translate }} {{ formatearFecha(soli.fechaCreacion) }}</span>
+                    </div>
                   </div>
 
                   @if (soli.iniciadoPor === 'CUIDADOR') {
