@@ -32,6 +32,11 @@
           <input matInput type="password" formControlName="password" placeholder="Ingresa tu contraseña" />
         </mat-form-field>
 
+        <!-- Google reCAPTCHA Widget -->
+        <div style="margin: 15px 0 20px 0; display: flex; justify-content: center;">
+          <div id="recaptcha-container"></div>
+        </div>
+
         <div class="botones-accion">
           <button type="submit" mat-flat-button class="btn-verde-pill" [disabled]="cargando">
             <i class="fas fa-arrow-right"></i> {{ cargando ? 'Ingresando...' : 'Ingresar a SoulStory' }}
