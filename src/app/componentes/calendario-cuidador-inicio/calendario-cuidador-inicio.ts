@@ -38,6 +38,8 @@ export class CalendarioCuidadorInicio implements OnInit {
   filtroNombre = '';
   asignaciones: AsignacionRespondeDTO[] = [];
   fotoPerfil: string | null = null;
+  tieneSolicitudPendiente = false;
+  fotoAdultoMayorPendiente: string | null = null;
 
   private usuarioService = inject(UsuarioService);
   private solicitudService = inject(SolicitudService);
@@ -57,6 +59,7 @@ export class CalendarioCuidadorInicio implements OnInit {
 
     if (this.userId) {
       this.cargarAsignaciones();
+      this.verificarSolicitudesPendientes();
     } else {
       this.cargandoAsignaciones = false;
     }
@@ -138,6 +141,35 @@ export class CalendarioCuidadorInicio implements OnInit {
   abrirCalendarioPaciente(am: AsignacionRespondeDTO) {
     localStorage.setItem('soulstory_active_id_asignacion', String(am.idAsignacion));
     this.router.navigate(['/calendario-cuidador-adultomayor']);
+  }
+
+  verificarSolicitudesPendientes() {
+    if (!this.userId) return;
+    this.solicitudService.obtenerPendientesCuidador(this.userId).subscribe({
+      next: (res) => {
+        const pendientes = res ? res.filter(s => s.iniciadoPor === 'ADULTO_MAYOR' && s.estado === 'PENDIENTE') : [];
+        if (pendientes.length > 0) {
+          this.tieneSolicitudPendiente = true;
+          this.usuarioService.obtenerAdultoMayorPorId(pendientes[0].idAdultoMayor).subscribe({
+            next: (am) => {
+              this.fotoAdultoMayorPendiente = am.contenidoFoto || null;
+              this.cdr.detectChanges();
+            },
+            error: () => {
+              this.fotoAdultoMayorPendiente = null;
+              this.cdr.detectChanges();
+            }
+          });
+        } else {
+          this.tieneSolicitudPendiente = false;
+          this.fotoAdultoMayorPendiente = null;
+          this.cdr.detectChanges();
+        }
+      },
+      error: (err) => {
+        console.warn("Error al verificar solicitudes pendientes:", err);
+      }
+    });
   }
 
   cerrarSesion() {

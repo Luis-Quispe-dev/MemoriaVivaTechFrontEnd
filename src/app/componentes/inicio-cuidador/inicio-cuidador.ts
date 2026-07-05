@@ -29,7 +29,7 @@ import Swal from 'sweetalert2';
     MatButtonModule,
     MatIconModule,
     MatSelectModule,
-    TranslatePipe,
+    TranslatePipe
   ],
   templateUrl: './inicio-cuidador.html',
   styleUrl: './inicio-cuidador.css',
@@ -53,6 +53,8 @@ export class InicioCuidador implements OnInit, OnDestroy {
   nuevoMensaje = '';
   cargandoMensajes = false;
   totalNoLeidosCount = 0; // NUEVO: Suma de todos los mensajes no leídos de todos los pacientes del cuidador
+  tieneSolicitudPendiente = false;
+  fotoAdultoMayorPendiente: string | null = null;
 
   private intervalId: any = null;
   private timerConteoId: any = null; // NUEVO: Temporizador para contar mensajes no leídos de todos los pacientes en segundo plano
@@ -66,10 +68,7 @@ export class InicioCuidador implements OnInit, OnDestroy {
 
   ngOnInit() {
     // Guardia de seguridad
-    if (
-      !this.usuarioService.estaLogueado() ||
-      !this.usuarioService.obtenerRoles().includes('ROLE_CUIDADOR')
-    ) {
+    if (!this.usuarioService.estaLogueado() || !this.usuarioService.obtenerRoles().includes('ROLE_CUIDADOR')) {
       this.router.navigate(['/iniciar-sesion']);
       return;
     }
@@ -78,13 +77,19 @@ export class InicioCuidador implements OnInit, OnDestroy {
     this.nombreCuidador = this.usuarioService.obtenerNombreCompleto() || 'Cuidador';
     this.fotoPerfil = this.usuarioService.obtenerFotoPerfil();
 
-    this.iniciarPollingConteo(); // NUEVO: Iniciar monitoreo en segundo plano de mensajes no leídos totales
+    if (this.userId) {
+      this.cargarAsignacionesYConteo();
+      this.iniciarPollingConteo(); // NUEVO: Iniciar monitoreo en segundo plano de mensajes no leídos totales
+      this.verificarSolicitudesPendientes();
+    }
   }
 
   ngOnDestroy() {
     this.detenerPolling();
     this.detenerPollingConteo();
   }
+
+
 
   // Lógica del Chat Multi-Paciente Dedicado
   toggleChatGlobal() {
@@ -106,18 +111,17 @@ export class InicioCuidador implements OnInit, OnDestroy {
     this.solicitudService.obtenerAsignacionesActivasCuidador(this.userId).subscribe({
       next: (res) => {
         // Creamos un listado local temporal para evitar el parpadeo en la interfaz
-        const tempPacientes =
-          res.map((p) => {
-            // Si ya existe en la lista actual, preservamos su conteo de forma temporal
-            const existente = this.pacientesChat.find((pc) => pc.idAdultoMayor === p.idAdultoMayor);
-            return {
-              idAdultoMayor: p.idAdultoMayor,
-              nombreCompleto: p.nombreAdultoMayor,
-              idAsignacion: p.idAsignacion,
-              fotoAdultoMayor: p.fotoAdultoMayor,
-              noLeidosCount: existente ? existente.noLeidosCount : 0,
-            };
-          }) || [];
+        const tempPacientes = res.map(p => {
+          // Si ya existe en la lista actual, preservamos su conteo de forma temporal
+          const existente = this.pacientesChat.find(pc => pc.idAdultoMayor === p.idAdultoMayor);
+          return {
+            idAdultoMayor: p.idAdultoMayor,
+            nombreCompleto: p.nombreAdultoMayor,
+            idAsignacion: p.idAsignacion,
+            fotoAdultoMayor: p.fotoAdultoMayor,
+            noLeidosCount: existente ? existente.noLeidosCount : 0
+          };
+        }) || [];
 
         let pendingRequests = tempPacientes.length;
         if (pendingRequests === 0) {
@@ -128,18 +132,12 @@ export class InicioCuidador implements OnInit, OnDestroy {
         }
 
         let tempTotal = 0;
-        tempPacientes.forEach((pac) => {
+        tempPacientes.forEach(pac => {
           this.mensajeService.obtenerMensajesPorAsignacion(pac.idAsignacion).subscribe({
             next: (msgs) => {
               if (msgs) {
-                pac.noLeidosCount = msgs.filter(
-                  (m) => m.tipoRemitente === 'ADULTO_MAYOR' && !m.leido,
-                ).length;
-                if (
-                  this.mostrarChatGlobal &&
-                  this.pacienteSeleccionadoChat &&
-                  this.pacienteSeleccionadoChat.idAsignacion === pac.idAsignacion
-                ) {
+                pac.noLeidosCount = msgs.filter(m => m.tipoRemitente === 'ADULTO_MAYOR' && !m.leido).length;
+                if (this.mostrarChatGlobal && this.pacienteSeleccionadoChat && this.pacienteSeleccionadoChat.idAsignacion === pac.idAsignacion) {
                   pac.noLeidosCount = 0;
                 }
                 tempTotal += pac.noLeidosCount;
@@ -159,11 +157,11 @@ export class InicioCuidador implements OnInit, OnDestroy {
                 this.totalNoLeidosCount = tempTotal;
                 this.cdr.detectChanges();
               }
-            },
+            }
           });
         });
       },
-      error: (err) => console.error('Error al cargar vinculaciones del chat:', err),
+      error: (err) => console.error("Error al cargar vinculaciones del chat:", err)
     });
   }
 
@@ -179,43 +177,41 @@ export class InicioCuidador implements OnInit, OnDestroy {
   cargarMensajes() {
     if (!this.pacienteSeleccionadoChat) return;
 
-    this.mensajeService
-      .obtenerMensajesPorAsignacion(this.pacienteSeleccionadoChat.idAsignacion)
-      .subscribe({
-        next: (data) => {
-          this.mensajes = data || [];
+    this.mensajeService.obtenerMensajesPorAsignacion(this.pacienteSeleccionadoChat.idAsignacion).subscribe({
+      next: (data) => {
+        this.mensajes = data || [];
 
-          // Limpiar el contador local de no leídos
-          this.pacienteSeleccionadoChat.noLeidosCount = 0;
+        // Limpiar el contador local de no leídos
+        this.pacienteSeleccionadoChat.noLeidosCount = 0;
 
-          if (this.cargandoMensajes) {
-            // Retraso artificial deliberado de 1 segundo para la transición visual inicial
-            setTimeout(() => {
-              this.cargandoMensajes = false;
-              this.cdr.detectChanges();
-              this.scrollToBottom();
-              this.marcarMensajesComoLeidos();
-            }, 1000);
-          } else {
-            // Si ya estamos conversando, actualizamos de inmediato sin retraso
+        if (this.cargandoMensajes) {
+          // Retraso artificial deliberado de 1 segundo para la transición visual inicial
+          setTimeout(() => {
+            this.cargandoMensajes = false;
             this.cdr.detectChanges();
             this.scrollToBottom();
             this.marcarMensajesComoLeidos();
-          }
-        },
-        error: (err) => {
-          console.error('Error al cargar mensajes:', err);
-          if (this.cargandoMensajes) {
-            setTimeout(() => {
-              this.cargandoMensajes = false;
-              this.cdr.detectChanges();
-            }, 1000);
-          } else {
+          }, 1000);
+        } else {
+          // Si ya estamos conversando, actualizamos de inmediato sin retraso
+          this.cdr.detectChanges();
+          this.scrollToBottom();
+          this.marcarMensajesComoLeidos();
+        }
+      },
+      error: (err) => {
+        console.error("Error al cargar mensajes:", err);
+        if (this.cargandoMensajes) {
+          setTimeout(() => {
             this.cargandoMensajes = false;
             this.cdr.detectChanges();
-          }
-        },
-      });
+          }, 1000);
+        } else {
+          this.cargandoMensajes = false;
+          this.cdr.detectChanges();
+        }
+      }
+    });
   }
 
   enviarMensaje() {
@@ -227,7 +223,7 @@ export class InicioCuidador implements OnInit, OnDestroy {
     const dto = {
       idAsignacion: this.pacienteSeleccionadoChat.idAsignacion,
       contenido: texto,
-      tipoRemitente: 'CUIDADOR',
+      tipoRemitente: 'CUIDADOR'
     };
 
     this.mensajeService.enviarMensaje(dto).subscribe({
@@ -235,23 +231,21 @@ export class InicioCuidador implements OnInit, OnDestroy {
         this.cargarMensajes();
       },
       error: (err) => {
-        console.error('Error al enviar mensaje del cuidador:', err);
+        console.error("Error al enviar mensaje del cuidador:", err);
         Swal.fire(
           this.lenguajeService.translate('REC_TEXTO.SAVE_ERROR_TITLE'),
           this.lenguajeService.translate('CCA.ALERT.ADD_ERROR_DESC'),
-          'error',
+          'error'
         );
-      },
+      }
     });
   }
 
   marcarMensajesComoLeidos() {
     if (!this.pacienteSeleccionadoChat) return;
-    this.mensajeService
-      .marcarMensajesComoLeidos(this.pacienteSeleccionadoChat.idAsignacion)
-      .subscribe({
-        error: (err) => console.warn('No se pudieron marcar los mensajes como leídos:', err),
-      });
+    this.mensajeService.marcarMensajesComoLeidos(this.pacienteSeleccionadoChat.idAsignacion).subscribe({
+      error: (err) => console.warn("No se pudieron marcar los mensajes como leídos:", err)
+    });
   }
 
   iniciarPolling() {
@@ -272,19 +266,17 @@ export class InicioCuidador implements OnInit, OnDestroy {
 
   cargarMensajesSilencioso() {
     if (!this.pacienteSeleccionadoChat) return;
-    this.mensajeService
-      .obtenerMensajesPorAsignacion(this.pacienteSeleccionadoChat.idAsignacion)
-      .subscribe({
-        next: (data) => {
-          const nuevos = data || [];
-          if (nuevos.length !== this.mensajes.length) {
-            this.mensajes = nuevos;
-            this.cdr.detectChanges();
-            this.scrollToBottom();
-            this.marcarMensajesComoLeidos();
-          }
-        },
-      });
+    this.mensajeService.obtenerMensajesPorAsignacion(this.pacienteSeleccionadoChat.idAsignacion).subscribe({
+      next: (data) => {
+        const nuevos = data || [];
+        if (nuevos.length !== this.mensajes.length) {
+          this.mensajes = nuevos;
+          this.cdr.detectChanges();
+          this.scrollToBottom();
+          this.marcarMensajesComoLeidos();
+        }
+      }
+    });
   }
 
   // Metodos de monitoreo en segundo plano del total de mensajes no leidos del cuidador
@@ -345,7 +337,38 @@ export class InicioCuidador implements OnInit, OnDestroy {
       return this.pacientesChat;
     }
     const q = this.busquedaChatQuery.toLowerCase().trim();
-    return this.pacientesChat.filter((p) => p.nombreCompleto.toLowerCase().includes(q));
+    return this.pacientesChat.filter(p => p.nombreCompleto.toLowerCase().includes(q));
+  }
+
+
+
+  verificarSolicitudesPendientes() {
+    if (!this.userId) return;
+    this.solicitudService.obtenerPendientesCuidador(this.userId).subscribe({
+      next: (res) => {
+        const pendientes = res ? res.filter(s => s.iniciadoPor === 'ADULTO_MAYOR' && s.estado === 'PENDIENTE') : [];
+        if (pendientes.length > 0) {
+          this.tieneSolicitudPendiente = true;
+          this.usuarioService.obtenerAdultoMayorPorId(pendientes[0].idAdultoMayor).subscribe({
+            next: (am) => {
+              this.fotoAdultoMayorPendiente = am.contenidoFoto || null;
+              this.cdr.detectChanges();
+            },
+            error: () => {
+              this.fotoAdultoMayorPendiente = null;
+              this.cdr.detectChanges();
+            }
+          });
+        } else {
+          this.tieneSolicitudPendiente = false;
+          this.fotoAdultoMayorPendiente = null;
+          this.cdr.detectChanges();
+        }
+      },
+      error: (err) => {
+        console.warn("Error al verificar solicitudes pendientes:", err);
+      }
+    });
   }
 
   irAlPerfil() {
