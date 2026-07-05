@@ -1,17 +1,18 @@
-import {Component, inject} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {MatCardModule} from '@angular/material/card';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatInputModule} from '@angular/material/input';
-import {MatButtonModule} from '@angular/material/button';
-import {MatIconModule} from '@angular/material/icon';
-import {Router, RouterModule} from '@angular/router';
-import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
+import { Component, inject, OnInit } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatCardModule } from '@angular/material/card';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { UsuarioService } from '../../services/usuario-service';
+import { ConfiguracionService } from '../../services/configuracion-service';
+import { LenguajeService } from '../../services/lenguaje.service';
+import { TranslatePipe } from '@ngx-translate/core';
 import Swal from 'sweetalert2';
-import {UsuarioService} from '../../services/usuario-service';
-import {TranslatePipe} from '@ngx-translate/core';
-import {ConfiguracionService} from '../../services/configuracion-service';
-import {LenguajeService} from '../../services/lenguaje.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-iniciar-sesion',
@@ -29,7 +30,7 @@ import {LenguajeService} from '../../services/lenguaje.service';
   templateUrl: './iniciar-sesion.html',
   styleUrl: './iniciar-sesion.css',
 })
-export class IniciarSesion {
+export class IniciarSesion implements OnInit {
   private usuarioService = inject(UsuarioService);
   private configuracionService = inject(ConfiguracionService);
   private lenguajeService = inject(LenguajeService);
@@ -42,6 +43,31 @@ export class IniciarSesion {
   });
 
   cargando = false;
+  captchaToken: string | null = null;
+
+  ngOnInit() {
+    this.renderRecaptcha();
+  }
+
+  renderRecaptcha() {
+    if (typeof (window as any).grecaptcha !== 'undefined' && (window as any).grecaptcha.render) {
+      const container = document.getElementById('recaptcha-container');
+      if (container) {
+        container.innerHTML = '';
+        (window as any).grecaptcha.render('recaptcha-container', {
+          'sitekey': environment.recaptchaSiteKey,
+          'callback': (token: string) => {
+            this.captchaToken = token;
+          },
+          'expired-callback': () => {
+            this.captchaToken = null;
+          }
+        });
+      }
+    } else {
+      setTimeout(() => this.renderRecaptcha(), 100);
+    }
+  }
 
   enviarFormulario() {
     if (this.loginForm.invalid) {
@@ -54,13 +80,24 @@ export class IniciarSesion {
       return;
     }
 
+    if (!this.captchaToken) {
+      Swal.fire({
+        title: this.lenguajeService.translate('LOGIN.CAPTCHA_REQUIRED_TITLE') || 'Verificación requerida',
+        text: this.lenguajeService.translate('LOGIN.CAPTCHA_REQUIRED_TEXT') || 'Por favor, completa la casilla "No soy un robot".',
+        icon: 'warning',
+        confirmButtonText: this.lenguajeService.translate('BOTON.ENTENDIDO') || 'Entendido'
+      });
+      return;
+    }
+
     this.cargando = true;
     const creds = this.loginForm.getRawValue();
 
     // El backend espera 'username' (que es el email) y 'password'
     const payload = {
       username: creds.email,
-      password: creds.password
+      password: creds.password,
+      captchaToken: this.captchaToken
     };
 
     this.usuarioService.iniciarSesion(payload).subscribe({
@@ -101,7 +138,7 @@ export class IniciarSesion {
       },
       error: (err) => {
         this.cargando = false;
-        console.error("Error al iniciar sesión!", err);
+        console.error("Error al iniciar sesión", err);
         Swal.fire({
           title: this.lenguajeService.translate('LOGIN.ERROR_TITLE') || 'Error de ingreso',
           text: this.lenguajeService.translate('LOGIN.ERROR_TEXT') || 'Credenciales inválidas. Por favor, verifica tu correo y contraseña.',
